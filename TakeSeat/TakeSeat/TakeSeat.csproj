@@ -118,15 +118,51 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Content Include="assets\css\bootstrap-responsive.css" />
-    <Content Include="assets\css\bootstrap-responsive.min.css" />
     <Content Include="assets\css\bootstrap.css" />
     <Content Include="assets\css\bootstrap.min.css" />
+    <Content Include="assets\css\main.css" />
     <Content Include="assets\img\glyphicons-halflings-white.png" />
     <Content Include="assets\img\glyphicons-halflings.png" />
     <Content Include="assets\js\bootstrap.js" />
     <Content Include="assets\js\bootstrap.min.js" />
+    <Content Include="assets\js\easeljs\display\Bitmap.js" />
+    <Content Include="assets\js\easeljs\display\BitmapAnimation.js" />
+    <Content Include="assets\js\easeljs\display\BitmapText.js" />
+    <Content Include="assets\js\easeljs\display\Container.js" />
+    <Content Include="assets\js\easeljs\display\DisplayObject.js" />
+    <Content Include="assets\js\easeljs\display\DOMElement.js" />
+    <Content Include="assets\js\easeljs\display\Graphics.js" />
+    <Content Include="assets\js\easeljs\display\MovieClip.js" />
+    <Content Include="assets\js\easeljs\display\Shadow.js" />
+    <Content Include="assets\js\easeljs\display\Shape.js" />
+    <Content Include="assets\js\easeljs\display\Sprite.js" />
+    <Content Include="assets\js\easeljs\display\SpriteSheet.js" />
+    <Content Include="assets\js\easeljs\display\Stage.js" />
+    <Content Include="assets\js\easeljs\display\Text.js" />
+    <Content Include="assets\js\easeljs\events\MouseEvent.js" />
+    <Content Include="assets\js\easeljs\filters\AlphaMapFilter.js" />
+    <Content Include="assets\js\easeljs\filters\AlphaMaskFilter.js" />
+    <Content Include="assets\js\easeljs\filters\BlurFilter.js" />
+    <Content Include="assets\js\easeljs\filters\ColorFilter.js" />
+    <Content Include="assets\js\easeljs\filters\ColorMatrix.js" />
+    <Content Include="assets\js\easeljs\filters\ColorMatrixFilter.js" />
+    <Content Include="assets\js\easeljs\filters\Filter.js" />
+    <Content Include="assets\js\easeljs\geom\Matrix2D.js" />
+    <Content Include="assets\js\easeljs\geom\Point.js" />
+    <Content Include="assets\js\easeljs\geom\Rectangle.js" />
+    <Content Include="assets\js\easeljs\ui\ButtonHelper.js" />
+    <Content Include="assets\js\easeljs\ui\Touch.js" />
+    <Content Include="assets\js\easeljs\utils\SpriteSheetBuilder.js" />
+    <Content Include="assets\js\easeljs\utils\SpriteSheetUtils.js" />
+    <Content Include="assets\js\easeljs\utils\Ticker.js" />
+    <Content Include="assets\js\easeljs\utils\UID.js" />
+    <Content Include="assets\js\easeljs\version.js" />
+    <Content Include="assets\js\easeljs\version_movieclip.js" />
+    <Content Include="assets\js\jquery-2.1.1.min.js" />
+    <Content Include="assets\js\paper-core.js" />
+    <Content Include="assets\js\paper-core.min.js" />
     <Content Include="Global.asax" />
+    <Content Include="js\paperPOC.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -145,6 +181,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Map\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Map\Paper.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -2,6 +2,18 @@
     ViewBag.Title = "Index";
 }
 <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
-<h2>Index</h2>
+<link href="~/assets/css/main.css" rel="stylesheet" />
+<script src="~/assets/js/jquery-2.1.1.min.js"></script>
 
-<button type="button" class="btn btn-success">Success</button>
+<div class="row show-grid">
+  
+    <div class="span10">
+        <h3>Comparing ParepJS and EaselJS</h3>
+        <div class="row  show-grid">
+            <div class="span4 offset1 canvas">Paper JS @Html.Partial("Paper")</div>
+            <div class="span4 offset1 canvas">Easel JS </div>
+        </div>
+    </div>
+
+</div>
+
