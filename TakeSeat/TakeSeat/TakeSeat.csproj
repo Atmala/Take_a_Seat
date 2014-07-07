@@ -161,6 +161,12 @@
     <Content Include="assets\js\jquery-2.1.1.min.js" />
     <Content Include="assets\js\paper-core.js" />
     <Content Include="assets\js\paper-core.min.js" />
+    <Content Include="assets\js\paper-full.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\js\paper-full.min.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Global.asax" />
     <Content Include="js\paperPOC.js" />
     <Content Include="Web.config" />
