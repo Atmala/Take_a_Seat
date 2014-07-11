@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\CanvasParameters.cs" />
     <Compile Include="Models\Line.cs" />
     <Compile Include="Models\RoomModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
