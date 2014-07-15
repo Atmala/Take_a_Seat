@@ -12,6 +12,7 @@ namespace TakeSeat.Controllers
         //
         // GET: /Map/
 
+
         public ActionResult Index()
         {
             return View();
@@ -25,3 +26,4 @@ namespace TakeSeat.Controllers
         }
     }
 }
+
