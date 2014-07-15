@@ -32,5 +32,25 @@ namespace CommonClasses.Models
             AddLine(new Line(-50, 0, 50, 0));
             AddLine(new Line(50, 0, 50, -100));
         }
+
+        public IEnumerable<Line> GetCanvasLines(CanvasParameters parameters)
+        {
+            return _lines.Select(l => l.TransformLine(parameters));
+        }
+
+        public IEnumerable<Line> GetCanvasLines(int canvasWidth, int canvasHeight)
+        {
+            int minimumX = _lines.Min(l => Math.Min(l.X1, l.X2));
+            int maximumX = _lines.Max(l => Math.Max(l.X1, l.X2));
+            int width = maximumX - minimumX;
+
+            int minimumY = _lines.Min(l => Math.Min(l.Y1, l.Y2));
+            int maximumY = _lines.Max(l => Math.Max(l.Y1, l.Y2));
+            int height = maximumY - minimumY;
+
+            decimal pixelsInSm = Math.Min((decimal) canvasWidth/width, (decimal) canvasHeight/height);
+            var parameters = new CanvasParameters(pixelsInSm, -minimumX, -minimumY);
+            return GetCanvasLines(parameters);
+        }
     }
 }

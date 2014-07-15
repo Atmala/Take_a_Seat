@@ -20,5 +20,14 @@ namespace CommonClasses.Models
             X2 = x2;
             Y2 = y2;
         }
+
+        public Line TransformLine(CanvasParameters parameters)
+        {
+            return new Line(
+                (int)(X1 * parameters.PixelsInSm) + parameters.ShiftX,
+                (int)(Y1 * parameters.PixelsInSm) + parameters.ShiftY, 
+                (int)(X2 * parameters.PixelsInSm) + parameters.ShiftX,
+                (int)(Y2 * parameters.PixelsInSm) + parameters.ShiftY);
+        }
     }
 }
