@@ -3,7 +3,21 @@
     Layout = "~/Views/_Layout.cshtml";
 }
 
-<div class="row show-grid">
-    <div class="span10 canvas"><h3>I can draw lines!</h3> @Html.Partial("Paper")</div>
+<div class="row">
+    <div class="col-lg-8 canvas">@Html.Partial("Paper")</div>
+    <div class="col-lg-4">
+        <div class="bs-component">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Tools</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="md-overlay"><button type="button" class="btn btn-success btn-primary btn-lg btn-tool">Draw line</button></div>
+                    <div class="md-overlay"><button type="button" class="btn btn-info btn-primary btn-lg btn-tool">Add table</button></div>
+                    <div class="md-overlay"><button type="button" class="btn btn-warning btn-primary btn-lg btn-tool">Add room</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 

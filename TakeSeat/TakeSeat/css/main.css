@@ -12,7 +12,6 @@
  
 
 .canvas .paperCanvas {
-    margin: auto;
     width: 700px;
     height: 400px;
 
@@ -22,4 +21,12 @@
 
     outline: 3px solid #ACCCE2;
 
+}
+
+.md-overlay {
+    margin-bottom: 15px;
+}
+
+.btn-tool {
+    width: 150px;
 }
