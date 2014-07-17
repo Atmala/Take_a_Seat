@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeSeat.Tests", "TakeSeat.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonClasses", "CommonClasses\CommonClasses.csproj", "{BF8BD8D4-6F7A-4ADC-BD0A-F4CA5FA595ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbLayer", "DbLayer\DbLayer.csproj", "{AF693853-0E97-4744-8253-8C2BC1EB7564}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BF8BD8D4-6F7A-4ADC-BD0A-F4CA5FA595ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF8BD8D4-6F7A-4ADC-BD0A-F4CA5FA595ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF8BD8D4-6F7A-4ADC-BD0A-F4CA5FA595ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF693853-0E97-4744-8253-8C2BC1EB7564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF693853-0E97-4744-8253-8C2BC1EB7564}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF693853-0E97-4744-8253-8C2BC1EB7564}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF693853-0E97-4744-8253-8C2BC1EB7564}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,19 +8,21 @@ using System.Threading.Tasks;
 
 namespace CommonClasses.Database
 {
-    public class Point
+    public class Rectangle
     {
         [Key]
         public int Id { get; set; }
         [Required]
-        public int X { get; set; }
+        public int LeftTopX { get; set; }
         [Required]
-        public int Y { get; set; }
+        public int LeftTopY { get; set; }
+        [Required]
+        public int Width { get; set; }
+        [Required]
+        public int Height { get; set; }
         [Required]
         public int RoomObjectId { get; set; }
         [ForeignKey("RoomObjectId")]
         public RoomObject RoomObject { get; set; }
-        public int Order { get; set; }
-
     }
 }

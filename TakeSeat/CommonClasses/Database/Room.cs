@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace CommonClasses.Database
 {
-    public class Point
+    public class Room
     {
         [Key]
         public int Id { get; set; }
+        [StringLength(200)]
+        public string Caption { get; set; }
+        [StringLength(1000)]
+        public string Description { get; set; }
         [Required]
-        public int X { get; set; }
-        [Required]
-        public int Y { get; set; }
-        [Required]
-        public int RoomObjectId { get; set; }
-        [ForeignKey("RoomObjectId")]
-        public RoomObject RoomObject { get; set; }
         public int Order { get; set; }
 
+        public List<RoomObject> RoomObjects { get; set; } 
     }
 }
