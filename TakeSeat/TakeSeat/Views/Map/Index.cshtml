@@ -2,8 +2,9 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/_Layout.cshtml";
 }
+<script  src="~/js/Controllers/MapController.js"></script>
 
-<div class="row">
+<div class="row" ng-controller="PaperController" ng-init="Init()">
     <div class="col-lg-8 canvas">@Html.Partial("Paper")</div>
     <div class="col-lg-4">
         <div class="bs-component">
@@ -12,9 +13,21 @@
                     <h3 class="panel-title">Tools</h3>
                 </div>
                 <div class="panel-body">
-                    <div class="md-overlay"><button type="button" class="btn btn-success btn-primary btn-lg btn-tool">Draw line</button></div>
-                    <div class="md-overlay"><button type="button" class="btn btn-info btn-primary btn-lg btn-tool">Add table</button></div>
-                    <div class="md-overlay"><button type="button" class="btn btn-warning btn-primary btn-lg btn-tool">Add room</button></div>
+                    <div class="md-overlay">
+                        <button type="button" class="btn btn-success btn-primary btn-lg btn-tool" data-toggle="button">
+                            Draw line
+                        </button>
+                    </div>
+                    <div class="md-overlay">
+                        <button type="button" class="btn btn-info btn-primary btn-lg btn-tool" data-toggle="button">
+                            Add table
+                        </button>
+                    </div>
+                    <div class="md-overlay">
+                        <button type="button" class="btn btn-warning btn-primary btn-lg btn-tool" data-toggle="button">
+                            Add room
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

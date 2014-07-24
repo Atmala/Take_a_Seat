@@ -1,7 +1,5 @@
 ﻿
-<script type="text/paperscript" canvas="paperCanvas" src="~/js/paperPOC.js"></script>
-
 <div class="paperCanvas">
-    <canvas  id="paperCanvas" 
+    <canvas id="paperCanvas" ng-mousedown="mouseDown($event)" ng-mousemove="mouseMove($event)" ng-mouseup="mouseUp()"
             style="-webkit-user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" width="700" height="400"></canvas>
 </div>

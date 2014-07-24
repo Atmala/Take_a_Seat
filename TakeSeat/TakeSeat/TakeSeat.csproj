@@ -120,6 +120,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="assets\css\bootstrap.css" />
     <Content Include="assets\css\bootstrap.min.css" />
+    <Content Include="assets\js\angular.js" />
     <Content Include="css\main.css" />
     <Content Include="assets\img\glyphicons-halflings-white.png" />
     <Content Include="assets\img\glyphicons-halflings.png" />
@@ -135,6 +136,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Global.asax" />
+    <Content Include="js\Controllers\MapController.js" />
     <Content Include="js\paperPOC.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
