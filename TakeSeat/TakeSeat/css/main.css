@@ -30,3 +30,7 @@
 .btn-tool {
     width: 150px;
 }
+
+.activeBtn {
+    font-weight: bold;
+}

@@ -8,12 +8,16 @@ seatApp
                     var path, start;
                     var isDrawing = false;
 
+                   function canDraw() {
+                       return isDrawing && scope.mode === 'line';
+                   };
+
                     function mouseUp(event) {
                         isDrawing = false;
                     }
 
                     function mouseDrag(event) {
-                        if (isDrawing) {
+                        if (canDraw()) {
                             var x = event.offsetX;
                             var y = event.offsetY;
                             if (x <= 5 || y <= 5 || x >= event.currentTarget.width - 5 || y >= event.currentTarget.height - 5) {
