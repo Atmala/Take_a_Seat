@@ -2,9 +2,10 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/_Layout.cshtml";
 }
-<script  src="~/js/Controllers/MapController.js"></script>
 
-<div class="row" ng-controller="PaperController" ng-init="Init()">
+<script src="~/js/Controllers/MapController.js"></script>
+
+<div class="row" ng-controller="Map">
     <div class="col-lg-8 canvas">@Html.Partial("Paper")</div>
     <div class="col-lg-4">
         <div class="bs-component">

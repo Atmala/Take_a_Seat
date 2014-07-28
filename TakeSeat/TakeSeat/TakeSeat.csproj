@@ -137,6 +137,7 @@
     </Content>
     <Content Include="Global.asax" />
     <Content Include="js\Controllers\MapController.js" />
+    <Content Include="js\Directives\Paper.js" />
     <Content Include="js\paperPOC.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
