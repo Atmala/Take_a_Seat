@@ -9,10 +9,21 @@ namespace TakeSeat.Controllers
 {
     public class MapController : Controller
     {
+        public RoomModel Room
+        {
+            get
+            {
+                if (Session["Room"] == null)
+                {
+                    var room = new RoomModel();
+                    room.CreateTestData();
+                    Session["Room"] = room;
+                }
+                return (RoomModel) Session["Room"];
+            }
+        }
         //
         // GET: /Map/
-
-
         public ActionResult Index()
         {
             return View();
@@ -20,10 +31,12 @@ namespace TakeSeat.Controllers
 
         public IEnumerable<Line> GetRoomModel(int canvasWidth, int canvasHeight)
         {
-            var roomModel = new RoomModel();
-            roomModel.CreateTestData();
-            return roomModel.GetCanvasLines(canvasWidth, canvasHeight);
+            return Room.GetCanvasLines(canvasWidth, canvasHeight);
+        }
+
+        public void AddNewLine(int canvasX1, int canvasY1, int canvasX2, int canvasY2)
+        {
+            Room.AddNewLine(canvasX1, canvasY1, canvasX2, canvasY2);
         }
     }
 }
-
