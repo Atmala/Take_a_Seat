@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using CommonClasses.Models;
 
 namespace TakeSeat.Controllers
@@ -30,7 +31,7 @@ namespace TakeSeat.Controllers
         {
             var roomModel = new RoomModel();
             roomModel.CreateTestData();
-            var lines = roomModel.GetCanvasLines(700, 400);
+            var lines = roomModel.GetCanvasLines(700, 400).ToList();
             return Json(lines, JsonRequestBehavior.AllowGet);
         }
 
