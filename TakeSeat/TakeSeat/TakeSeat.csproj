@@ -120,6 +120,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="assets\css\bootstrap.css" />
     <Content Include="assets\css\bootstrap.min.css" />
+    <Content Include="assets\js\angular-resource.js" />
     <Content Include="assets\js\angular.js" />
     <Content Include="css\main.css" />
     <Content Include="assets\img\glyphicons-halflings-white.png" />
@@ -139,6 +140,7 @@
     <Content Include="js\Controllers\MapController.js" />
     <Content Include="js\Directives\Paper.js" />
     <Content Include="js\paperPOC.js" />
+    <Content Include="js\Services\DataResources.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

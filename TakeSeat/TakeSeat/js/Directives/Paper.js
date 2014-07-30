@@ -27,11 +27,15 @@ seatApp
 
                             path.removeSegments();
 
-                            path.moveTo(start);
-                            path.lineTo(new paper.Point([x, y]));
-
-                            paper.view.draw();
+                            drawLine();
                         }
+                    }
+
+                    function drawLine() {
+                        path.moveTo(start);
+                        path.lineTo(new paper.Point([x, y]));
+
+                        paper.view.draw();
                     }
 
                     function mouseDown(event) {

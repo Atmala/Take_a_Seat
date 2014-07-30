@@ -1,9 +1,16 @@
-﻿var seatApp = angular.module('seatApp', []);
+﻿var seatApp = angular.module('seatApp', ['DataResources']);
 
-seatApp.controller('Map', ['$scope', function ($scope) {
+seatApp.controller('Map', ['$scope', 'MapProvider', function ($scope, mapProvider) {
 
     function initMode() {
         $scope.mode = 'view';
+    }
+
+    $scope.Init = function () {
+        initMode();
+        var lines = mapProvider.query(function() {
+            $scope.lines = lines;
+        });
     }
 
     $scope.isSelected = function (section) {
@@ -16,6 +23,5 @@ seatApp.controller('Map', ['$scope', function ($scope) {
         else
             $scope.mode = mode;
     }
-
-    initMode();
+   
 }]);

@@ -22,13 +22,8 @@ namespace CommonClasses.Models
         public void CreateTestData()
         {
             Clear();
-            AddLine(new Line(-100, -100, 100, -100));
-            AddLine(new Line(100, -100, 100, 100));
-            AddLine(new Line(100, 100, -100, 100));
-            AddLine(new Line(-100, 100, -100, -100));
-            AddLine(new Line(-50, -100, -50, 0));
-            AddLine(new Line(-50, 0, 50, 0));
-            AddLine(new Line(50, 0, 50, -100));
+            AddLine(new Line(20, 300, 350, 35));
+            AddLine(new Line(20, 20, 500, 350));
         }
 
         public IEnumerable<Line> GetCanvasLines(CanvasParameters parameters)

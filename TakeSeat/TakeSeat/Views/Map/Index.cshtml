@@ -3,9 +3,10 @@
     Layout = "~/Views/_Layout.cshtml";
 }
 
+<script src="~/js/Services/DataResources.js"></script>
 <script src="~/js/Controllers/MapController.js"></script>
 
-<div class="row" ng-controller="Map">
+<div class="row" ng-controller="Map" ng-init="Init()">
     <div class="col-lg-8 canvas">@Html.Partial("Paper")</div>
     <div class="col-lg-4">
         <div class="bs-component">
