@@ -122,6 +122,7 @@
     <Content Include="assets\css\bootstrap.min.css" />
     <Content Include="assets\js\angular-resource.js" />
     <Content Include="assets\js\angular.js" />
+    <Content Include="assets\js\underscore.js" />
     <Content Include="css\main.css" />
     <Content Include="assets\img\glyphicons-halflings-white.png" />
     <Content Include="assets\img\glyphicons-halflings.png" />
