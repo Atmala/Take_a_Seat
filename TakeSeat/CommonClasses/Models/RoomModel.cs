@@ -8,6 +8,7 @@ namespace CommonClasses.Models
     {
         private readonly List<Line> _lines = new List<Line>(); 
         public IEnumerable<Line> Lines { get { return _lines.AsEnumerable(); } }
+        public CanvasParameters Parameters { get; private set; }
 
         public void AddLine(Line line)
         {
@@ -26,9 +27,9 @@ namespace CommonClasses.Models
             AddLine(new Line(20, 20, 500, 350));
         }
 
-        public IEnumerable<Line> GetCanvasLines(CanvasParameters parameters)
+        public IEnumerable<Line> GetCanvasLines()
         {
-            return _lines.Select(l => l.TransformLine(parameters));
+            return _lines.Select(l => l.TransformLine(Parameters));
         }
 
         public IEnumerable<Line> GetCanvasLines(int canvasWidth, int canvasHeight)
@@ -42,8 +43,18 @@ namespace CommonClasses.Models
             int height = maximumY - minimumY;
 
             decimal pixelsInSm = Math.Min((decimal) canvasWidth/width, (decimal) canvasHeight/height);
-            var parameters = new CanvasParameters(pixelsInSm, -minimumX, -minimumY);
-            return GetCanvasLines(parameters);
+            Parameters = new CanvasParameters(pixelsInSm, -minimumX, -minimumY);
+            return GetCanvasLines();
+        }
+
+        public void AddNewLine(int canvasX1, int canvasY1, int canvasX2, int canvasY2)
+        {
+            var line = new Line(
+                (int)((canvasX1 - Parameters.ShiftX)/Parameters.PixelsInSm),
+                (int)((canvasY1 - Parameters.ShiftY)/Parameters.PixelsInSm),
+                (int)((canvasX2 - Parameters.ShiftX)/Parameters.PixelsInSm),
+                (int)((canvasY2 - Parameters.ShiftY)/Parameters.PixelsInSm));
+            _lines.Add(line);
         }
     }
 }

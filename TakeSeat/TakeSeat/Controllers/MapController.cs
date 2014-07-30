@@ -5,6 +5,21 @@ namespace TakeSeat.Controllers
 {
     public class MapController : Controller
     {
+        public RoomModel Room
+        {
+            get
+            {
+                if (Session["Room"] == null)
+                {
+                    var room = new RoomModel();
+                    room.CreateTestData();
+                    Session["Room"] = room;
+                }
+                return (RoomModel) Session["Room"];
+            }
+        }
+        //
+        // GET: /Map/
         public ActionResult Index()
         {
             return View();
@@ -18,6 +33,10 @@ namespace TakeSeat.Controllers
             var lines = roomModel.GetCanvasLines(700, 400);
             return Json(lines, JsonRequestBehavior.AllowGet);
         }
+
+        public void AddNewLine(int canvasX1, int canvasY1, int canvasX2, int canvasY2)
+        {
+            Room.AddNewLine(canvasX1, canvasY1, canvasX2, canvasY2);
+        }
     }
 }
-
