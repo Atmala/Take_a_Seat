@@ -35,7 +35,8 @@ namespace TakeSeat.Controllers
             return Json(lines, JsonRequestBehavior.AllowGet);
         }
 
-        public void AddNewLine(int canvasX1, int canvasY1, int canvasX2, int canvasY2)
+         [HttpPost]
+        public void SaveLine(int canvasX1, int canvasY1, int canvasX2, int canvasY2)
         {
             Room.AddNewLine(canvasX1, canvasY1, canvasX2, canvasY2);
         }
