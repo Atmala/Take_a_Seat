@@ -37,7 +37,7 @@ namespace CommonClasses.Models
             return _lines.Select(l => l.TransformLine(Parameters));
         }
 
-        public IEnumerable<Line> GetCanvasLines(int canvasWidth, int canvasHeight)
+        public void SetParametersByCanvasSize(int canvasWidth, int canvasHeight)
         {
             int minimumX = _lines.Min(l => Math.Min(l.X1, l.X2));
             int maximumX = _lines.Max(l => Math.Max(l.X1, l.X2));
@@ -51,7 +51,6 @@ namespace CommonClasses.Models
             Parameters = new CanvasParameters(pixelsInSm, 
                 (int)(-minimumX * pixelsInSm), 
                 (int)(-minimumY * pixelsInSm));
-            return GetCanvasLines();
         }
 
         public void AddNewLine(int canvasX1, int canvasY1, int canvasX2, int canvasY2)
@@ -62,6 +61,12 @@ namespace CommonClasses.Models
                 (int)((canvasX2 - Parameters.ShiftX)/Parameters.PixelsInSm),
                 (int)((canvasY2 - Parameters.ShiftY)/Parameters.PixelsInSm));
             _lines.Add(line);
+        }
+
+        public void MoveImage(int shiftX, int shiftY)
+        {
+            Parameters.ShiftX += shiftX;
+            Parameters.ShiftY += shiftY;
         }
     }
 }

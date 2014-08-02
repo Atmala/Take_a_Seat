@@ -10,8 +10,8 @@ namespace CommonClasses.Models
     public class CanvasParameters
     {
         public decimal PixelsInSm { get; private set; }
-        public int ShiftX { get; private set; }
-        public int ShiftY { get; private set; }
+        public int ShiftX { get; set; }
+        public int ShiftY { get; set; }
 
         public CanvasParameters(decimal pixelsInSm, int shiftX, int shiftY)
         {

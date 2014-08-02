@@ -22,12 +22,15 @@ seatApp.controller('Map', ['$scope', 'MapProvider', function ($scope, mapProvide
             initMode();
         else
             $scope.mode = mode;
+    }
 
+    $scope.SaveLine = function() {
         mapProvider.SaveLine(
-        { canvasX1: 100, canvasY1: 100, canvasX2 : 100, canvasY2 : 100},
+        { canvasX1: 100, canvasY1: 100, canvasX2: 100, canvasY2: 100 },
             function () {
-            $scope.result = lines;
-        });
+                $scope.result = lines;
+            });
     }
    
 }]);
+
