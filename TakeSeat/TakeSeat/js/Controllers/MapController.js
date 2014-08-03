@@ -16,7 +16,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', '$http', function ($scope, m
         //success(function (data) {
         //    $scope.room = data;
         //});
-        var room = mapProvider.GetRoom(function(response) {
+        var room = mapProvider.Get(function(response) {
             $scope.room = response;
         });
     }

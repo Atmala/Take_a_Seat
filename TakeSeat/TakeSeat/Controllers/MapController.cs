@@ -29,7 +29,7 @@ namespace TakeSeat.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetRoom()
+        public JsonResult Get()
         {
 <<<<<<< .mine
             var lines = Room.GetCanvasLines().ToList();

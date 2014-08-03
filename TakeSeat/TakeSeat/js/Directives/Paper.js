@@ -107,8 +107,8 @@ seatApp
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
                                 var newPath = getNewPath();
-                                newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.points[0].Y]));
-                                newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.points[1].Y]));
+                                newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.Points[0].Y]));
+                                newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.Points[1].Y]));
                                 allFigures.push(newPath);
                             });
                         });
