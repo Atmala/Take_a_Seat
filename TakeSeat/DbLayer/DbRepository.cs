@@ -28,24 +28,62 @@ namespace DbLayer
                     Id = room.Id,
                     Caption = room.Caption, 
                     Description = room.Description,
-                    Order = room.Order
+                    Order = room.Order,
+                    RoomObjects = GetRoomObjectModels(db, roomId)
                 };
-                var roomObjects =
+                
+            }
+            return roomModel;
+        }
+
+        private List<RoomObjectModel> GetRoomObjectModels(TakeSeatDbContext db, int roomId)
+        {
+            var result = new List<RoomObjectModel>();
+            var roomObjects =
                     from ro in db.RoomObjects
                     join rot in db.RoomObjectTypes on ro.RoomObjectTypeId equals rot.Id
                     where ro.RoomId == roomId
-                    select new {RoomObject = ro, RoomObjectType = rot.Name};
-                
-                foreach (var r in roomObjects)
+                    select new { RoomObject = ro, RoomObjectType = rot.Name };
+
+            foreach (var r in roomObjects)
+            {
+                var roomObjectModel = new RoomObjectModel
                 {
-                    var roomObjectModel = new RoomObjectModel
-                    {
-                        Id = r.RoomObject.Id, 
-                        RoomObjectType = r.RoomObjectType
-                    };
-                }
+                    Id = r.RoomObject.Id,
+                    RoomObjectType = r.RoomObjectType,
+                    Points = GetPointModels(db, r.RoomObject.Id),
+                    Rectangles = GetRectangleModels(db, r.RoomObject.Id)
+                };
             }
-            return roomModel;
+            return result;
+        }
+
+        private List<PointModel> GetPointModels(TakeSeatDbContext db, int roomObjectId)
+        {
+            return (from p in db.Points
+                where p.RoomObjectId == roomObjectId
+                orderby p.Order
+                select new PointModel
+                       {
+                           Id = p.Id,
+                           X = p.X,
+                           Y = p.Y, 
+                           Order = p.Order
+                       }).ToList();
+        }
+
+        private List<RectangleModel> GetRectangleModels(TakeSeatDbContext db, int roomObjectId)
+        {
+            return (from p in db.Rectangles
+                    where p.RoomObjectId == roomObjectId
+                    select new RectangleModel
+                    {
+                        Id = p.Id,
+                        LeftTopX = p.LeftTopX, 
+                        LeftTopY = p.LeftTopY,
+                        Width = p.Width,
+                        Height = p.Height
+                    }).ToList();
         }
     }
 }
