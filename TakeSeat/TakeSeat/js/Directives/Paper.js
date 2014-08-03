@@ -37,18 +37,7 @@ seatApp
 
                     function mouseMove(event) {
                         $('#logInfo').text(event.offsetX + ' : ' + event.offsetY);
-                        if (mouseDownPoint) {
-                            event.delta = new paper.Point(
-                                event.offsetX - mouseDownPoint.x,
-                                event.offsetY - mouseDownPoint.y);
-                            var limit = 2;
-                            if (event.delta.x > limit || event.delta.y > limit || event.delta.x < -limit || event.delta.y < -limit) {
-                                mouseDrag(event);
-                                mouseDownPoint.x = event.offsetX;
-                                mouseDownPoint.y = event.offsetY;
-                            }
-                            return;
-                        }
+                        
                         var x = event.offsetX;
                         var y = event.offsetY;
                         if (canDraw()) {
@@ -61,7 +50,18 @@ seatApp
 
                             drawLine(mouseDownPoint, new paper.Point([x, y]));
                         } else {
-                            
+                            if (mouseDownPoint) {
+                                event.delta = new paper.Point(
+                                    event.offsetX - mouseDownPoint.x,
+                                    event.offsetY - mouseDownPoint.y);
+                                var limit = 2;
+                                if (event.delta.x > limit || event.delta.y > limit || event.delta.x < -limit || event.delta.y < -limit) {
+                                    mouseDrag(event);
+                                    mouseDownPoint.x = event.offsetX;
+                                    mouseDownPoint.y = event.offsetY;
+                                }
+                                return;
+                            }
                         }
                     }
 

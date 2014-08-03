@@ -31,11 +31,6 @@ namespace TakeSeat.Controllers
         [HttpGet]
         public JsonResult Get()
         {
-<<<<<<< .mine
-            var lines = Room.GetCanvasLines().ToList();
-=======
-            //var lines = Room.GetCanvasLines().ToList();
->>>>>>> .theirs
             //var json = new JavaScriptSerializer().Serialize(Room);
             var result = Json(Room, JsonRequestBehavior.AllowGet);
             return result;
