@@ -5,50 +5,42 @@ seatApp
                 restrict: 'A',
                 link: function (scope, element, attrs) {
 
-                    var path, mouseDownPoint;
+                    var path, mouseDownPoint, rectangle;
                     var isDrawing = false;
                     var allFigures = [];
-
-                    function canDraw() {
-                        return isDrawing && scope.mode === 'line';
-                    };
+                    var rectangleWidth = 30, rectangleHeight = 50;
 
                     function mouseUp(event) {
                         isDrawing = false;
                         mouseDownPoint = undefined;
                     }
 
-                    //function move() {
-                    //    if (mouseDownPoint) {
-                    //        var shiftX = event.offsetX - mouseDownPoint.x;
-                    //        var shiftY = event.offsetY - mouseDownPoint.y;
-                    //        mouseDownPoint.x = event.offsetX;
-                    //        mouseDownPoint.y = event.offsetY;
-                    //        mapProvider.MoveFullImage(
-                    //            { shiftX: shiftX, shiftY: shiftY },
-                    //              function () {
-                    //                  scope.lines = lines;
-                    //              });
-                    //        var lines = mapProvider.Get(function () {
-                    //            scope.lines = lines;
-                    //        });
-                    //    }
-                    //}
-
                     function mouseMove(event) {
                         $('#logInfo').text(event.offsetX + ' : ' + event.offsetY);
                         
                         var x = event.offsetX;
                         var y = event.offsetY;
-                        if (canDraw()) {
-                            if (x <= 5 || y <= 5 || x >= event.currentTarget.width - 5 || y >= event.currentTarget.height - 5) {
-                                mouseUp();
-                                return;
+                        if (scope.mode === 'line') {
+                            if (isDrawing) {
+                                if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
+                                    mouseUp();
+                                    return;
+                                }
+
+                                path.removeSegments();
+                                drawLine(mouseDownPoint, new paper.Point([x, y]));
                             }
-
-                            path.removeSegments();
-
-                            drawLine(mouseDownPoint, new paper.Point([x, y]));
+                        } else if (scope.mode === 'table'){
+                            if (rectangle) {
+                                rectangle.removeSegments();
+                            } else {
+                                rectangle = getNewPath();
+                            }
+                            rectangle.moveTo(x, y);
+                            rectangle.lineTo(x + rectangleWidth, y);
+                            rectangle.lineTo(x + rectangleWidth, y + rectangleHeight);
+                            rectangle.lineTo(x, y + rectangleHeight);
+                            rectangle.lineTo(x, y);
                         } else {
                             if (mouseDownPoint) {
                                 event.delta = new paper.Point(
@@ -88,8 +80,15 @@ seatApp
                     }
 
                     function mouseDown(event) {
-                        isDrawing = true;
-                        path = getNewPath();
+                        if (scope.mode === 'line') {
+                            isDrawing = true;
+                            path = getNewPath();
+                        } else if (scope.mode === 'table') {
+                            if (rectangle) {
+                                allFigures.push(rectangle);
+                                rectangle = undefined;
+                            }
+                        }
                         mouseDownPoint = new paper.Point([event.offsetX, event.offsetY]);
                     }
 

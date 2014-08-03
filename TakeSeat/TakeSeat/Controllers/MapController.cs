@@ -14,7 +14,7 @@ namespace TakeSeat.Controllers
                 if (Session["Room"] == null)
                 {
                     var room = new RoomModel2();
-                    room.CreateTestData();
+                    //room.CreateTestData();
                     //room.SetParametersByCanvasSize(700, 400);
                     Session["Room"] = room;
                 }
