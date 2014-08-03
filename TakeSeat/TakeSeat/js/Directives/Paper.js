@@ -18,22 +18,22 @@ seatApp
                         mouseDownPoint = undefined;
                     }
 
-                    function move() {
-                        if (mouseDownPoint) {
-                            var shiftX = event.offsetX - mouseDownPoint.x;
-                            var shiftY = event.offsetY - mouseDownPoint.y;
-                            mouseDownPoint.x = event.offsetX;
-                            mouseDownPoint.y = event.offsetY;
-                            mapProvider.MoveFullImage(
-                                { shiftX: shiftX, shiftY: shiftY },
-                                  function () {
-                                      scope.lines = lines;
-                                  });
-                            var lines = mapProvider.Get(function () {
-                                scope.lines = lines;
-                            });
-                        }
-                    }
+                    //function move() {
+                    //    if (mouseDownPoint) {
+                    //        var shiftX = event.offsetX - mouseDownPoint.x;
+                    //        var shiftY = event.offsetY - mouseDownPoint.y;
+                    //        mouseDownPoint.x = event.offsetX;
+                    //        mouseDownPoint.y = event.offsetY;
+                    //        mapProvider.MoveFullImage(
+                    //            { shiftX: shiftX, shiftY: shiftY },
+                    //              function () {
+                    //                  scope.lines = lines;
+                    //              });
+                    //        var lines = mapProvider.Get(function () {
+                    //            scope.lines = lines;
+                    //        });
+                    //    }
+                    //}
 
                     function mouseMove(event) {
                         $('#logInfo').text(event.offsetX + ' : ' + event.offsetY);
@@ -104,11 +104,11 @@ seatApp
 
                     function initAllFigures() {
                         project.activeLayer.remove();
-                        scope.$watch('scope.lines', function () {
-                            _.each(scope.lines, function (line) {
+                        scope.$watch('scope.room.RoomObjects', function () {
+                            _.each(scope.room.RoomObjects, function (roomObject) {
                                 var newPath = getNewPath();
-                                newPath.moveTo(new paper.Point([line.X1, line.Y1]));
-                                newPath.lineTo(new paper.Point([line.X2, line.Y2]));
+                                newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.points[0].Y]));
+                                newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.points[1].Y]));
                                 allFigures.push(newPath);
                             });
                         });

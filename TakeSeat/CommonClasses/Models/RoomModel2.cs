@@ -18,5 +18,19 @@ namespace CommonClasses.Models
         {
             RoomObjects = new List<RoomObjectModel>();
         }
+
+        public void CreateTestData()
+        {
+            RoomObjects.Add(
+                new RoomObjectModel
+                {
+                    RoomObjectType = "wall",
+                    Points = new List<PointModel>
+                             {
+                                 new PointModel{X = 10, Y = 10},
+                                 new PointModel{X = 200, Y = 200}
+                             }
+                });
+        }
     }
 }

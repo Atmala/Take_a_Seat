@@ -1,6 +1,6 @@
 ﻿var seatApp = angular.module('seatApp', ['DataResources']);
 
-seatApp.controller('Map', ['$scope', 'MapProvider', function ($scope, mapProvider) {
+seatApp.controller('Map', ['$scope', 'MapProvider', '$http', function ($scope, mapProvider, $http) {
 
     function initMode() {
         $scope.mode = 'view';
@@ -8,8 +8,16 @@ seatApp.controller('Map', ['$scope', 'MapProvider', function ($scope, mapProvide
 
     $scope.Init = function () {
         initMode();
-        mapProvider.Get(function(response) {
-            $scope.lines = response;
+        //var room = $resource('/Map/Get', {}, 
+        //  { charge: {method:'GET', params:{charge:true}}
+        //  });
+        //$scope.room = room;
+        //$http.jsonp('http://localhost:44039/Map/Get').
+        //success(function (data) {
+        //    $scope.room = data;
+        //});
+        var room = mapProvider.GetRoom(function(response) {
+            $scope.room = response;
         });
     }
 

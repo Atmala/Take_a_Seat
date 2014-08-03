@@ -16,6 +16,7 @@ namespace DbLayer
             
         }
 
+        #region GetRoomModel Methods
         public RoomModel2 GetRoomModel(int roomId)
         {
             RoomModel2 roomModel;
@@ -85,5 +86,7 @@ namespace DbLayer
                         Height = p.Height
                     }).ToList();
         }
+
+        #endregion
     }
 }
