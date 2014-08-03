@@ -31,7 +31,8 @@ namespace TakeSeat.Controllers
         public JsonResult Get()
         {
             var lines = Room.GetCanvasLines().ToList();
-            return Json(lines, JsonRequestBehavior.AllowGet);
+            var result = Json(lines, JsonRequestBehavior.AllowGet);
+            return result;
         }
 
         [HttpPost]

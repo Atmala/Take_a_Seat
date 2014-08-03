@@ -8,8 +8,8 @@ seatApp.controller('Map', ['$scope', 'MapProvider', function ($scope, mapProvide
 
     $scope.Init = function () {
         initMode();
-        var lines = mapProvider.Get(function() {
-            $scope.lines = lines;
+        mapProvider.Get(function(response) {
+            $scope.lines = response;
         });
     }
 
