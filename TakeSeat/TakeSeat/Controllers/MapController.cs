@@ -7,18 +7,18 @@ namespace TakeSeat.Controllers
 {
     public class MapController : Controller
     {
-        public RoomModel2 Room
+        public RoomModel Room
         {
             get
             {
                 if (Session["Room"] == null)
                 {
-                    var room = new RoomModel2();
+                    var room = new RoomModel();
                     //room.CreateTestData();
                     //room.SetParametersByCanvasSize(700, 400);
                     Session["Room"] = room;
                 }
-                return (RoomModel2) Session["Room"];
+                return (RoomModel) Session["Room"];
             }
         }
         //
@@ -50,7 +50,7 @@ namespace TakeSeat.Controllers
         }
 
         [HttpPost]
-        public void SaveRoom(RoomModel2 room)
+        public void SaveRoom(RoomModel room)
         {
             return;
         }

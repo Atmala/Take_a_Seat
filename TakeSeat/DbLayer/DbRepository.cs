@@ -9,40 +9,37 @@ using CommonClasses.Models;
 
 namespace DbLayer
 {
-    public class DbRepository
+    public class DbRepository: IDisposable
     {
+        private TakeSeatDbContext _db = new TakeSeatDbContext();
         public void SaveRoomModel(RoomModel roomModel)
         {
             
         }
 
         #region GetRoomModel Methods
-        public RoomModel2 GetRoomModel(int roomId)
+        public RoomModel GetRoomModel(int roomId)
         {
-            RoomModel2 roomModel;
-            using (var db = new TakeSeatDbContext())
-            {
-                var room = db.Rooms.FirstOrDefault(r => r.Id == roomId);
-                if (room == null) return new RoomModel2();
-                roomModel = new RoomModel2
+            RoomModel roomModel;
+                var room = _db.Rooms.FirstOrDefault(r => r.Id == roomId);
+                if (room == null) return new RoomModel();
+                roomModel = new RoomModel
                 {
                     Id = room.Id,
                     Caption = room.Caption, 
                     Description = room.Description,
                     Order = room.Order,
-                    RoomObjects = GetRoomObjectModels(db, roomId)
+                    RoomObjects = GetRoomObjectModels(roomId)
                 };
-                
-            }
             return roomModel;
         }
 
-        private List<RoomObjectModel> GetRoomObjectModels(TakeSeatDbContext db, int roomId)
+        private List<RoomObjectModel> GetRoomObjectModels(int roomId)
         {
             var result = new List<RoomObjectModel>();
             var roomObjects =
-                    from ro in db.RoomObjects
-                    join rot in db.RoomObjectTypes on ro.RoomObjectTypeId equals rot.Id
+                    from ro in _db.RoomObjects
+                    join rot in _db.RoomObjectTypes on ro.RoomObjectTypeId equals rot.Id
                     where ro.RoomId == roomId
                     select new { RoomObject = ro, RoomObjectType = rot.Name };
 
@@ -52,16 +49,16 @@ namespace DbLayer
                 {
                     Id = r.RoomObject.Id,
                     RoomObjectType = r.RoomObjectType,
-                    Points = GetPointModels(db, r.RoomObject.Id),
-                    Rectangles = GetRectangleModels(db, r.RoomObject.Id)
+                    Points = GetPointModels(r.RoomObject.Id),
+                    Rectangles = GetRectangleModels(r.RoomObject.Id)
                 };
             }
             return result;
         }
 
-        private List<PointModel> GetPointModels(TakeSeatDbContext db, int roomObjectId)
+        private List<PointModel> GetPointModels(int roomObjectId)
         {
-            return (from p in db.Points
+            return (from p in _db.Points
                 where p.RoomObjectId == roomObjectId
                 orderby p.Order
                 select new PointModel
@@ -73,9 +70,9 @@ namespace DbLayer
                        }).ToList();
         }
 
-        private List<RectangleModel> GetRectangleModels(TakeSeatDbContext db, int roomObjectId)
+        private List<RectangleModel> GetRectangleModels(int roomObjectId)
         {
-            return (from p in db.Rectangles
+            return (from p in _db.Rectangles
                     where p.RoomObjectId == roomObjectId
                     select new RectangleModel
                     {
@@ -88,5 +85,10 @@ namespace DbLayer
         }
 
         #endregion
+
+        public void Dispose()
+        {
+
+        }
     }
 }

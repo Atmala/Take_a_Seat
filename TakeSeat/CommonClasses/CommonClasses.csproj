@@ -63,7 +63,6 @@
     <Compile Include="Models\PointModel.cs" />
     <Compile Include="Models\RectangleModel.cs" />
     <Compile Include="Models\RoomModel.cs" />
-    <Compile Include="Models\RoomModel2.cs" />
     <Compile Include="Models\RoomObjectModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
