@@ -2,8 +2,9 @@
     factory('MapProvider', ['$resource', function($resource) {
         return $resource('/Map/:action', {}, {
             'Get': { method: 'GET', params: { action: 'Get' } },
+            'SaveRoom': { method: 'POST', params: { action: 'SaveRoom'} },
             'SaveLine': { method: 'POST', params: { action: 'SaveLine' } },
             'MoveFullImage': { method: 'POST', params: { action: 'MoveFullImage' } }
         });
     }
-    ]);
+]);

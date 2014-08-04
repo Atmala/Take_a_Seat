@@ -48,5 +48,11 @@ namespace TakeSeat.Controllers
             //var lines = Room.GetCanvasLines();
             return Json(Room, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public void SaveRoom(RoomModel2 room)
+        {
+            return;
+        }
     }
 }

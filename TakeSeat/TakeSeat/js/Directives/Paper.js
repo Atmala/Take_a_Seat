@@ -13,6 +13,26 @@ seatApp
                     function mouseUp(event) {
                         isDrawing = false;
                         mouseDownPoint = undefined;
+                        if (path && scope.mode === 'line') {
+                            var roomObject = {
+                                RoomObjectType: 'line',
+                                Points: [
+                                {
+                                    //Id: 0,
+                                    X: path.segments[0].point.x,
+                                    Y: path.segments[0].point.y,
+                                    //Order: 1
+                                },
+                                {
+                                    //Id: 0,
+                                    X: path.segments[1].point.x,
+                                    Y: path.segments[1].point.y,
+                                    //Order: 2
+                                }]
+                            };
+                            scope.room.RoomObjects.push(roomObject);
+                            mapProvider.SaveRoom(scope.room, function () {});
+                        }
                     }
 
                     function mouseMove(event) {
