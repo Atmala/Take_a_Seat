@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CommonClasses.Database;
 
 namespace CommonClasses.Models
 {
@@ -20,7 +21,7 @@ namespace CommonClasses.Models
             RoomObjects.Add(
                 new RoomObjectModel
                 {
-                    RoomObjectType = "wall",
+                    RoomObjectTypeStr = "wall",
                     Points = new List<PointModel>
                              {
                                  new PointModel{X = 10, Y = 10},

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.Core.Metadata.Edm;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -17,7 +18,7 @@ namespace DbLayer
 
         #region Save
 
-        public int Save<T>(T obj, int? transactionNumber = null) where T : class, IMapping
+        public int Save<T>(T obj) where T : class, IMapping
         {
             int id = obj.Id;
             if (id == 0)
@@ -36,9 +37,62 @@ namespace DbLayer
 
         #endregion
 
-        public void SaveRoomModel(RoomModel room)
+        #region RoomObjectType
+
+        private List<RoomObjectType> _roomObjectTypes;
+        private List<RoomObjectType> RoomObjectTypes
         {
+            get
+            {
+                return _roomObjectTypes ?? (_roomObjectTypes = _db.RoomObjectTypes.ToList());
+            }
         }
+
+        private int GetRoomObjectTypeId(string name)
+        {
+            var roomObjectType = RoomObjectTypes.
+                FirstOrDefault(r => r.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+            return roomObjectType == null ? 0 : roomObjectType.Id;
+        }
+
+        #endregion
+
+
+        #region SaveRoomModel Methods
+        private void SaveRoomObjectModel(RoomObjectModel roomObjectModel, int roomId)
+        {
+            var roomObject = new RoomObject();
+            ReflectionHelper.CopyAllProperties(roomObjectModel, roomObject);
+            roomObject.RoomId = roomId;
+            roomObject.RoomObjectTypeId = GetRoomObjectTypeId(roomObjectModel.RoomObjectTypeStr);
+            Save(roomObject);
+            foreach (var pointModel in roomObjectModel.Points)
+            {
+                var point = new Point();
+                ReflectionHelper.CopyAllProperties(pointModel, point);
+                point.RoomObjectId = roomObject.Id;
+                Save(point);
+            }
+            foreach (var rectangleModel in roomObjectModel.Rectangles)
+            {
+                var rectangle = new Rectangle();
+                ReflectionHelper.CopyAllProperties(rectangleModel, rectangle);
+                rectangle.RoomObjectId = roomObject.Id;
+                Save(rectangle);
+            }
+        }
+        public void SaveRoomModel(RoomModel roomModel)
+        {
+            var room = new Room();
+            ReflectionHelper.CopyAllProperties(roomModel, room);
+            Save(room);
+            foreach (var roomObjectModel in roomModel.RoomObjects)
+            {
+                SaveRoomObjectModel(roomObjectModel, room.Id);
+            }
+        }
+
+        #endregion
 
         #region GetRoomModel Methods
         public RoomModel GetRoomModel(int roomId)
@@ -71,7 +125,7 @@ namespace DbLayer
                 var roomObjectModel = new RoomObjectModel
                 {
                     Id = r.RoomObject.Id,
-                    RoomObjectType = r.RoomObjectType,
+                    RoomObjectTypeStr = r.RoomObjectType,
                     Points = GetPointModels(r.RoomObject.Id),
                     Rectangles = GetRectangleModels(r.RoomObject.Id)
                 };

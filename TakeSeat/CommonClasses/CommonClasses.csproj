@@ -60,8 +60,6 @@
     <Compile Include="Database\RoomObject.cs" />
     <Compile Include="Database\RoomObjectType.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
-    <Compile Include="Models\CanvasParameters.cs" />
-    <Compile Include="Models\Line.cs" />
     <Compile Include="Models\PointModel.cs" />
     <Compile Include="Models\RectangleModel.cs" />
     <Compile Include="Models\RoomModel.cs" />
