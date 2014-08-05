@@ -36,7 +36,7 @@ seatApp
                     }
 
                     function mouseMove(event) {
-                        $('#logInfo').text(event.offsetX + ' : ' + event.offsetY);
+                        setCurrentCoords(event.offsetX, event.offsetY);
                         
                         var x = event.offsetX;
                         var y = event.offsetY;
@@ -84,8 +84,14 @@ seatApp
                                 figure.position.y += event.delta.y;
                             });
                             var fig = allFigures[0];
-                            $('#logInfo').text(fig.position.x + ' : ' + fig.position.y);
+                            setCurrentCoords(fig.position.x, fig.position.y);
                         }
+                    }
+
+                    function setCurrentCoords(x, y) {
+                        scope.X = x;
+                        scope.Y = y;
+                        scope.$apply();
                     }
 
                     function drawLine(startPoint, endPoint) {

@@ -8,14 +8,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', '$http', function ($scope, m
 
     $scope.Init = function () {
         initMode();
-        //var room = $resource('/Map/Get', {}, 
-        //  { charge: {method:'GET', params:{charge:true}}
-        //  });
-        //$scope.room = room;
-        //$http.jsonp('http://localhost:44039/Map/Get').
-        //success(function (data) {
-        //    $scope.room = data;
-        //});
+
         var room = mapProvider.Get(function(response) {
             $scope.room = response;
         });
