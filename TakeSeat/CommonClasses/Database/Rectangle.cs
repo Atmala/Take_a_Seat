@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CommonClasses.Database
 {
-    public class Rectangle
+    public class Rectangle: IMapping
     {
         [Key]
         public int Id { get; set; }

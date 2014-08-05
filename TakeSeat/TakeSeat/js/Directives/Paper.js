@@ -30,6 +30,7 @@ seatApp
                                     //Order: 2
                                 }]
                             };
+                            allFigures.push(path);
                             scope.room.RoomObjects.push(roomObject);
                             mapProvider.SaveRoom(scope.room, function () {});
                         }

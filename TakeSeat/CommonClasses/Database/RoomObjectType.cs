@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CommonClasses.Database
 {
-    public class RoomObjectType
+    public class RoomObjectType: IMapping
     {
         [Key]
         public int Id { get; set; }

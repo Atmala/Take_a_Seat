@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CommonClasses.Database
 {
-    public class Point
+    public class Point: IMapping
     {
         [Key]
         public int Id { get; set; }

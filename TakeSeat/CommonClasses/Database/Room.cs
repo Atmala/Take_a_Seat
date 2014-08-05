@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CommonClasses.Database
 {
-    public class Room
+    public class Room: IMapping
     {
         [Key]
         public int Id { get; set; }

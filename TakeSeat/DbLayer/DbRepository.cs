@@ -5,6 +5,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using CommonClasses.Database;
+using CommonClasses.Helpers;
 using CommonClasses.Models;
 
 namespace DbLayer
@@ -12,9 +14,30 @@ namespace DbLayer
     public class DbRepository: IDisposable
     {
         private TakeSeatDbContext _db = new TakeSeatDbContext();
-        public void SaveRoomModel(RoomModel roomModel)
+
+        #region Save
+
+        public int Save<T>(T obj, int? transactionNumber = null) where T : class, IMapping
         {
-            
+            int id = obj.Id;
+            if (id == 0)
+            {
+                _db.Add(obj);
+            }
+            else
+            {
+                var record = _db.GetById<T>(id);
+                ReflectionHelper.CopyAllProperties(obj, record);
+            }
+            _db.SaveChanges();
+
+            return obj.Id;
+        }
+
+        #endregion
+
+        public void SaveRoomModel(RoomModel room)
+        {
         }
 
         #region GetRoomModel Methods
@@ -88,7 +111,7 @@ namespace DbLayer
 
         public void Dispose()
         {
-
+            if (_db != null) _db.Dispose();
         }
     }
 }
