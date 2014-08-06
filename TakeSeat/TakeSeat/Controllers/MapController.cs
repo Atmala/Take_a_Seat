@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using CommonClasses.Models;
+using TakeSeatServiceProxy;
 
 namespace TakeSeat.Controllers
 {
@@ -52,7 +53,7 @@ namespace TakeSeat.Controllers
         [HttpPost]
         public void SaveRoom(RoomModel room)
         {
-            return;
+            ServiceProxy.SaveRoom(room);
         }
     }
 }

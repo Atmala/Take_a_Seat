@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonClasses", "CommonClas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbLayer", "DbLayer\DbLayer.csproj", "{AF693853-0E97-4744-8253-8C2BC1EB7564}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeSeatServiceProxy", "TakeSeatServiceProxy\TakeSeatServiceProxy.csproj", "{AE75B3E7-F2F7-4531-A084-AFBD1E699C9D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{AF693853-0E97-4744-8253-8C2BC1EB7564}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF693853-0E97-4744-8253-8C2BC1EB7564}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF693853-0E97-4744-8253-8C2BC1EB7564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE75B3E7-F2F7-4531-A084-AFBD1E699C9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE75B3E7-F2F7-4531-A084-AFBD1E699C9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE75B3E7-F2F7-4531-A084-AFBD1E699C9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE75B3E7-F2F7-4531-A084-AFBD1E699C9D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
