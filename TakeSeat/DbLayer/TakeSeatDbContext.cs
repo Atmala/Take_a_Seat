@@ -65,7 +65,7 @@ namespace DbLayer
         {
             var param = Expression.Parameter(typeof(T), "e");
             var predicate =
-                Expression.Lambda<Func<T, bool>>(Expression.Equal(Expression.Property(param, typeof(T).Name + "Id"),
+                Expression.Lambda<Func<T, bool>>(Expression.Equal(Expression.Property(param, "Id"),
                                                                   Expression.Constant(id)), param);
             return GetDbSet<T>().SingleOrDefault(predicate);
         }

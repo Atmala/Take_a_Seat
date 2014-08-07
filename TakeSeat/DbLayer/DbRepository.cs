@@ -57,7 +57,6 @@ namespace DbLayer
 
         #endregion
 
-
         #region SaveRoomModel Methods
         private void SaveRoomObjectModel(RoomObjectModel roomObjectModel, int roomId)
         {
