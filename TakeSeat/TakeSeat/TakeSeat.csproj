@@ -187,6 +187,10 @@
       <Project>{bf8bd8d4-6f7a-4adc-bd0a-f4ca5fa595ed}</Project>
       <Name>CommonClasses</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TakeSeatServiceProxy\TakeSeatServiceProxy.csproj">
+      <Project>{ae75b3e7-f2f7-4531-a084-afbd1e699c9d}</Project>
+      <Name>TakeSeatServiceProxy</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
