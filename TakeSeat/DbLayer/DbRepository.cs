@@ -128,6 +128,7 @@ namespace DbLayer
                     Points = GetPointModels(r.RoomObject.Id),
                     Rectangles = GetRectangleModels(r.RoomObject.Id)
                 };
+                result.Add(roomObjectModel);
             }
             return result;
         }
@@ -165,6 +166,12 @@ namespace DbLayer
         public void Dispose()
         {
             if (_db != null) _db.Dispose();
+        }
+
+        public RoomModel GetFirstRoom()
+        {
+            var room = _db.Rooms.FirstOrDefault();
+            return room == null ? null : GetRoomModel(room.Id);
         }
     }
 }

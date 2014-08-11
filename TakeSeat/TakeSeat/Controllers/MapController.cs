@@ -14,7 +14,7 @@ namespace TakeSeat.Controllers
             {
                 if (Session["Room"] == null)
                 {
-                    var room = new RoomModel();
+                    var room = ServiceProxy.GetFirstRoom() ?? new RoomModel();
                     //room.CreateTestData();
                     //room.SetParametersByCanvasSize(700, 400);
                     Session["Room"] = room;
@@ -35,12 +35,6 @@ namespace TakeSeat.Controllers
             //var json = new JavaScriptSerializer().Serialize(Room);
             var result = Json(Room, JsonRequestBehavior.AllowGet);
             return result;
-        }
-
-        [HttpPost]
-        public void SaveLine(int canvasX1, int canvasY1, int canvasX2, int canvasY2)
-        {
-            //Room.AddNewLine(canvasX1, canvasY1, canvasX2, canvasY2);
         }
 
         [HttpPost]

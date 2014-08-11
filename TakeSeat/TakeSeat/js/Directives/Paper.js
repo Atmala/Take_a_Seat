@@ -15,7 +15,7 @@ seatApp
                         mouseDownPoint = undefined;
                         if (path && scope.mode === 'line') {
                             var roomObject = {
-                                RoomObjectType: 'line',
+                                RoomObjectTypeStr: 'wall',
                                 Points: [
                                 {
                                     //Id: 0,
@@ -125,7 +125,7 @@ seatApp
                         paper.setup(canvas[0]);
 
                         initAllFigures();
-                        //paper.view.draw();
+                        paper.view.draw();
                     }
 
                     function initAllFigures() {
