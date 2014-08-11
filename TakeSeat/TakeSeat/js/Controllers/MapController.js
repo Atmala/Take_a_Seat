@@ -1,6 +1,6 @@
 ﻿var seatApp = angular.module('seatApp', ['DataResources']);
 
-seatApp.controller('Map', ['$scope', 'MapProvider', '$http', function ($scope, mapProvider, $http) {
+seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function ($scope, mapProvider, employeeProvider) {
 
     function initMode() {
         $scope.mode = 'view';
@@ -9,13 +9,24 @@ seatApp.controller('Map', ['$scope', 'MapProvider', '$http', function ($scope, m
     $scope.Init = function () {
         initMode();
 
-        var room = mapProvider.Get(function(response) {
+        mapProvider.Get(function(response) {
             $scope.room = response;
+        });
+        employeeProvider.query(function (response) {
+            $scope.employeeList = response;
         });
     }
 
     $scope.isSelected = function (section) {
         return $scope.mode === section;
+    }
+
+    $scope.isSelectedEmployee = function (employee) {
+        return $scope.selectedEmployee && employee.Id == $scope.selectedEmployee.Id;
+    }
+
+    $scope.selectEmployee = function (employee) {
+        return $scope.selectedEmployee = employee;
     }
 
     $scope.changeMode = function (mode) {

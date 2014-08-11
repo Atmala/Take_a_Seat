@@ -35,7 +35,11 @@ namespace TakeSeatServiceProxy
                 new EmployeeInfo {Id = 1, FioShort = "Кравчук Л.Н."},
                 new EmployeeInfo {Id = 2, FioShort = "Кучма Л.Д."},
                 new EmployeeInfo {Id = 3, FioShort = "Ющенко В.А."},
-                new EmployeeInfo {Id = 4, FioShort = "Янукович В.Ф"}
+                new EmployeeInfo {Id = 4, FioShort = "Янукович В.Ф"},
+                new EmployeeInfo {Id = 5, FioShort = "Кравчук Л.Н."},
+                new EmployeeInfo {Id = 6, FioShort = "Кучма Л.Д."},
+                new EmployeeInfo {Id = 7, FioShort = "Ющенко В.А."},
+                new EmployeeInfo {Id = 8, FioShort = "Янукович В.Ф"}
             };
         }
     }

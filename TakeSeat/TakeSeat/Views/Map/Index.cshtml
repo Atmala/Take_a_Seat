@@ -17,9 +17,9 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Tools</h3>
                 </div>
-                <div class="panel-body"> 
+                <div class="panel-body">
                     <div class="md-overlay">
-                        <button type="button" class="btn btn-success btn-primary btn-lg" ng-click="changeMode('line')" 
+                        <button type="button" class="btn btn-success btn-primary btn-lg" ng-click="changeMode('line')"
                                 ng-class="{active : isSelected('line'), activeBtn : isSelected('line')}">
                             Draw line
                         </button>
@@ -36,6 +36,21 @@
                             Add room
                         </button>
                     </div>
+                </div>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Emploee List</h3>
+                </div>
+                <div class="employeeList panel-body">
+                    <table class="table " id="tblEmployee">
+                        <tbody>
+                            <tr ng-repeat="employee in employeeList" ng-class="{selected: isSelectedEmployee(employee)}" ng-click="selectEmployee(employee)">
+                                <td>{{employee.FioShort}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

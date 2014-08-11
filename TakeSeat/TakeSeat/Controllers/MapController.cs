@@ -43,6 +43,7 @@ namespace TakeSeat.Controllers
             ServiceProxy.SaveRoom(room);
         }
 
+        [HttpGet]
         public JsonResult GetEmployeesWithoutSeat()
         {
             return Json(ServiceProxy.GetEmployeesWithoutSeat(), JsonRequestBehavior.AllowGet);

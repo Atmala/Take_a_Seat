@@ -34,3 +34,12 @@
 .activeBtn {
     font-weight: bold;
 }
+
+.employeeList {
+    height:140px;
+    overflow-y:scroll;
+}
+#tblEmployee .selected {
+    background-color: #485563 !important;
+    font-weight: bold;
+}
