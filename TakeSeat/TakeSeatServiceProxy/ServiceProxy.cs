@@ -20,11 +20,11 @@ namespace TakeSeatServiceProxy
             }
         }
 
-        public static void SaveRoom(RoomModel roomModel)
+        public static RoomModel SaveRoom(RoomModel roomModel)
         {
             using (var dbRepository = new DbRepository())
             {
-                dbRepository.SaveRoomModel(roomModel);
+                return dbRepository.SaveRoomModel(roomModel);
             }
         }
 

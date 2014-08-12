@@ -80,7 +80,7 @@ namespace DbLayer
                 Save(rectangle);
             }
         }
-        public void SaveRoomModel(RoomModel roomModel)
+        public RoomModel SaveRoomModel(RoomModel roomModel)
         {
             var room = new Room();
             ReflectionHelper.CopyAllProperties(roomModel, room);
@@ -89,6 +89,7 @@ namespace DbLayer
             {
                 SaveRoomObjectModel(roomObjectModel, room.Id);
             }
+            return GetRoomModel(room.Id);
         }
 
         #endregion

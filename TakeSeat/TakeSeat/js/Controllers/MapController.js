@@ -36,12 +36,8 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             $scope.mode = mode;
     }
 
-    $scope.SaveLine = function() {
-        mapProvider.SaveLine(
-        { canvasX1: 100, canvasY1: 100, canvasX2: 100, canvasY2: 100 },
-            function () {
-                $scope.result = lines;
-            });
+    $scope.saveRoom = function() {
+        mapProvider.SaveRoom($scope.room);
     }
    
 }]);

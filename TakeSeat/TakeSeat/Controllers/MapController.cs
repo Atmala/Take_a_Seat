@@ -21,6 +21,7 @@ namespace TakeSeat.Controllers
                 }
                 return (RoomModel) Session["Room"];
             }
+            set { Session["Room"] = value; }
         }
         //
         // GET: /Map/
@@ -40,7 +41,7 @@ namespace TakeSeat.Controllers
         [HttpPost]
         public void SaveRoom(RoomModel room)
         {
-            ServiceProxy.SaveRoom(room);
+            Room = ServiceProxy.SaveRoom(room);
         }
 
         [HttpGet]

@@ -37,7 +37,7 @@ seatApp
                             };
                             
                             scope.room.RoomObjects.push(roomObject);
-                            mapProvider.SaveRoom(scope.room, function () {});
+                            //mapProvider.SaveRoom(scope.room, function () {});
                         }
                        
                         if (scope.mode === 'assign') {
