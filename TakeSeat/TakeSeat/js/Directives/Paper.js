@@ -9,10 +9,15 @@ seatApp
                     var isDrawing = false;
                     var allFigures = [];
                     var rectangleWidth = 30, rectangleHeight = 50;
+                    var color = '#ACCCE2';
 
                     function mouseUp(event) {
                         isDrawing = false;
                         mouseDownPoint = undefined;
+
+                        if (scope.mode != 'assign') {
+                            allFigures.push(path);
+                        }
                         if (path && scope.mode === 'line') {
                             var roomObject = {
                                 RoomObjectTypeStr: 'wall',
@@ -30,10 +35,28 @@ seatApp
                                     //Order: 2
                                 }]
                             };
-                            allFigures.push(path);
+                            
                             scope.room.RoomObjects.push(roomObject);
                             mapProvider.SaveRoom(scope.room, function () {});
                         }
+                       
+                        if (scope.mode === 'assign') {
+                            clearSelection();
+                            allFigures.forEach(function(fig) {
+                                var x = event.offsetX;
+                                var y = event.offsetY;
+                                var point = new paper.Point(x, y);
+                                if (fig.contains(point)) {
+                                    fig.strokeWidth = 5;
+                                }
+                            });
+                        }
+                    }
+
+                    function clearSelection() {
+                        allFigures.forEach(function (fig) {
+                                fig.strokeWidth = 1;
+                        });
                     }
 
                     function mouseMove(event) {
@@ -41,8 +64,7 @@ seatApp
                         
                         var x = event.offsetX;
                         var y = event.offsetY;
-                        if (scope.mode === 'line') {
-                            if (isDrawing) {
+                        if (scope.mode === 'line' && isDrawing) {
                                 if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
                                     mouseUp();
                                     return;
@@ -50,19 +72,12 @@ seatApp
 
                                 path.removeSegments();
                                 drawLine(mouseDownPoint, new paper.Point([x, y]));
-                            }
-                        } else if (scope.mode === 'table'){
-                            if (rectangle) {
-                                rectangle.removeSegments();
-                            } else {
-                                rectangle = getNewPath();
-                            }
-                            rectangle.moveTo(x, y);
-                            rectangle.lineTo(x + rectangleWidth, y);
-                            rectangle.lineTo(x + rectangleWidth, y + rectangleHeight);
-                            rectangle.lineTo(x, y + rectangleHeight);
-                            rectangle.lineTo(x, y);
-                        } else {
+                            
+                        } else if (scope.mode === 'table' && isDrawing) {
+
+                            path.position = new paper.Point([x, y]);
+
+                        } /*else {
                             if (mouseDownPoint) {
                                 event.delta = new paper.Point(
                                     event.offsetX - mouseDownPoint.x,
@@ -75,7 +90,8 @@ seatApp
                                 }
                                 return;
                             }
-                        }
+                        }*/
+                        //Can't get why do we need this, commented to simplify investigation
                     }
 
                     function mouseDrag(event) {
@@ -102,21 +118,29 @@ seatApp
 
                     function getNewPath() {
                         var newPath = new paper.Path();
-                        newPath.strokeColor = '#ACCCE2';
+                        newPath.strokeColor = color;
+                        return newPath;
+                    }
+
+                    function getNewRectangle(x, y) {
+                        var point = new paper.Point(x, y);
+                        var size = new paper.Size(rectangleWidth, rectangleHeight);
+                        var newPath = new paper.Path.Rectangle(point, size);
+                        newPath.strokeColor = color;
                         return newPath;
                     }
 
                     function mouseDown(event) {
+                        isDrawing = true;
+                        var x = event.offsetX;
+                        var y = event.offsetY;
+
                         if (scope.mode === 'line') {
-                            isDrawing = true;
                             path = getNewPath();
                         } else if (scope.mode === 'table') {
-                            if (rectangle) {
-                                allFigures.push(rectangle);
-                                rectangle = undefined;
-                            }
+                            path = getNewRectangle(x, y);
                         }
-                        mouseDownPoint = new paper.Point([event.offsetX, event.offsetY]);
+                        mouseDownPoint = new paper.Point([x, y]);
                     }
 
                     function initPaper() {
@@ -129,7 +153,7 @@ seatApp
                     }
 
                     function initAllFigures() {
-                        project.activeLayer.remove();
+                       /* project.activeLayer.remove();
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
                                 var newPath = getNewPath();
@@ -137,7 +161,8 @@ seatApp
                                 newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.Points[1].Y]));
                                 allFigures.push(newPath);
                             });
-                        });
+                        });*/
+                        //that throws on initial page load as scope.room == NULL
                     }
 
                     element.on('mousedown', mouseDown)
