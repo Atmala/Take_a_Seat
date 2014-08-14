@@ -19,38 +19,95 @@ seatApp
                             allFigures.push(path);
                         }
                         if (path && scope.mode === 'line') {
-                            var roomObject = {
-                                RoomObjectTypeStr: 'wall',
-                                Points: [
-                                {
-                                    //Id: 0,
-                                    X: path.segments[0].point.x,
-                                    Y: path.segments[0].point.y,
-                                    //Order: 1
-                                },
-                                {
-                                    //Id: 0,
-                                    X: path.segments[1].point.x,
-                                    Y: path.segments[1].point.y,
-                                    //Order: 2
-                                }]
-                            };
-                            
-                            scope.room.RoomObjects.push(roomObject);
-                            //mapProvider.SaveRoom(scope.room, function () {});
+                            scope.room.RoomObjects.push(getLine());
                         }
                        
                         if (scope.mode === 'assign') {
-                            clearSelection();
-                            allFigures.forEach(function(fig) {
-                                var x = event.offsetX;
-                                var y = event.offsetY;
-                                var point = new paper.Point(x, y);
-                                if (fig.contains(point)) {
-                                    fig.strokeWidth = 5;
-                                }
-                            });
+                            if (!scope.selectedEmployee)
+                                alert("Please select Employee");
+                            else {
+                                clearSelection();
+                                allFigures.forEach(function (fig) {
+                                    var x = event.offsetX;
+                                    var y = event.offsetY;
+                                    var point = new paper.Point(x, y);
+                                    if (fig.contains(point)) {
+                                        
+                                        fig.strokeWidth = 5;
+                                        if (!fig.tag) {
+                                            var table = getTable();
+                                            fig.tag = table;
+                                            scope.room.RoomObjects.push(table);
+                                        }
+                                        if (fig.text) {
+                                            fig.text.remove();
+                                            fig.tag.EmployeeId = scope.selectedEmployee.Id;
+                                        }
+
+                                        fig.text = new PointText({
+                                            point: [fig.position.x - 18, fig.position.y - 35],
+                                            content: scope.selectedEmployee.FioShort,
+                                            fillColor: color,
+                                            fontFamily: 'Courier New',
+                                            fontWeight: 'bold',
+                                            fontSize: 15
+                                        });
+                                        
+                                    }
+                                });
+                            }
                         }
+                    }
+
+                    function getLine() {
+                       return {
+                            RoomObjectTypeStr: 'wall',
+                            Points: [
+                            {
+                                //Id: 0,
+                                X: path.segments[0].point.x,
+                                Y: path.segments[0].point.y,
+                                //Order: 1
+                            },
+                            {
+                                //Id: 0,
+                                X: path.segments[1].point.x,
+                                Y: path.segments[1].point.y,
+                                //Order: 2
+                            }]
+                        };
+                    }
+
+                    function getTable() {
+                        return {
+                            RoomObjectTypeStr: 'table',
+                            Points: [
+                            {
+                                //Id: 0,
+                                X: path.segments[0].point.x,
+                                Y: path.segments[0].point.y,
+                                //Order: 1
+                            },
+                            {
+                                //Id: 0,
+                                X: path.segments[1].point.x,
+                                Y: path.segments[1].point.y,
+                                //Order: 2
+                            },
+                            {
+                                //Id: 0,
+                                X: path.segments[2].point.x,
+                                Y: path.segments[2].point.y,
+                                //Order: 2
+                            },
+                            {
+                                //Id: 0,
+                                X: path.segments[3].point.x,
+                                Y: path.segments[3].point.y,
+                                //Order: 2
+                            }],
+                            EmployeeId: scope.selectedEmployee.Id
+                        };
                     }
 
                     function clearSelection() {
@@ -77,32 +134,7 @@ seatApp
 
                             path.position = new paper.Point([x, y]);
 
-                        } /*else {
-                            if (mouseDownPoint) {
-                                event.delta = new paper.Point(
-                                    event.offsetX - mouseDownPoint.x,
-                                    event.offsetY - mouseDownPoint.y);
-                                var limit = 2;
-                                if (event.delta.x > limit || event.delta.y > limit || event.delta.x < -limit || event.delta.y < -limit) {
-                                    mouseDrag(event);
-                                    mouseDownPoint.x = event.offsetX;
-                                    mouseDownPoint.y = event.offsetY;
-                                }
-                                return;
-                            }
-                        }*/
-                        //Can't get why do we need this, commented to simplify investigation
-                    }
-
-                    function mouseDrag(event) {
-                        if (mouseDownPoint) {
-                            allFigures.forEach(function (figure) {
-                                figure.position.x += event.delta.x;
-                                figure.position.y += event.delta.y;
-                            });
-                            var fig = allFigures[0];
-                            setCurrentCoords(fig.position.x, fig.position.y);
-                        }
+                        } 
                     }
 
                     function setCurrentCoords(x, y) {
@@ -148,21 +180,7 @@ seatApp
                         var canvas = $('#paperCanvas');
                         paper.setup(canvas[0]);
 
-                        initAllFigures();
                         paper.view.draw();
-                    }
-
-                    function initAllFigures() {
-                       /* project.activeLayer.remove();
-                        scope.$watch('scope.room.RoomObjects', function () {
-                            _.each(scope.room.RoomObjects, function (roomObject) {
-                                var newPath = getNewPath();
-                                newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.Points[0].Y]));
-                                newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.Points[1].Y]));
-                                allFigures.push(newPath);
-                            });
-                        });*/
-                        //that throws on initial page load as scope.room == NULL
                     }
 
                     element.on('mousedown', mouseDown)

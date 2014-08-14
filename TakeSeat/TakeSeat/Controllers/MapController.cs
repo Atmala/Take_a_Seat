@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using System.Web.Script.Serialization;
+﻿using System.Web.Mvc;
 using CommonClasses.Models;
 using TakeSeatServiceProxy;
 
@@ -15,8 +13,7 @@ namespace TakeSeat.Controllers
                 if (Session["Room"] == null)
                 {
                     var room = ServiceProxy.GetFirstRoom() ?? new RoomModel();
-                    //room.CreateTestData();
-                    //room.SetParametersByCanvasSize(700, 400);
+                    room.RoomObjects.Clear();
                     Session["Room"] = room;
                 }
                 return (RoomModel) Session["Room"];

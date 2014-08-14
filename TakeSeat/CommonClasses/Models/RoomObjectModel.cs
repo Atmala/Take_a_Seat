@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommonClasses.Database;
+﻿using System.Collections.Generic;
 
 namespace CommonClasses.Models
 {
@@ -13,6 +8,7 @@ namespace CommonClasses.Models
         public string RoomObjectTypeStr { get; set; }
         public List<PointModel> Points { get; set; }
         public List<RectangleModel> Rectangles { get; set; }
+        public int EmployeeId { get; set; }
         public RoomObjectModel()
         {
             Points = new List<PointModel>();

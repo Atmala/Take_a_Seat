@@ -2,7 +2,6 @@ using CommonClasses.Database;
 
 namespace DbLayer.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
     
     public partial class InsertInitialData : DbMigration
