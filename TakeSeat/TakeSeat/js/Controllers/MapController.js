@@ -36,7 +36,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             $scope.mode = mode;
     }
 
-    $scope.saveRoom = function() {
+    $scope.saveRoom = function () {
         mapProvider.SaveRoom($scope.room);
     }
    

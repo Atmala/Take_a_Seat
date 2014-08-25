@@ -19,9 +19,17 @@ seatApp
                             allFigures.push(path);
                         }
                         if (path && scope.mode === 'line') {
-                            scope.room.RoomObjects.push(getLine());
+                            //scope.room.RoomObjects.push(getLine());
+                            var lineInfo = {
+                                X1: path.segments[0].point.x,
+                                Y1: path.segments[0].point.y,
+                                X2: path.segments[1].point.x,
+                                Y2: path.segments[1].point.y
+                            };
+                            mapProvider.SaveWall(lineInfo);
                         }
-                       
+
+                        
                         if (scope.mode === 'assign') {
                             if (!scope.selectedEmployee)
                                 alert("Please select Employee");
@@ -57,25 +65,6 @@ seatApp
                                 });
                             }
                         }
-                    }
-
-                    function getLine() {
-                       return {
-                            RoomObjectTypeStr: 'wall',
-                            Points: [
-                            {
-                                //Id: 0,
-                                X: path.segments[0].point.x,
-                                Y: path.segments[0].point.y,
-                                //Order: 1
-                            },
-                            {
-                                //Id: 0,
-                                X: path.segments[1].point.x,
-                                Y: path.segments[1].point.y,
-                                //Order: 2
-                            }]
-                        };
                     }
 
                     function getTable() {
@@ -181,6 +170,19 @@ seatApp
                         paper.setup(canvas[0]);
 
                         paper.view.draw();
+                        initAllFigures();
+                    }
+
+                    function initAllFigures() {
+                        project.activeLayer.remove();
+                        scope.$watch('scope.room.RoomObjects', function () {
+                            _.each(scope.room.RoomObjects, function (roomObject) {
+                                var newPath = getNewPath();
+                                newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.Points[0].Y]));
+                                newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.Points[1].Y]));
+                                //allFigures.push(newPath);
+                            });
+                        });
                     }
 
                     element.on('mousedown', mouseDown)

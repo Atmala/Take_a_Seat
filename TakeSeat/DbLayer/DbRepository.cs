@@ -164,6 +164,33 @@ namespace DbLayer
 
         #endregion
 
+        #region Save Separate Objects
+
+        private int SavePoint(int roomObjectId, int x, int y)
+        {
+            var point = new Point
+                        {
+                            RoomObjectId = roomObjectId,
+                            X = x, 
+                            Y = y
+                        };
+            return Save(point);
+        }
+        public int SaveWall(int roomId, int x1, int y1, int x2, int y2)
+        {
+            var roomObject = new RoomObject()
+                             {
+                                 RoomId = roomId,
+                                 RoomObjectTypeId = GetRoomObjectTypeId("wall")
+                             };
+            int roomObjectId = Save(roomObject);
+            SavePoint(roomObjectId, x1, y1);
+            SavePoint(roomObjectId, x2, y2);
+            return roomObjectId;
+        }
+
+        #endregion
+
         public void Dispose()
         {
             if (_db != null) _db.Dispose();

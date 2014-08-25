@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using CommonClasses.InfoClasses;
 using CommonClasses.Models;
 using TakeSeatServiceProxy;
 
@@ -12,8 +13,8 @@ namespace TakeSeat.Controllers
             {
                 if (Session["Room"] == null)
                 {
-                    var room = ServiceProxy.GetFirstRoom() ?? new RoomModel();
-                    room.RoomObjects.Clear();
+                    var room = ServiceProxy.GetFirstRoom();
+                    if (room == null) room = ServiceProxy.SaveRoom(new RoomModel());
                     Session["Room"] = room;
                 }
                 return (RoomModel) Session["Room"];
@@ -45,6 +46,13 @@ namespace TakeSeat.Controllers
         public JsonResult GetEmployeesWithoutSeat()
         {
             return Json(ServiceProxy.GetEmployeesWithoutSeat(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void SaveWall(LineInfo lineInfo)
+        {
+            ServiceProxy.SaveWall(Room.Id, lineInfo.X1, lineInfo.Y1, lineInfo.X2, lineInfo.Y2);
+            //return Json(ServiceProxy.SaveWall(Room.Id, x1, y1, x2, y2));
         }
     }
 }

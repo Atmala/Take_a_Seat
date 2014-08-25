@@ -31,11 +31,19 @@ namespace TakeSeatServiceProxy
                 new EmployeeInfo {Id = 2, FioShort = "Кучма Л.Д."},
                 new EmployeeInfo {Id = 3, FioShort = "Ющенко В.А."},
                 new EmployeeInfo {Id = 4, FioShort = "Янукович В.Ф"},
-                new EmployeeInfo {Id = 5, FioShort = "Кравчук Л.Н."},
-                new EmployeeInfo {Id = 6, FioShort = "Кучма Л.Д."},
-                new EmployeeInfo {Id = 7, FioShort = "Ющенко В.А."},
-                new EmployeeInfo {Id = 8, FioShort = "Янукович В.Ф"}
+                new EmployeeInfo {Id = 5, FioShort = "Ленин В.И."},
+                new EmployeeInfo {Id = 6, FioShort = "Сталин И.В."},
+                new EmployeeInfo {Id = 7, FioShort = "Хрущев Н.С."},
+                new EmployeeInfo {Id = 8, FioShort = "Брежнев Л.И."}
             };
+        }
+
+        public static int SaveWall(int roomId, int x1, int y1, int x2, int y2)
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                return dbRepository.SaveWall(roomId, x1, y1, x2, y2);
+            }
         }
     }
 }

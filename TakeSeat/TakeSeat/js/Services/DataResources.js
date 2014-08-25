@@ -4,7 +4,7 @@
             return $resource('/Map/:action', {}, {
                 'Get': { method: 'GET', params: { action: 'Get' } },
                 'SaveRoom': { method: 'POST', params: { action: 'SaveRoom' } },
-                'SaveLine': { method: 'POST', params: { action: 'SaveLine' } },
+                'SaveWall': { method: 'POST', params: { action: 'SaveWall' } },
                 'MoveFullImage': { method: 'POST', params: { action: 'MoveFullImage' } }
             });
         }])
