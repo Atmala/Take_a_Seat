@@ -21,7 +21,7 @@ seatApp
                         if (path && scope.mode === 'line') {
                             scope.room.RoomObjects.push(getLine());
                         }
-                       
+
                         if (scope.mode === 'assign') {
                             if (!scope.selectedEmployee)
                                 alert("Please select Employee");
@@ -32,7 +32,7 @@ seatApp
                                     var y = event.offsetY;
                                     var point = new paper.Point(x, y);
                                     if (fig.contains(point)) {
-                                        
+
                                         fig.strokeWidth = 5;
                                         if (!fig.tag) {
                                             var table = getTable();
@@ -52,7 +52,7 @@ seatApp
                                             fontWeight: 'bold',
                                             fontSize: 15
                                         });
-                                        
+
                                     }
                                 });
                             }
@@ -60,7 +60,7 @@ seatApp
                     }
 
                     function getLine() {
-                       return {
+                        return {
                             RoomObjectTypeStr: 'wall',
                             Points: [
                             {
@@ -112,34 +112,50 @@ seatApp
 
                     function clearSelection() {
                         allFigures.forEach(function (fig) {
-                                fig.strokeWidth = 1;
+                            fig.strokeWidth = 1;
                         });
                     }
 
                     function mouseMove(event) {
                         setCurrentCoords(event.offsetX, event.offsetY);
-                        
-                        var x = event.offsetX;
-                        var y = event.offsetY;
-                        if (scope.mode === 'line' && isDrawing) {
-                                if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
-                                    mouseUp();
-                                    return;
-                                }
 
-                                path.removeSegments();
-                                drawLine(mouseDownPoint, new paper.Point([x, y]));
-                            
+                        var viewPosition = paper.view.viewToProject(new paper.Point(event.offsetX, event.offsetY));
+                        var x = viewPosition.x;
+                        var y = viewPosition.y;
+                        if (scope.mode === 'line' && isDrawing) {
+                            if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
+                                mouseUp();
+                                return;
+                            }
+
+                            path.removeSegments();
+                            drawLine(mouseDownPoint, new paper.Point([x, y]));
+
                         } else if (scope.mode === 'table' && isDrawing) {
 
                             path.position = new paper.Point([x, y]);
 
-                        } 
+                        } else {
+                            if (mouseDownPoint) {
+                                event.delta = new paper.Point(
+                                    x - mouseDownPoint.x,
+                                    y - mouseDownPoint.y);
+                                var limit = 2;
+                                if (event.delta.x > limit || event.delta.y > limit || event.delta.x < -limit || event.delta.y < -limit) {
+                                    paper.view.center = new paper.Point(
+                                        paper.view.center.x - event.delta.x,
+                                        paper.view.center.y - event.delta.y);
+                                    mouseDownPoint.x = x;
+                                    mouseDownPoint.y = y;
+                                }
+                                return;
+                            }
+                        }
                     }
 
                     function setCurrentCoords(x, y) {
-                        scope.X = x;
-                        scope.Y = y;
+                        scope.X = view.center.x;
+                        scope.Y = view.center.y;
                         scope.$apply();
                     }
 
@@ -164,8 +180,9 @@ seatApp
 
                     function mouseDown(event) {
                         isDrawing = true;
-                        var x = event.offsetX;
-                        var y = event.offsetY;
+                        var viewPosition = paper.view.viewToProject(new paper.Point(event.offsetX, event.offsetY));
+                        var x = viewPosition.x;
+                        var y = viewPosition.y;
 
                         if (scope.mode === 'line') {
                             path = getNewPath();
@@ -179,7 +196,6 @@ seatApp
                         paper.install(window);
                         var canvas = $('#paperCanvas');
                         paper.setup(canvas[0]);
-
                         paper.view.draw();
                     }
 
