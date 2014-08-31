@@ -62,6 +62,7 @@
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="InfoClasses\EmployeeInfo.cs" />
     <Compile Include="InfoClasses\LineInfo.cs" />
+    <Compile Include="InfoClasses\RectangleInfo.cs" />
     <Compile Include="Models\PointModel.cs" />
     <Compile Include="Models\RectangleModel.cs" />
     <Compile Include="Models\RoomModel.cs" />

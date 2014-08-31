@@ -176,6 +176,20 @@ namespace DbLayer
                         };
             return Save(point);
         }
+
+        private int SaveRectangle(int roomObjectId, int leftTopX, int leftTopY, int width, int height)
+        {
+            var rectangle = new Rectangle
+                {
+                    RoomObjectId = roomObjectId, 
+                    LeftTopX = leftTopX, 
+                    LeftTopY = leftTopY, 
+                    Width = width, 
+                    Height = height
+                };
+            return Save(rectangle);
+        }
+
         public int SaveWall(int roomId, int x1, int y1, int x2, int y2)
         {
             var roomObject = new RoomObject()
@@ -186,6 +200,18 @@ namespace DbLayer
             int roomObjectId = Save(roomObject);
             SavePoint(roomObjectId, x1, y1);
             SavePoint(roomObjectId, x2, y2);
+            return roomObjectId;
+        }
+
+        public int SaveTable(int roomId, int leftTopX, int leftTopY, int width, int height)
+        {
+            var roomObject = new RoomObject()
+            {
+                RoomId = roomId,
+                RoomObjectTypeId = GetRoomObjectTypeId("table")
+            };
+            int roomObjectId = Save(roomObject);
+            SaveRectangle(roomObjectId, leftTopX, leftTopY, width, height);
             return roomObjectId;
         }
 
