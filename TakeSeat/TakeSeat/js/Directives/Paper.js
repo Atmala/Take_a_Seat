@@ -60,7 +60,6 @@ seatApp
                                             fontWeight: 'bold',
                                             fontSize: 15
                                         });
-                                        
                                     }
                                 });
                             }
@@ -143,11 +142,20 @@ seatApp
                         return newPath;
                     }
 
-                    function getNewRectangle(x, y) {
+                    function createNewRectangle(x, y) {
                         var point = new paper.Point(x, y);
                         var size = new paper.Size(rectangleWidth, rectangleHeight);
                         var newPath = new paper.Path.Rectangle(point, size);
                         newPath.strokeColor = color;
+
+                        var rectangleInfo = {
+                            LeftTopX: x,
+                            LeftTopY: y,
+                            Width: rectangleWidth,
+                            Height: rectangleHeight
+                        };
+                        mapProvider.SaveTable(rectangleInfo);
+
                         return newPath;
                     }
 
@@ -159,7 +167,7 @@ seatApp
                         if (scope.mode === 'line') {
                             path = getNewPath();
                         } else if (scope.mode === 'table') {
-                            path = getNewRectangle(x, y);
+                            path = createNewRectangle(x, y);
                         }
                         mouseDownPoint = new paper.Point([x, y]);
                     }
@@ -178,9 +186,16 @@ seatApp
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
                                 var newPath = getNewPath();
-                                newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.Points[0].Y]));
-                                newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.Points[1].Y]));
-                                //allFigures.push(newPath);
+                                if (roomObject.Points != undefined && roomObject.Points.length > 0) {
+                                    newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.Points[0].Y]));
+                                    newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.Points[1].Y]));
+                                }
+                                if (roomObject.Rectangles != undefined && roomObject.Rectangles.length > 0) {
+                                    var point = new paper.Point(roomObject.Rectangles[0].LeftTopX, roomObject.Rectangles[0].LeftTopY);
+                                    var size = new paper.Size(roomObject.Rectangles[0].Width, roomObject.Rectangles[0].Height);
+                                    var tablePath = new paper.Path.Rectangle(point, size);
+                                    tablePath.strokeColor = color;
+                                }
                             });
                         });
                     }

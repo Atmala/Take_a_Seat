@@ -54,5 +54,12 @@ namespace TakeSeat.Controllers
             ServiceProxy.SaveWall(Room.Id, lineInfo.X1, lineInfo.Y1, lineInfo.X2, lineInfo.Y2);
             //return Json(ServiceProxy.SaveWall(Room.Id, x1, y1, x2, y2));
         }
+
+        [HttpPost]
+        public void SaveTable(RectangleInfo rectangleInfo)
+        {
+            ServiceProxy.SaveTable(Room.Id, rectangleInfo.LeftTopX, rectangleInfo.LeftTopY,
+                rectangleInfo.Width, rectangleInfo.Height);
+        }
     }
 }

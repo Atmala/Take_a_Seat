@@ -5,7 +5,7 @@
                 'Get': { method: 'GET', params: { action: 'Get' } },
                 'SaveRoom': { method: 'POST', params: { action: 'SaveRoom' } },
                 'SaveWall': { method: 'POST', params: { action: 'SaveWall' } },
-                'MoveFullImage': { method: 'POST', params: { action: 'MoveFullImage' } }
+                'SaveTable': { method: 'POST', params: { action: 'SaveTable' } },
             });
         }])
  .factory('EmployeeProvider', [
