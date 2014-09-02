@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using CommonClasses.Database;
 using CommonClasses.Helpers;
+using CommonClasses.InfoClasses;
 using CommonClasses.Models;
 
 namespace DbLayer
@@ -155,6 +157,7 @@ namespace DbLayer
                     select new RectangleModel
                     {
                         Id = p.Id,
+                        RoomObjectId = roomObjectId, 
                         LeftTopX = p.LeftTopX, 
                         LeftTopY = p.LeftTopY,
                         Width = p.Width,
@@ -215,6 +218,45 @@ namespace DbLayer
             return roomObjectId;
         }
 
+        public int SaveEmployeeTableLink(EmployeeTableLinkInfo employeeTableLinkInfo)
+        {
+            var link = (from etl in _db.EmployeeTableLinks
+                where etl.EmployeeId == employeeTableLinkInfo.EmployeeId
+                      && etl.RoomObjectId == employeeTableLinkInfo.RoomObjectId
+                select etl).FirstOrDefault();
+            
+            if (link == null)
+            {
+                link = new EmployeeTableLink
+                       {
+                           EmployeeId = employeeTableLinkInfo.EmployeeId,
+                           RoomObjectId = employeeTableLinkInfo.RoomObjectId
+                       };
+                Save(link);
+            }
+            return link.Id;
+        }
+
+        #endregion
+
+        #region Get Methods
+        public RoomModel GetFirstRoom()
+        {
+            var room = _db.Rooms.FirstOrDefault();
+            return room == null ? null : GetRoomModel(room.Id);
+        }
+
+        public List<EmployeeInfo> GetEmployeesWithoutSeat()
+        {
+            return (from e in _db.Employees
+                select new EmployeeInfo
+                       {
+                           Id = e.Id,
+                           FioShort = e.Surname + (string.IsNullOrEmpty(e.FirstName) ? ""
+                               : " " + e.FirstName)
+                       }).ToList();
+        }
+
         #endregion
 
         public void Dispose()
@@ -222,10 +264,6 @@ namespace DbLayer
             if (_db != null) _db.Dispose();
         }
 
-        public RoomModel GetFirstRoom()
-        {
-            var room = _db.Rooms.FirstOrDefault();
-            return room == null ? null : GetRoomModel(room.Id);
-        }
+        
     }
 }

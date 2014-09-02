@@ -6,6 +6,7 @@
                 'SaveRoom': { method: 'POST', params: { action: 'SaveRoom' } },
                 'SaveWall': { method: 'POST', params: { action: 'SaveWall' } },
                 'SaveTable': { method: 'POST', params: { action: 'SaveTable' } },
+                'SaveEmployeeTableLink': { method: 'POST', params: { action: 'SaveEmployeeTableLink' } },
             });
         }])
  .factory('EmployeeProvider', [

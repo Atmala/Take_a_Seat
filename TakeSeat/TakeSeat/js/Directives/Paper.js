@@ -42,14 +42,8 @@ seatApp
                                     if (fig.contains(point)) {
                                         
                                         fig.strokeWidth = 5;
-                                        if (!fig.tag) {
-                                            var table = getTable();
-                                            fig.tag = table;
-                                            scope.room.RoomObjects.push(table);
-                                        }
                                         if (fig.text) {
                                             fig.text.remove();
-                                            fig.tag.EmployeeId = scope.selectedEmployee.Id;
                                         }
 
                                         fig.text = new PointText({
@@ -60,47 +54,21 @@ seatApp
                                             fontWeight: 'bold',
                                             fontSize: 15
                                         });
+
+                                        var employeeTableLink = {
+                                            EmployeeId: scope.selectedEmployee.Id,
+                                            RoomObjectId: fig.dbRoomObjectId
+                                        };
+                                        mapProvider.SaveEmployeeTableLink(employeeTableLink);
                                     }
                                 });
                             }
                         }
                     }
 
-                    function getTable() {
-                        return {
-                            RoomObjectTypeStr: 'table',
-                            Points: [
-                            {
-                                //Id: 0,
-                                X: path.segments[0].point.x,
-                                Y: path.segments[0].point.y,
-                                //Order: 1
-                            },
-                            {
-                                //Id: 0,
-                                X: path.segments[1].point.x,
-                                Y: path.segments[1].point.y,
-                                //Order: 2
-                            },
-                            {
-                                //Id: 0,
-                                X: path.segments[2].point.x,
-                                Y: path.segments[2].point.y,
-                                //Order: 2
-                            },
-                            {
-                                //Id: 0,
-                                X: path.segments[3].point.x,
-                                Y: path.segments[3].point.y,
-                                //Order: 2
-                            }],
-                            EmployeeId: scope.selectedEmployee.Id
-                        };
-                    }
-
                     function clearSelection() {
                         allFigures.forEach(function (fig) {
-                                fig.strokeWidth = 1;
+                                if (fig != undefined) fig.strokeWidth = 1;
                         });
                     }
 
@@ -189,12 +157,15 @@ seatApp
                                 if (roomObject.Points != undefined && roomObject.Points.length > 0) {
                                     newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.Points[0].Y]));
                                     newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.Points[1].Y]));
+                                    allFigures.push(newPath);
                                 }
                                 if (roomObject.Rectangles != undefined && roomObject.Rectangles.length > 0) {
                                     var point = new paper.Point(roomObject.Rectangles[0].LeftTopX, roomObject.Rectangles[0].LeftTopY);
                                     var size = new paper.Size(roomObject.Rectangles[0].Width, roomObject.Rectangles[0].Height);
                                     var tablePath = new paper.Path.Rectangle(point, size);
+                                    tablePath.dbRoomObjectId = roomObject.Rectangles[0].RoomObjectId;
                                     tablePath.strokeColor = color;
+                                    allFigures.push(tablePath);
                                 }
                             });
                         });

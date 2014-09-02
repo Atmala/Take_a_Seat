@@ -15,6 +15,8 @@ namespace DbLayer
         public DbSet<RoomObjectType> RoomObjectTypes { get; set; }
         public DbSet<Point> Points { get; set; }
         public DbSet<Rectangle> Rectangles { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<EmployeeTableLink> EmployeeTableLinks { get; set; }
 
         #region Auxilliary Properties and Methods
 

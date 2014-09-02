@@ -61,5 +61,11 @@ namespace TakeSeat.Controllers
             ServiceProxy.SaveTable(Room.Id, rectangleInfo.LeftTopX, rectangleInfo.LeftTopY,
                 rectangleInfo.Width, rectangleInfo.Height);
         }
+
+        [HttpPost]
+        public void SaveEmployeeTableLink(EmployeeTableLinkInfo employeeTableLinkInfo)
+        {
+            ServiceProxy.SaveEmployeeTableLink(employeeTableLinkInfo);
+        }
     }
 }

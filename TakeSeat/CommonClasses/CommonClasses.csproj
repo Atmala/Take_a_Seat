@@ -53,6 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\Employee.cs" />
+    <Compile Include="Database\EmployeeTableLink.cs" />
     <Compile Include="Database\IMapping.cs" />
     <Compile Include="Database\Point.cs" />
     <Compile Include="Database\Rectangle.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Database\RoomObjectType.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="InfoClasses\EmployeeInfo.cs" />
+    <Compile Include="InfoClasses\EmployeeTableLinkInfo.cs" />
     <Compile Include="InfoClasses\LineInfo.cs" />
     <Compile Include="InfoClasses\RectangleInfo.cs" />
     <Compile Include="Models\PointModel.cs" />
