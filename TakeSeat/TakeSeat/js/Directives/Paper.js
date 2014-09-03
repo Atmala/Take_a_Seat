@@ -5,7 +5,7 @@ seatApp
                 restrict: 'A',
                 link: function (scope, element, attrs) {
 
-                    var path, mouseDownPoint, rectangle;
+                    var path, mouseDownPoint;
                     var isDrawing = false;
                     var allFigures = [];
                     var rectangleWidth = 30, rectangleHeight = 50;
@@ -32,7 +32,6 @@ seatApp
                             allFigures.push(path);
                         }
                         if (path && scope.mode === 'line') {
-                            //scope.room.RoomObjects.push(getLine());
                             var lineInfo = {
                                 X1: path.segments[0].point.x,
                                 Y1: path.segments[0].point.y,
@@ -49,30 +48,10 @@ seatApp
                             else {
                                 clearSelection();
                                 allFigures.forEach(function (fig) {
-                                    var x = event.offsetX;
-                                    var y = event.offsetY;
-                                    var point = new paper.Point(x, y);
+                                    var point = new paper.Point(event.offsetX, event.offsetY);
                                     if (fig.contains(point)) {
-                                        
-                                        fig.strokeWidth = 5;
-                                        if (fig.text) {
-                                            fig.text.remove();
-                                        }
-
-                                        fig.text = new PointText({
-                                            point: [fig.position.x - 18, fig.position.y - 35],
-                                            content: scope.selectedEmployee.FioShort,
-                                            fillColor: color,
-                                            fontFamily: 'Courier New',
-                                            fontWeight: 'bold',
-                                            fontSize: 15
-                                        });
-
-                                        var employeeTableLink = {
-                                            EmployeeId: scope.selectedEmployee.Id,
-                                            RoomObjectId: fig.dbRoomObjectId
-                                        };
-                                        mapProvider.SaveEmployeeTableLink(employeeTableLink);
+                                        setEmployeeTableText(fig, scope.selectedEmployee.FioShort);
+                                        saveEmployeeTableLink(scope.selectedEmployee.ID, fig.dbRoomObjectId);
                                     }
                                 });
                             }
@@ -98,6 +77,30 @@ seatApp
                             path.position = new paper.Point([x, y]);
 
                         } 
+                    }
+
+                    function setEmployeeTableText(tableFigure, employeeFio) {
+                        tableFigure.strokeWidth = 5;
+                        if (tableFigure.text) {
+                            tableFigure.text.remove();
+                        }
+
+                        fig.text = new PointText({
+                            point: [tableFigure.position.x - 18, tableFigure.position.y - 35],
+                            content: employeeFio,
+                            fillColor: color,
+                            fontFamily: 'Courier New',
+                            fontWeight: 'bold',
+                            fontSize: 15
+                        });
+                    }
+
+                    function saveEmployeeTableLink(employeeId, roomObjectId) {
+                        var employeeTableLink = {
+                            EmployeeId: employeeId,
+                            RoomObjectId: roomObjectId
+                        };
+                        mapProvider.SaveEmployeeTableLink(employeeTableLink);
                     }
 
                     function clearSelection() {
@@ -146,10 +149,9 @@ seatApp
                         paper.setup(canvas[0]);
 
                         paper.view.draw();
-                        initAllFigures();
                     }
 
-                    function initAllFigures() {
+                    scope.initAllFigures = function () {
                         project.activeLayer.remove();
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
@@ -168,6 +170,7 @@ seatApp
                                     allFigures.push(tablePath);
                                 }
                             });
+                            paper.view.draw();
                         });
                     }
 
