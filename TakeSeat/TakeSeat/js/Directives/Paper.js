@@ -11,6 +11,19 @@ seatApp
                     var rectangleWidth = 30, rectangleHeight = 50;
                     var color = '#ACCCE2';
 
+                    function mouseDown(event) {
+                        isDrawing = true;
+                        var x = event.offsetX;
+                        var y = event.offsetY;
+
+                        if (scope.mode === 'line') {
+                            path = getNewPath();
+                        } else if (scope.mode === 'table') {
+                            path = createNewRectangle(x, y);
+                        }
+                        mouseDownPoint = new paper.Point([x, y]);
+                    }
+
                     function mouseUp(event) {
                         isDrawing = false;
                         mouseDownPoint = undefined;
@@ -66,12 +79,6 @@ seatApp
                         }
                     }
 
-                    function clearSelection() {
-                        allFigures.forEach(function (fig) {
-                                if (fig != undefined) fig.strokeWidth = 1;
-                        });
-                    }
-
                     function mouseMove(event) {
                         setCurrentCoords(event.offsetX, event.offsetY);
                         
@@ -91,6 +98,12 @@ seatApp
                             path.position = new paper.Point([x, y]);
 
                         } 
+                    }
+
+                    function clearSelection() {
+                        allFigures.forEach(function (fig) {
+                            if (fig != undefined) fig.strokeWidth = 1;
+                        });
                     }
 
                     function setCurrentCoords(x, y) {
@@ -125,19 +138,6 @@ seatApp
                         mapProvider.SaveTable(rectangleInfo);
 
                         return newPath;
-                    }
-
-                    function mouseDown(event) {
-                        isDrawing = true;
-                        var x = event.offsetX;
-                        var y = event.offsetY;
-
-                        if (scope.mode === 'line') {
-                            path = getNewPath();
-                        } else if (scope.mode === 'table') {
-                            path = createNewRectangle(x, y);
-                        }
-                        mouseDownPoint = new paper.Point([x, y]);
                     }
 
                     function initPaper() {
