@@ -9,6 +9,7 @@ namespace CommonClasses.Models
         public List<PointModel> Points { get; set; }
         public List<RectangleModel> Rectangles { get; set; }
         public int EmployeeId { get; set; }
+        public string EmployeeFio { get; set; }
         public RoomObjectModel()
         {
             Points = new List<PointModel>();

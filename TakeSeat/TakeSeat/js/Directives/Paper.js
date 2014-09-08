@@ -40,7 +40,6 @@ seatApp
                             };
                             mapProvider.SaveWall(lineInfo);
                         }
-
                         
                         if (scope.mode === 'assign') {
                             if (!scope.selectedEmployee)
@@ -73,10 +72,8 @@ seatApp
                                 drawLine(mouseDownPoint, new paper.Point([x, y]));
                             
                         } else if (scope.mode === 'table' && isDrawing) {
-
                             path.position = new paper.Point([x, y]);
-
-                        } 
+                        }
                     }
 
                     function setEmployeeTableText(tableFigure, employeeFio) {
@@ -167,6 +164,9 @@ seatApp
                                     var tablePath = new paper.Path.Rectangle(point, size);
                                     tablePath.dbRoomObjectId = roomObject.Rectangles[0].RoomObjectId;
                                     tablePath.strokeColor = color;
+                                    if (roomObject.EmployeeFio != '') {
+                                        setEmployeeTableText(tablePath, roomObject.EmployeeFio);
+                                    }
                                     allFigures.push(tablePath);
                                 }
                             });
