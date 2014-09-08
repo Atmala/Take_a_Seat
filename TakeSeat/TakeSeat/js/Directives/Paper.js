@@ -51,7 +51,7 @@ seatApp
                                     var point = new paper.Point(event.offsetX, event.offsetY);
                                     if (fig.contains(point)) {
                                         setEmployeeTableText(fig, scope.selectedEmployee.FioShort);
-                                        saveEmployeeTableLink(scope.selectedEmployee.ID, fig.dbRoomObjectId);
+                                        saveEmployeeTableLink(scope.selectedEmployee.Id, fig.dbRoomObjectId);
                                     }
                                 });
                             }
@@ -85,7 +85,7 @@ seatApp
                             tableFigure.text.remove();
                         }
 
-                        fig.text = new PointText({
+                        tableFigure.text = new PointText({
                             point: [tableFigure.position.x - 18, tableFigure.position.y - 35],
                             content: employeeFio,
                             fillColor: color,

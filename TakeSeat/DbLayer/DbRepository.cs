@@ -218,8 +218,23 @@ namespace DbLayer
             return roomObjectId;
         }
 
+        private void DeleteOtherEmployeeTableLinks(int employeeId, int roomObjectId)
+        {
+            var links = (from etl in _db.EmployeeTableLinks
+                         where etl.EmployeeId == employeeId && etl.RoomObjectId != roomObjectId
+                              || etl.RoomObjectId == roomObjectId && etl.EmployeeId != employeeId
+                         select etl);
+            foreach (var link in links)
+            {
+                _db.EmployeeTableLinks.Remove(link);
+            }
+            _db.SaveChanges();
+        }
+
         public int SaveEmployeeTableLink(EmployeeTableLinkInfo employeeTableLinkInfo)
         {
+            DeleteOtherEmployeeTableLinks(employeeTableLinkInfo.EmployeeId, employeeTableLinkInfo.RoomObjectId);
+
             var link = (from etl in _db.EmployeeTableLinks
                 where etl.EmployeeId == employeeTableLinkInfo.EmployeeId
                       && etl.RoomObjectId == employeeTableLinkInfo.RoomObjectId
