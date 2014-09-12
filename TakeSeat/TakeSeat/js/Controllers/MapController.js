@@ -9,9 +9,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     $scope.Init = function () {
         initMode();
 
-        mapProvider.Get(function(response) {
-            $scope.room = response;
-        });
         employeeProvider.query(function (response) {
             $scope.employeeList = response;
         });
@@ -37,7 +34,10 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.showRoom = function () {
-        $scope.initAllFigures();
+        mapProvider.Get(function (response) {
+            $scope.room = response;
+            $scope.initAllFigures();
+        });
     }
    
 }]);

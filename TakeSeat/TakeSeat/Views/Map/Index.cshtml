@@ -8,6 +8,7 @@
 
 <div class="row" ng-controller="Map" ng-init="Init()">
     <div class="col-lg-8">
+        <div>{{'Room: ' + RoomCaption}}</div>
         <div class="canvas">@Html.Partial("Paper")</div>
         <div>{{X +' : '+ Y}}</div>
     </div>

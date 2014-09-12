@@ -67,7 +67,7 @@ seatApp
                                     mouseUp();
                                     return;
                                 }
-
+                                
                                 path.removeSegments();
                                 drawLine(mouseDownPoint, new paper.Point([x, y]));
                             
@@ -149,6 +149,7 @@ seatApp
                     }
 
                     scope.initAllFigures = function () {
+                        scope.RoomCaption = scope.room.Id;
                         project.activeLayer.remove();
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
@@ -172,6 +173,7 @@ seatApp
                             });
                             paper.view.draw();
                         });
+                        scope.$apply();
                     }
 
                     element.on('mousedown', mouseDown)
