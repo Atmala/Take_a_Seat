@@ -54,5 +54,13 @@ namespace TakeSeatServiceProxy
                 return dbRepository.SaveEmployeeTableLink(employeeTableLinkInfo);
             }
         }
+
+        public static void RemoveEmployeeTableLink(EmployeeTableLinkInfo employeeTableLinkInfo)
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                dbRepository.RemoveEmployeeTableLink(employeeTableLinkInfo);
+            }
+        }
     }
 }

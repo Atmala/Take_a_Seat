@@ -7,6 +7,7 @@
                 'SaveWall': { method: 'POST', params: { action: 'SaveWall' } },
                 'SaveTable': { method: 'POST', params: { action: 'SaveTable' } },
                 'SaveEmployeeTableLink': { method: 'POST', params: { action: 'SaveEmployeeTableLink' } },
+                'RemoveEmployeeTableLink': { method: 'POST', params: { action: 'RemoveEmployeeTableLink' } },
             });
         }])
  .factory('EmployeeProvider', [

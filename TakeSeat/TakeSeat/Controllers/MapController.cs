@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using CommonClasses.InfoClasses;
 using CommonClasses.Models;
 using TakeSeatServiceProxy;
@@ -66,6 +67,18 @@ namespace TakeSeat.Controllers
         public void SaveEmployeeTableLink(EmployeeTableLinkInfo employeeTableLinkInfo)
         {
             ServiceProxy.SaveEmployeeTableLink(employeeTableLinkInfo);
+        }
+
+        [HttpPost]
+        public void RemoveEmployeeTableLink(EmployeeTableLinkInfo employeeTableLinkInfo)
+        {
+            var roomObject = Room.RoomObjects.FirstOrDefault(r => r.Id == employeeTableLinkInfo.RoomObjectId);
+            if (roomObject != null)
+            {
+                roomObject.EmployeeFio = string.Empty;
+                roomObject.EmployeeId = 0;
+            }
+            ServiceProxy.RemoveEmployeeTableLink(employeeTableLinkInfo);
         }
     }
 }

@@ -38,6 +38,12 @@
                         </button>
                     </div>
                     <div class="md-overlay">
+                        <button type="button" class="btn btn-warning btn-primary btn-lg" ng-click="changeMode('discard')"
+                                ng-class="{active : isSelected('room'), activeBtn : isSelected('discard')}">
+                            Discard person
+                        </button>
+                    </div>
+                    <div class="md-overlay">
                         <button type="button" class="btn btn-success btn-primary btn-lg" ng-click="showRoom()">
                             Show Room
                         </button>

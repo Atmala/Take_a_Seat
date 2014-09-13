@@ -56,6 +56,17 @@ seatApp
                                 });
                             }
                         }
+
+                        if (scope.mode === 'discard') {
+                            allFigures.forEach(function (fig) {
+                                var point = new paper.Point(event.offsetX, event.offsetY);
+                                if (fig.contains(point)) {
+                                    setEmployeeTableText(fig, '');
+                                    removeEmployeeTableLink(fig.dbEmployeeId, fig.dbRoomObjectId);
+                                    scope.loadEmployees();
+                                }
+                            });
+                        }
                     }
 
                     function mouseMove(event) {
@@ -99,6 +110,14 @@ seatApp
                             RoomObjectId: roomObjectId
                         };
                         mapProvider.SaveEmployeeTableLink(employeeTableLink);
+                    }
+
+                    function removeEmployeeTableLink(employeeId, roomObjectId) {
+                        var employeeTableLink = {
+                            EmployeeId: employeeId,
+                            RoomObjectId: roomObjectId
+                        };
+                        mapProvider.RemoveEmployeeTableLink(employeeTableLink);
                     }
 
                     function clearSelection() {
@@ -164,9 +183,10 @@ seatApp
                                     var point = new paper.Point(roomObject.Rectangles[0].LeftTopX, roomObject.Rectangles[0].LeftTopY);
                                     var size = new paper.Size(roomObject.Rectangles[0].Width, roomObject.Rectangles[0].Height);
                                     var tablePath = new paper.Path.Rectangle(point, size);
-                                    tablePath.dbRoomObjectId = roomObject.Rectangles[0].RoomObjectId;
+                                    tablePath.dbRoomObjectId = roomObject.Id;
                                     tablePath.strokeColor = color;
                                     if (roomObject.EmployeeFio != '') {
+                                        tablePath.dbEmployeeId = roomObject.EmployeeId;
                                         setEmployeeTableText(tablePath, roomObject.EmployeeFio);
                                     }
                                     allFigures.push(tablePath);

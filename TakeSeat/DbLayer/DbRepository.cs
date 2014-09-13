@@ -261,6 +261,20 @@ namespace DbLayer
             return link.Id;
         }
 
+        public void RemoveEmployeeTableLink(EmployeeTableLinkInfo employeeTableLinkInfo)
+        {
+            var link = (from etl in _db.EmployeeTableLinks
+                        where etl.EmployeeId == employeeTableLinkInfo.EmployeeId
+                              && etl.RoomObjectId == employeeTableLinkInfo.RoomObjectId
+                        select etl).FirstOrDefault();
+
+            if (link != null)
+            {
+                _db.EmployeeTableLinks.Remove(link);
+                _db.SaveChanges();
+            }
+        }
+
         #endregion
 
         #region Get Methods
