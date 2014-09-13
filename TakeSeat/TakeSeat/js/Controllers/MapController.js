@@ -8,10 +8,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     $scope.Init = function () {
         initMode();
-
-        employeeProvider.query(function (response) {
-            $scope.employeeList = response;
-        });
+        $scope.loadEmployees();
     }
 
     $scope.isSelected = function (section) {
@@ -33,12 +30,19 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             $scope.mode = mode;
     }
 
-    $scope.showRoom = function () {
-        mapProvider.Get(function (response) {
+    $scope.showRoom = function() {
+        mapProvider.Get(function(response) {
             $scope.room = response;
             $scope.initAllFigures();
         });
+    };
+
+    $scope.loadEmployees = function() {
+        employeeProvider.query(function (response) {
+            $scope.employeeList = response;
+            $scope.$apply();
+        });
     }
-   
+
 }]);
 

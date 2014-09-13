@@ -51,6 +51,7 @@ seatApp
                                     if (fig.contains(point)) {
                                         setEmployeeTableText(fig, scope.selectedEmployee.FioShort);
                                         saveEmployeeTableLink(scope.selectedEmployee.Id, fig.dbRoomObjectId);
+                                        scope.loadEmployees();
                                     }
                                 });
                             }

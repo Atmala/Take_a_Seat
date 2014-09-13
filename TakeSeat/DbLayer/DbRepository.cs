@@ -273,7 +273,8 @@ namespace DbLayer
         public List<EmployeeInfo> GetEmployeesWithoutSeat()
         {
             return (from e in _db.Employees
-                select new EmployeeInfo
+                    where !_db.EmployeeTableLinks.Any(etl => etl.EmployeeId == e.Id)
+                    select new EmployeeInfo
                        {
                            Id = e.Id,
                            FioShort = e.Surname + (string.IsNullOrEmpty(e.FirstName) ? ""
@@ -287,7 +288,5 @@ namespace DbLayer
         {
             if (_db != null) _db.Dispose();
         }
-
-        
     }
 }
