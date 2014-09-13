@@ -7,7 +7,6 @@ seatApp
 
                     var path, mouseDownPoint;
                     var isDrawing = false;
-                    var allFigures = [];
                     var rectangleWidth = 30, rectangleHeight = 50;
                     var color = '#ACCCE2';
 
@@ -28,9 +27,6 @@ seatApp
                         isDrawing = false;
                         mouseDownPoint = undefined;
 
-                        if (scope.mode != 'assign') {
-                            allFigures.push(path);
-                        }
                         if (path && scope.mode === 'line') {
                             var lineInfo = {
                                 X1: path.segments[0].point.x,
@@ -46,7 +42,7 @@ seatApp
                                 alert("Please select Employee");
                             else {
                                 clearSelection();
-                                allFigures.forEach(function (fig) {
+                                project.activeLayer.children.forEach(function (fig) {
                                     var point = new paper.Point(event.offsetX, event.offsetY);
                                     if (fig.contains(point)) {
                                         setEmployeeTableText(fig, scope.selectedEmployee.FioShort);
@@ -58,7 +54,7 @@ seatApp
                         }
 
                         if (scope.mode === 'discard') {
-                            allFigures.forEach(function (fig) {
+                            project.activeLayer.children.forEach(function (fig) {
                                 var point = new paper.Point(event.offsetX, event.offsetY);
                                 if (fig.contains(point)) {
                                     setEmployeeTableText(fig, '');
@@ -121,8 +117,8 @@ seatApp
                     }
 
                     function clearSelection() {
-                        allFigures.forEach(function (fig) {
-                            if (fig != undefined) fig.strokeWidth = 1;
+                        project.activeLayer.children.forEach(function (fig) {
+                            if (fig) fig.strokeWidth = 1;
                         });
                     }
 
@@ -177,7 +173,6 @@ seatApp
                                 if (roomObject.Points != undefined && roomObject.Points.length > 0) {
                                     newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.Points[0].Y]));
                                     newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.Points[1].Y]));
-                                    allFigures.push(newPath);
                                 }
                                 if (roomObject.Rectangles != undefined && roomObject.Rectangles.length > 0) {
                                     var point = new paper.Point(roomObject.Rectangles[0].LeftTopX, roomObject.Rectangles[0].LeftTopY);
@@ -189,7 +184,6 @@ seatApp
                                         tablePath.dbEmployeeId = roomObject.EmployeeId;
                                         setEmployeeTableText(tablePath, roomObject.EmployeeFio);
                                     }
-                                    allFigures.push(tablePath);
                                 }
                             });
                             paper.view.draw();
