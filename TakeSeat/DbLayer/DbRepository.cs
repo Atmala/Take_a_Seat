@@ -113,34 +113,35 @@ namespace DbLayer
             return roomModel;
         }
 
+        private RoomObjectModel GetRoomObjectModel(RoomObject roomObject, Employee employee)
+        {
+           return new RoomObjectModel
+            {
+                Id = roomObject.Id,
+                RoomObjectTypeStr = RoomObjectTypes.First(t => t.Id == roomObject.RoomObjectTypeId).Name,
+                Points = GetPointModels(roomObject.Id),
+                Rectangles = GetRectangleModels(roomObject.Id),
+                EmployeeId = employee == null ? 0 : employee.Id,
+                EmployeeFio = employee == null ? string.Empty : employee.Surname + " " + employee.FirstName
+            };
+        }
         private List<RoomObjectModel> GetRoomObjectModels(int roomId)
         {
             var result = new List<RoomObjectModel>();
             var roomObjects =
                     from ro in _db.RoomObjects
-                    join rot in _db.RoomObjectTypes on ro.RoomObjectTypeId equals rot.Id
                     from etl in _db.EmployeeTableLinks.Where(e => e.RoomObjectId == ro.Id).DefaultIfEmpty()
                     from emp in _db.Employees.Where(e => e.Id == etl.EmployeeId).DefaultIfEmpty()
                     where ro.RoomId == roomId
                     select new
                            {
                                RoomObject = ro, 
-                               RoomObjectType = rot.Name,
                                Employee = emp
                            };
 
             foreach (var r in roomObjects)
             {
-                var roomObjectModel = new RoomObjectModel
-                {
-                    Id = r.RoomObject.Id,
-                    RoomObjectTypeStr = r.RoomObjectType,
-                    Points = GetPointModels(r.RoomObject.Id),
-                    Rectangles = GetRectangleModels(r.RoomObject.Id),
-                    EmployeeId = r.Employee == null ? 0 : r.Employee.Id,
-                    EmployeeFio = r.Employee == null ? string.Empty : r.Employee.Surname + " " + r.Employee.FirstName
-                };
-                result.Add(roomObjectModel);
+                result.Add(GetRoomObjectModel(r.RoomObject, r.Employee));
             }
             return result;
         }
