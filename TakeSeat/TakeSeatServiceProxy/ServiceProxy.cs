@@ -39,11 +39,11 @@ namespace TakeSeatServiceProxy
             }
         }
 
-        public static int SaveTable(int roomId, int leftTopX, int leftTopY, int width, int height)
+        public static int SaveTable(int roomId, int roomObjectId, int leftTopX, int leftTopY, int width, int height)
         {
             using (var dbRepository = new DbRepository())
             {
-                return dbRepository.SaveTable(roomId, leftTopX, leftTopY, width, height);
+                return dbRepository.SaveTable(roomId, roomObjectId, leftTopX, leftTopY, width, height);
             }
         }
 

@@ -57,10 +57,12 @@ namespace TakeSeat.Controllers
         }
 
         [HttpPost]
-        public void SaveTable(RectangleInfo rectangleInfo)
+        public JsonResult SaveTable(RectangleInfo rectangleInfo)
         {
-            ServiceProxy.SaveTable(Room.Id, rectangleInfo.LeftTopX, rectangleInfo.LeftTopY,
+            var id = ServiceProxy.SaveTable(Room.Id, rectangleInfo.RoomObjectId, rectangleInfo.LeftTopX, rectangleInfo.LeftTopY,
                 rectangleInfo.Width, rectangleInfo.Height);
+            var response = new {Id = id};
+            return Json(response);
         }
 
         [HttpPost]

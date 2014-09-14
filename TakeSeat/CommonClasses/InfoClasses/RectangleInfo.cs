@@ -8,6 +8,7 @@ namespace CommonClasses.InfoClasses
 {
     public class RectangleInfo
     {
+        public int RoomObjectId { get; set; }
         public int LeftTopX { get; set; }
         public int LeftTopY { get; set; }
         public int Width { get; set; }

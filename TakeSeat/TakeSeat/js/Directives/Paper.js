@@ -10,6 +10,7 @@ seatApp
                     var rectangleWidth = 30, rectangleHeight = 50;
                     var color = '#ACCCE2';
                     var globalOffset = new paper.Point();
+                    var pathToMove;
 
                     function mouseDown(event) {
                         isDrawing = true;
@@ -21,14 +22,20 @@ seatApp
                         } else if (scope.mode === 'table') {
                             path = createNewRectangle(x, y);
                         } else {
-                            //moveAllItems();
+                            pathToMove = getTableByCoordinates(x, y);
                         }
                         mouseDownPoint = new paper.Point([x, y]);
+                        
                     }
 
                     function mouseUp(event) {
                         isDrawing = false;
                         mouseDownPoint = undefined;
+                        if (pathToMove) {
+                            savePathToMove();
+                            pathToMove = undefined;
+                        }
+                        
 
                         if (path && scope.mode === 'line') {
                             var lineInfo = {
@@ -70,6 +77,10 @@ seatApp
                         scope.HitResult = hitResult;
                         scope.$apply();
 
+                        project.deselectAll();
+                        var table = getTableByCoordinates(x, y);
+                        if (table) table.selected = true;
+
                         if (scope.mode === 'line' && isDrawing) {
                             if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
                                 mouseUp();
@@ -85,10 +96,19 @@ seatApp
                             var offsetX = x - mouseDownPoint.x;
                             var offsetY = y - mouseDownPoint.y;
                             if (Math.abs(offsetX) > 2 || Math.abs(offsetY) > 2) {
-                                globalOffset.x = globalOffset.x + offsetX;
-                                globalOffset.y = globalOffset.y + offsetY;
+                                if (pathToMove) {
+                                    pathToMove.position.x += offsetX;
+                                    pathToMove.position.y += offsetY;
+                                    if (pathToMove.text) {
+                                        pathToMove.text.point.x += offsetX;
+                                        pathToMove.text.point.y += offsetY;
+                                    }
+                                } else {
+                                    globalOffset.x += offsetX;
+                                    globalOffset.y += offsetY;
+                                    moveAllItems(offsetX, offsetY);
+                                }
                                 mouseDownPoint = new paper.Point(x, y);
-                                moveAllItems(offsetX, offsetY);
                             }
                         }
                     }
@@ -168,18 +188,20 @@ seatApp
                     }
 
                     function createNewRectangle(x, y) {
-                        var point = new paper.Point(x, y);
-                        var size = new paper.Size(rectangleWidth, rectangleHeight);
-                        var newPath = new paper.Path.Rectangle(point, size);
+                        var newPath = new paper.Path.Rectangle(x, y, rectangleWidth, rectangleHeight);
                         newPath.strokeColor = color;
+                        newPath.RoomObjectType = 'table';
 
                         var rectangleInfo = {
-                            LeftTopX: view2ProjectPoint(x),
-                            LeftTopY: view2ProjectPoint(y),
+                            RoomObjectId: 0,
+                            LeftTopX: view2ProjectX(x),
+                            LeftTopY: view2ProjectY(y),
                             Width: rectangleWidth,
                             Height: rectangleHeight
                         };
-                        mapProvider.SaveTable(rectangleInfo);
+                        mapProvider.SaveTable(rectangleInfo, function(response) {
+                            newPath.dbRoomObjectId = response.Value;
+                        });
 
                         return newPath;
                     }
@@ -241,6 +263,18 @@ seatApp
                         return new paper.Point(view2ProjectX(point.x), view2ProjectY(point.y));
                     }
 
+                    function project2ViewX(viewX) {
+                        return viewX + globalOffset.x;
+                    }
+
+                    function project2ViewY(viewY) {
+                        return viewY + globalOffset.y;
+                    }
+
+                    function project2ViewPoint(point) {
+                        return new paper.Point(project2ViewX(point.x), project2ViewY(point.y));
+                    }
+
                     function getTableByPoint(point) {
                         for (var i = 0; i < project.activeLayer.children.length; i++) {
                             var item = project.activeLayer.children[i];
@@ -255,6 +289,24 @@ seatApp
                         return getTableByPoint(new paper.Point(x, y));
                     }
 
+                    function savePathToMove() {
+                        if (!pathToMove) return;
+                        if (pathToMove.RoomObjectType === 'table') {
+                            var x1 = view2ProjectX(pathToMove.segments[0].point.x);
+                            var y1 = view2ProjectY(pathToMove.segments[0].point.y);
+                            var x2 = view2ProjectX(pathToMove.segments[2].point.x);
+                            var y2 = view2ProjectY(pathToMove.segments[2].point.y);
+                            var rectangleInfo = {
+                                RoomObjectId: pathToMove.dbRoomObjectId,
+                                LeftTopX: Math.min(x1, x2),
+                                LeftTopY: Math.min(y1, y2),
+                                Width: Math.abs(x1 - x2),
+                                Height: Math.abs(y1 - y2)
+                            };
+                            mapProvider.SaveTable(rectangleInfo);
+                        }
+                    }
+                    
                     element.on('mousedown', mouseDown)
                         .on('mouseup', mouseUp)
                         .on('mousemove', mouseMove);

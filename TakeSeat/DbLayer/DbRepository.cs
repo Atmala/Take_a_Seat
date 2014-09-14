@@ -215,16 +215,34 @@ namespace DbLayer
             return roomObjectId;
         }
 
-        public int SaveTable(int roomId, int leftTopX, int leftTopY, int width, int height)
+        private int SaveNewTable(int roomId, int leftTopX, int leftTopY, int width, int height)
         {
             var roomObject = new RoomObject()
             {
                 RoomId = roomId,
                 RoomObjectTypeId = GetRoomObjectTypeId("table")
             };
-            int roomObjectId = Save(roomObject);
+            var roomObjectId = Save(roomObject);
             SaveRectangle(roomObjectId, leftTopX, leftTopY, width, height);
             return roomObjectId;
+        }
+
+        private int UpdateTable(int roomObjectId, int leftTopX, int leftTopY, int width, int height)
+        {
+            var rectangle = _db.Rectangles.Single(r => r.RoomObjectId == roomObjectId);
+            rectangle.LeftTopX = leftTopX;
+            rectangle.LeftTopY = leftTopY;
+            rectangle.Width = width;
+            rectangle.Height = height;
+            Save(rectangle);
+            return roomObjectId;
+        }
+
+        public int SaveTable(int roomId, int roomObjectId, int leftTopX, int leftTopY, int width, int height)
+        {
+            return roomObjectId == 0
+                ? SaveNewTable(roomId, leftTopX, leftTopY, width, height)
+                : UpdateTable(roomObjectId, leftTopX, leftTopY, width, height);
         }
 
         private void DeleteOtherEmployeeTableLinks(int employeeId, int roomObjectId)
