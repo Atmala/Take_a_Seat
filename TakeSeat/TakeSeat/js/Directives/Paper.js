@@ -39,38 +39,23 @@ seatApp
                             };
                             mapProvider.SaveWall(lineInfo);
                         }
-                        
+
                         if (scope.mode === 'assign') {
                             if (!scope.selectedEmployee)
                                 alert("Please select Employee");
                             else {
-                                clearSelection();
-                                project.activeLayer.children.forEach(function (fig) {
-                                    var point = new paper.Point(event.offsetX, event.offsetY);
-                                    if (fig.contains(point)) {
-                                        setEmployeeTableText(fig, scope.selectedEmployee.FioShort);
-                                        saveEmployeeTableLink(scope.selectedEmployee.Id, fig.dbRoomObjectId);
-                                        scope.loadEmployees();
-                                    }
-                                });
+                                assignEmployee(event.offsetX, event.offsetY)
                             }
                         }
 
                         if (scope.mode === 'discard') {
-                            project.activeLayer.children.forEach(function (fig) {
-                                var point = new paper.Point(event.offsetX, event.offsetY);
-                                if (fig.contains(point)) {
-                                    setEmployeeTableText(fig, '');
-                                    removeEmployeeTableLink(fig.dbEmployeeId, fig.dbRoomObjectId);
-                                    scope.loadEmployees();
-                                }
-                            });
+                            discardEmployee(event.offsetX, event.offsetY);
                         }
                     }
 
                     function mouseMove(event) {
                         setCurrentCoords(event.offsetX, event.offsetY);
-                        
+
                         var x = event.offsetX;
                         var y = event.offsetY;
 
@@ -86,14 +71,14 @@ seatApp
                         scope.$apply();
 
                         if (scope.mode === 'line' && isDrawing) {
-                                if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
-                                    mouseUp();
-                                    return;
-                                }
-                                
-                                path.removeSegments();
-                                drawLine(mouseDownPoint, new paper.Point([x, y]));
-                            
+                            if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
+                                mouseUp();
+                                return;
+                            }
+
+                            path.removeSegments();
+                            drawLine(mouseDownPoint, new paper.Point([x, y]));
+
                         } else if (scope.mode === 'table' && isDrawing) {
                             path.position = new paper.Point([x, y]);
                         } else if (scope.mode === 'view' && mouseDownPoint) {
@@ -105,6 +90,25 @@ seatApp
                                 mouseDownPoint = new paper.Point(x, y);
                                 moveAllItems(offsetX, offsetY);
                             }
+                        }
+                    }
+
+                    function assignEmployee(x, y) {
+                        clearSelection();
+                        var table = getTableByCoordinates(x, y);
+                        if (table) {
+                            setEmployeeTableText(table, scope.selectedEmployee.FioShort);
+                            saveEmployeeTableLink(scope.selectedEmployee.Id, table.dbRoomObjectId);
+                            scope.loadEmployees();
+                        }
+                    }
+
+                    function discardEmployee(x, y) {
+                        var table = getTableByCoordinates(x, y);
+                        if (table) {
+                            setEmployeeTableText(table, '');
+                            removeEmployeeTableLink(table.dbEmployeeId, table.dbRoomObjectId);
+                            scope.loadEmployees();
                         }
                     }
 
@@ -189,7 +193,7 @@ seatApp
                     }
 
                     function moveAllItems(offsetX, offsetY) {
-                        project.activeLayer.children.forEach(function(item) {
+                        project.activeLayer.children.forEach(function (item) {
                             if (item.position) {
                                 item.position = new paper.Point(item.position.x + offsetX, item.position.y + offsetY);
                             }
@@ -202,6 +206,7 @@ seatApp
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
                                 var newPath = getNewPath();
+                                newPath.RoomObjectType = 'wall';
                                 if (roomObject.Points && roomObject.Points.length > 0) {
                                     newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.Points[0].Y]));
                                     newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.Points[1].Y]));
@@ -211,6 +216,7 @@ seatApp
                                     var size = new paper.Size(roomObject.Rectangles[0].Width, roomObject.Rectangles[0].Height);
                                     var tablePath = new paper.Path.Rectangle(point, size);
                                     tablePath.dbRoomObjectId = roomObject.Id;
+                                    tablePath.RoomObjectType = 'table';
                                     tablePath.strokeColor = color;
                                     if (roomObject.EmployeeFio != '') {
                                         tablePath.dbEmployeeId = roomObject.EmployeeId;
@@ -233,6 +239,20 @@ seatApp
 
                     function view2ProjectPoint(point) {
                         return new paper.Point(view2ProjectX(point.x), view2ProjectY(point.y));
+                    }
+
+                    function getTableByPoint(point) {
+                        for (var i = 0; i < project.activeLayer.children.length; i++) {
+                            var item = project.activeLayer.children[i];
+                            if (item.contains(point)) {
+                                return item;
+                            }
+                        }
+                        return undefined;
+                    }
+
+                    function getTableByCoordinates(x, y) {
+                        return getTableByPoint(new paper.Point(x, y));
                     }
 
                     element.on('mousedown', mouseDown)
