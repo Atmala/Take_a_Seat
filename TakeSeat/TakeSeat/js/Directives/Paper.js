@@ -9,6 +9,7 @@ seatApp
                     var isDrawing = false;
                     var rectangleWidth = 30, rectangleHeight = 50;
                     var color = '#ACCCE2';
+                    var globalOffset = new paper.Point();
 
                     function mouseDown(event) {
                         isDrawing = true;
@@ -19,6 +20,8 @@ seatApp
                             path = getNewPath();
                         } else if (scope.mode === 'table') {
                             path = createNewRectangle(x, y);
+                        } else {
+                            //moveAllItems();
                         }
                         mouseDownPoint = new paper.Point([x, y]);
                     }
@@ -29,10 +32,10 @@ seatApp
 
                         if (path && scope.mode === 'line') {
                             var lineInfo = {
-                                X1: path.segments[0].point.x,
-                                Y1: path.segments[0].point.y,
-                                X2: path.segments[1].point.x,
-                                Y2: path.segments[1].point.y
+                                X1: view2ProjectX(path.segments[0].point.x),
+                                Y1: view2ProjectY(path.segments[0].point.y),
+                                X2: view2ProjectX(path.segments[1].point.x),
+                                Y2: view2ProjectY(path.segments[1].point.y)
                             };
                             mapProvider.SaveWall(lineInfo);
                         }
@@ -70,6 +73,18 @@ seatApp
                         
                         var x = event.offsetX;
                         var y = event.offsetY;
+
+                        var hitOptions = {
+                            segments: true,
+                            stroke: true,
+                            fill: true,
+                            tolerance: 5
+                        };
+                        var point = new paper.Point(event.offsetX, event.offsetY);
+                        var hitResult = project.hitTest(point, hitOptions);
+                        scope.HitResult = hitResult;
+                        scope.$apply();
+
                         if (scope.mode === 'line' && isDrawing) {
                                 if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
                                     mouseUp();
@@ -81,11 +96,20 @@ seatApp
                             
                         } else if (scope.mode === 'table' && isDrawing) {
                             path.position = new paper.Point([x, y]);
+                        } else if (scope.mode === 'view' && mouseDownPoint) {
+                            var offsetX = x - mouseDownPoint.x;
+                            var offsetY = y - mouseDownPoint.y;
+                            if (Math.abs(offsetX) > 2 || Math.abs(offsetY) > 2) {
+                                globalOffset.x = globalOffset.x + offsetX;
+                                globalOffset.y = globalOffset.y + offsetY;
+                                mouseDownPoint = new paper.Point(x, y);
+                                moveAllItems(offsetX, offsetY);
+                            }
                         }
                     }
 
                     function setEmployeeTableText(tableFigure, employeeFio) {
-                        tableFigure.strokeWidth = 5;
+                        //tableFigure.strokeWidth = 5;
                         if (tableFigure.text) {
                             tableFigure.text.remove();
                         }
@@ -146,8 +170,8 @@ seatApp
                         newPath.strokeColor = color;
 
                         var rectangleInfo = {
-                            LeftTopX: x,
-                            LeftTopY: y,
+                            LeftTopX: view2ProjectPoint(x),
+                            LeftTopY: view2ProjectPoint(y),
                             Width: rectangleWidth,
                             Height: rectangleHeight
                         };
@@ -164,17 +188,25 @@ seatApp
                         paper.view.draw();
                     }
 
+                    function moveAllItems(offsetX, offsetY) {
+                        project.activeLayer.children.forEach(function(item) {
+                            if (item.position) {
+                                item.position = new paper.Point(item.position.x + offsetX, item.position.y + offsetY);
+                            }
+                        });
+                    }
+
                     scope.initAllFigures = function () {
                         scope.RoomCaption = scope.room.Id;
                         project.activeLayer.remove();
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
                                 var newPath = getNewPath();
-                                if (roomObject.Points != undefined && roomObject.Points.length > 0) {
+                                if (roomObject.Points && roomObject.Points.length > 0) {
                                     newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.Points[0].Y]));
                                     newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.Points[1].Y]));
                                 }
-                                if (roomObject.Rectangles != undefined && roomObject.Rectangles.length > 0) {
+                                if (roomObject.Rectangles && roomObject.Rectangles.length > 0) {
                                     var point = new paper.Point(roomObject.Rectangles[0].LeftTopX, roomObject.Rectangles[0].LeftTopY);
                                     var size = new paper.Size(roomObject.Rectangles[0].Width, roomObject.Rectangles[0].Height);
                                     var tablePath = new paper.Path.Rectangle(point, size);
@@ -189,6 +221,18 @@ seatApp
                             paper.view.draw();
                         });
                         scope.$apply();
+                    }
+
+                    function view2ProjectX(viewX) {
+                        return viewX - globalOffset.x;
+                    }
+
+                    function view2ProjectY(viewY) {
+                        return viewY - globalOffset.y;
+                    }
+
+                    function view2ProjectPoint(point) {
+                        return new paper.Point(view2ProjectX(point.x), view2ProjectY(point.y));
                     }
 
                     element.on('mousedown', mouseDown)
