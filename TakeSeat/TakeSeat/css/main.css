@@ -28,7 +28,13 @@
 }
 
 .btn-tool {
-    width: 150px;
+    padding: 0px;
+}
+
+.btn-tool-active {
+    border: 2px;
+    border-color: white;
+    border-style: solid;
 }
 
 .activeBtn {

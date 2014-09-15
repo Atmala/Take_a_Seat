@@ -21,27 +21,27 @@
                 </div>
                 <div class="panel-body">
                     <div class="md-overlay">
-                        <button type="button" class="btn btn-success btn-primary btn-lg" ng-click="changeMode('line')"
-                                ng-class="{active : isSelected('line'), activeBtn : isSelected('line')}">
-                            Draw line
+                        <button type="button" class="btn-tool" ng-click="changeMode('line')"
+                                ng-class="{btn-tool-active : isSelected('line')}">
+                            <img src="..\img\wall.png" />
                         </button>
                     </div>
                     <div class="md-overlay">
                         <button type="button" class="btn btn-info btn-primary btn-lg" ng-click="changeMode('table')"
                                 ng-class="{active : isSelected('table'), activeBtn : isSelected('table')}">
-                            Add table
+                            Add Table
                         </button>
                     </div>
                     <div class="md-overlay">
                         <button type="button" class="btn btn-warning btn-primary btn-lg" ng-click="changeMode('assign')"
                                 ng-class="{active : isSelected('room'), activeBtn : isSelected('assign')}">
-                            Assign person
+                            Assign Person
                         </button>
                     </div>
                     <div class="md-overlay">
                         <button type="button" class="btn btn-warning btn-primary btn-lg" ng-click="changeMode('discard')"
                                 ng-class="{active : isSelected('room'), activeBtn : isSelected('discard')}">
-                            Discard person
+                            Discard Person
                         </button>
                     </div>
                     <div class="md-overlay">
