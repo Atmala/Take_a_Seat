@@ -44,6 +44,20 @@
                         <img src="..\img\newroom.png" />
                     </button>
                 </div>
+                <div class="md-overlay">
+                    <button title="Add Window"
+                            type="button" class="btn-tool" ng-click="changeMode('window')"
+                            ng-class="{activeBtn : isSelected('window')}">
+                        <img src="..\img\window.png" />
+                    </button>
+                </div>
+                <div class="md-overlay">
+                    <button title="Add Door"
+                            type="button" class="btn-tool" ng-click="changeMode('door')"
+                            ng-class="{activeBtn : isSelected('door')}">
+                        <img src="..\img\door.png" />
+                    </button>
+                </div>
             </div>
         </div>
         
@@ -54,7 +68,7 @@
         <div>{{X +' : '+ Y}}</div>
         <div>{{'HitResult: ' + HitResult}}</div>
     </div>
-    <div class="employeePanel">
+    <div class="employeePanel panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title">Emploee List</h3>
         </div>
