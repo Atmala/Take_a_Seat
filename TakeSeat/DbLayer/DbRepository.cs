@@ -317,6 +317,43 @@ namespace DbLayer
 
         #endregion
 
+        #region Delete Methods
+
+        private void DeleteAllEmployeeTableLinks(int roomObjectId)
+        {
+            foreach (var employeeTableLink in _db.EmployeeTableLinks.Where(etl => etl.RoomObjectId == roomObjectId))
+            {
+                _db.EmployeeTableLinks.Remove(employeeTableLink);
+            }
+        }
+
+        private void DeleteAllRectangles(int roomObjectId)
+        {
+            foreach (var rectangle in _db.Rectangles.Where(r => r.RoomObjectId == roomObjectId))
+            {
+                _db.Rectangles.Remove(rectangle);
+            }
+        }
+
+        private void DeleteAllPoints(int roomObjectId)
+        {
+            foreach (var point in _db.Points.Where(r => r.RoomObjectId == roomObjectId))
+            {
+                _db.Points.Remove(point);
+            }
+        }
+        public void DeleteRoomObject(int roomObjectId)
+        {
+            DeleteAllEmployeeTableLinks(roomObjectId);
+            DeleteAllRectangles(roomObjectId);
+            DeleteAllPoints(roomObjectId);
+            var roomObject = _db.RoomObjects.FirstOrDefault(ro => ro.Id == roomObjectId);
+            if (roomObject != null) _db.RoomObjects.Remove(roomObject);
+            _db.SaveChanges();
+        }
+
+        #endregion
+
         public void Dispose()
         {
             if (_db != null) _db.Dispose();

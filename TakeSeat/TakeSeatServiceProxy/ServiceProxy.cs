@@ -62,5 +62,13 @@ namespace TakeSeatServiceProxy
                 dbRepository.RemoveEmployeeTableLink(employeeTableLinkInfo);
             }
         }
+
+        public static void DeleteRoomObject(int id)
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                dbRepository.DeleteRoomObject(id);
+            }
+        }
     }
 }

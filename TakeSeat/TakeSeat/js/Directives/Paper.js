@@ -21,11 +21,17 @@ seatApp
                             path = getNewPath();
                         } else if (scope.mode === 'table') {
                             path = createNewRectangle(x, y);
+                        } else if (scope.mode === 'delete') {
+                            var pathToDelete = getTableByCoordinates(x, y);
+                            if (pathToDelete) deletePath(pathToDelete);
                         } else {
                             pathToMove = getTableByCoordinates(x, y);
                         }
-                        mouseDownPoint = new paper.Point([x, y]);
-                        
+
+                        if (scope.mode !== 'delete') {
+                            mouseDownPoint = new paper.Point([x, y]);
+                        }
+
                     }
 
                     function mouseUp(event) {
@@ -304,6 +310,18 @@ seatApp
                                 Height: Math.abs(y1 - y2)
                             };
                             mapProvider.SaveTable(rectangleInfo);
+                        }
+                    }
+
+                    function deletePath(pathToDelete) {
+                        if (!pathToDelete) return;
+                        if (pathToDelete.RoomObjectType === 'table') {
+                            if (pathToDelete.text) {
+                                pathToDelete.text.remove();
+                                scope.loadEmployees();
+                            }
+                            mapProvider.DeleteRoomObject({ id: pathToDelete.dbRoomObjectId });
+                            pathToDelete.remove();
                         }
                     }
                     

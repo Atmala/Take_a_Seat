@@ -82,5 +82,13 @@ namespace TakeSeat.Controllers
             }
             ServiceProxy.RemoveEmployeeTableLink(employeeTableLinkInfo);
         }
+
+        [HttpDelete]
+        public void DeleteRoomObject(int id)
+        {
+            var roomObject = Room.RoomObjects.First(ro => ro.Id == id);
+            Room.RoomObjects.Remove(roomObject);
+            ServiceProxy.DeleteRoomObject(id);
+        }
     }
 }

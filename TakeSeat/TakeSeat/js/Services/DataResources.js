@@ -8,6 +8,7 @@
                 'SaveTable': { method: 'POST', params: { action: 'SaveTable' } },
                 'SaveEmployeeTableLink': { method: 'POST', params: { action: 'SaveEmployeeTableLink' } },
                 'RemoveEmployeeTableLink': { method: 'POST', params: { action: 'RemoveEmployeeTableLink' } },
+                'DeleteRoomObject': { method: 'DELETE', params: { action: 'DeleteRoomObject'}},
             });
         }])
  .factory('EmployeeProvider', [
