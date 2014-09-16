@@ -29,6 +29,7 @@
 
 .btn-tool {
     padding: 0px;
+    border: 0px;
 }
 
 .btn-tool-active {
@@ -39,6 +40,9 @@
 
 .activeBtn {
     font-weight: bold;
+    border: 1px;
+    border-color: white;
+    border-style: solid;
 }
 
 .employeeList {
@@ -48,4 +52,18 @@
 #tblEmployee .selected {
     background-color: #485563 !important;
     font-weight: bold;
+}
+.layout { overflow: hidden;}
+/*.layout DIV { position: absolute; }*/
+
+.toolPanel {
+    width: 76px;
+}
+
+.employeePanel {
+    width: 200px;
+}
+
+.canvasPanel {
+    width: 600px;
 }

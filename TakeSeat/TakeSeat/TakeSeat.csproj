@@ -166,6 +166,7 @@
     <Content Include="img\empty.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\newroom.png" />
     <Content Include="img\table.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

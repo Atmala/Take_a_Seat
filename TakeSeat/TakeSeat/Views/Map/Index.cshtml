@@ -2,71 +2,70 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/_Layout.cshtml";
 }
-
 <script src="~/js/Services/DataResources.js"></script>
 <script src="~/js/Controllers/MapController.js"></script>
-
-<div class="row" ng-controller="Map" ng-init="Init()">
-    <div class="col-lg-8">
+<div class="layout" ng-controller="Map" ng-init="Init()">
+    <div class="toolPanel">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Tools</h3>
+            </div>
+            <div class="panel-body">
+                <div class="md-overlay">
+                    <button title="Add Wall"
+                            type="button" class="btn-tool" ng-click="changeMode('line')"
+                            ng-class="{activeBtn : isSelected('line')}">
+                        <img src="..\img\wall.png" />
+                    </button>
+                </div>
+                <div class="md-overlay">
+                    <button title="Add Table"
+                            type="button" class="btn-tool" ng-click="changeMode('table')"
+                            ng-class="{activeBtn : isSelected('table')}">
+                        <img src="..\img\table.png" />
+                </div>
+                <div class="md-overlay">
+                    <button title="Assign Employee"
+                            type="button" class="btn-tool" ng-click="changeMode('assign')"
+                            ng-class="{activeBtn : isSelected('assign')}">
+                        <img src="..\img\assign.png" />
+                    </button>
+                </div>
+                <div class="md-overlay">
+                    <button title="Discard Employee"
+                            type="button" class="btn-tool" ng-click="changeMode('discard')"
+                            ng-class="{activeBtn : isSelected('discard')}">
+                        <img src="..\img\discard.png" />
+                    </button>
+                </div>
+                <div class="md-overlay">
+                    <button title="Show Room"
+                            type="button" class="btn-tool" ng-click="showRoom()">
+                        <img src="..\img\newroom.png" />
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="canvasPanel">
         <div>{{'Room: ' + RoomCaption}}</div>
         <div class="canvas">@Html.Partial("Paper")</div>
         <div>{{X +' : '+ Y}}</div>
         <div>{{'HitResult: ' + HitResult}}</div>
     </div>
-    <div class="col-lg-4">
-        <div class="bs-component">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Tools</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="md-overlay">
-                        <button type="button" class="btn-tool" ng-click="changeMode('line')"
-                                ng-class="{btn-tool-active : isSelected('line')}">
-                            <img src="..\img\wall.png" />
-                        </button>
-                    </div>
-                    <div class="md-overlay">
-                        <button type="button" class="btn btn-info btn-primary btn-lg" ng-click="changeMode('table')"
-                                ng-class="{active : isSelected('table'), activeBtn : isSelected('table')}">
-                            Add Table
-                        </button>
-                    </div>
-                    <div class="md-overlay">
-                        <button type="button" class="btn btn-warning btn-primary btn-lg" ng-click="changeMode('assign')"
-                                ng-class="{active : isSelected('room'), activeBtn : isSelected('assign')}">
-                            Assign Person
-                        </button>
-                    </div>
-                    <div class="md-overlay">
-                        <button type="button" class="btn btn-warning btn-primary btn-lg" ng-click="changeMode('discard')"
-                                ng-class="{active : isSelected('room'), activeBtn : isSelected('discard')}">
-                            Discard Person
-                        </button>
-                    </div>
-                    <div class="md-overlay">
-                        <button type="button" class="btn btn-success btn-primary btn-lg" ng-click="showRoom()">
-                            Show Room
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Emploee List</h3>
-                </div>
-                <div class="employeeList panel-body">
-                    <table class="table " id="tblEmployee">
-                        <tbody>
-                            <tr ng-repeat="employee in employeeList" ng-class="{selected: isSelectedEmployee(employee)}" ng-click="selectEmployee(employee)">
-                                <td>{{employee.FioShort}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="employeePanel">
+        <div class="panel-heading">
+            <h3 class="panel-title">Emploee List</h3>
+        </div>
+        <div class="employeeList panel-body">
+            <table class="table " id="tblEmployee">
+                <tbody>
+                    <tr ng-repeat="employee in employeeList" ng-class="{selected: isSelectedEmployee(employee)}" ng-click="selectEmployee(employee)">
+                        <td>{{employee.FioShort}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-

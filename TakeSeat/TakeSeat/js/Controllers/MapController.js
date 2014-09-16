@@ -28,6 +28,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             initMode();
         else
             $scope.mode = mode;
+        $scope.$apply();
     }
 
     $scope.showRoom = function() {
