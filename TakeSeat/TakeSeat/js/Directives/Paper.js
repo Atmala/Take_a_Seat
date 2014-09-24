@@ -31,7 +31,6 @@ seatApp
                         if (scope.mode !== 'delete') {
                             mouseDownPoint = new paper.Point([x, y]);
                         }
-
                     }
 
                     function mouseUp(event) {
@@ -42,7 +41,6 @@ seatApp
                             pathToMove = undefined;
                         }
                         
-
                         if (path && scope.mode === 'line') {
                             var lineInfo = {
                                 X1: view2ProjectX(path.segments[0].point.x),
@@ -57,7 +55,7 @@ seatApp
                             if (!scope.selectedEmployee)
                                 alert("Please select Employee");
                             else {
-                                assignEmployee(event.offsetX, event.offsetY)
+                                assignEmployee(event.offsetX, event.offsetY);
                             }
                         }
 
@@ -231,26 +229,11 @@ seatApp
                     scope.initAllFigures = function () {
                         scope.RoomCaption = scope.room.Id;
                         project.activeLayer.remove();
+                        var factory = new RoomObjectFactory(scope, mapProvider);
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
-                                var newPath = getNewPath();
-                                newPath.RoomObjectType = 'wall';
-                                if (roomObject.Points && roomObject.Points.length > 0) {
-                                    newPath.moveTo(new paper.Point([roomObject.Points[0].X, roomObject.Points[0].Y]));
-                                    newPath.lineTo(new paper.Point([roomObject.Points[1].X, roomObject.Points[1].Y]));
-                                }
-                                if (roomObject.Rectangles && roomObject.Rectangles.length > 0) {
-                                    var point = new paper.Point(roomObject.Rectangles[0].LeftTopX, roomObject.Rectangles[0].LeftTopY);
-                                    var size = new paper.Size(roomObject.Rectangles[0].Width, roomObject.Rectangles[0].Height);
-                                    var tablePath = new paper.Path.Rectangle(point, size);
-                                    tablePath.dbRoomObjectId = roomObject.Id;
-                                    tablePath.RoomObjectType = 'table';
-                                    tablePath.strokeColor = color;
-                                    if (roomObject.EmployeeFio != '') {
-                                        tablePath.dbEmployeeId = roomObject.EmployeeId;
-                                        setEmployeeTableText(tablePath, roomObject.EmployeeFio);
-                                    }
-                                }
+                                var newPath = factory.getPathByDbRoomObject(roomObject);
+                                newPath.strokeColor = color;
                             });
                             paper.view.draw();
                         });
@@ -333,3 +316,4 @@ seatApp
                 }
             };
         }]);
+

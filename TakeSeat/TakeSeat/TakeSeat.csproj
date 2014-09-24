@@ -178,6 +178,7 @@
     </Content>
     <Content Include="js\Controllers\MapController.js" />
     <Content Include="js\Directives\Paper.js" />
+    <Content Include="js\CanvasLogic\RoomObjectFactory.js" />
     <Content Include="js\Services\DataResources.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
