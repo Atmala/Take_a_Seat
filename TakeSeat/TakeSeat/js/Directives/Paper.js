@@ -23,7 +23,10 @@ seatApp
                             path = createNewRectangle(x, y);
                         } else if (scope.mode === 'delete') {
                             var pathToDelete = getTableByCoordinates(x, y);
-                            if (pathToDelete) deletePath(pathToDelete);
+                            if (pathToDelete) {
+                                pathToDelete.RoomObject.deleteRoomObject();
+                                pathToDelete.remove();
+                            }
                         } else {
                             pathToMove = getTableByCoordinates(x, y);
                         }
@@ -204,7 +207,7 @@ seatApp
                             Height: rectangleHeight
                         };
                         mapProvider.SaveTable(rectangleInfo, function(response) {
-                            newPath.dbRoomObjectId = response.Value;
+                            newPath.dbRoomObjectId = response.Id;
                         });
 
                         return newPath;
@@ -296,18 +299,6 @@ seatApp
                         }
                     }
 
-                    function deletePath(pathToDelete) {
-                        if (!pathToDelete) return;
-                        if (pathToDelete.RoomObjectType === 'table') {
-                            if (pathToDelete.text) {
-                                pathToDelete.text.remove();
-                                scope.loadEmployees();
-                            }
-                            mapProvider.DeleteRoomObject({ id: pathToDelete.dbRoomObjectId });
-                            pathToDelete.remove();
-                        }
-                    }
-                    
                     element.on('mousedown', mouseDown)
                         .on('mouseup', mouseUp)
                         .on('mousemove', mouseMove);
