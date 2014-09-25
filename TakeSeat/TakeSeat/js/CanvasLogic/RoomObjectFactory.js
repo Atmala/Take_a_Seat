@@ -1,35 +1,46 @@
 ﻿function RoomObjectFactory(scope, mapProvider) {
     this.getPathByDbRoomObject = function (dbRoomObject) {
 
+        var roomObject = null;
         if (dbRoomObject.Points && dbRoomObject.Points.length > 0) {
-            return getWallPath(dbRoomObject);
+            roomObject = new wallRoomObject(dbRoomObject);
         }
         if (dbRoomObject.Rectangles && dbRoomObject.Rectangles.length > 0) {
-            return getTablePath(dbRoomObject);
+            roomObject = new tableRoomObject(dbRoomObject);
+        }
+        if (roomObject) {
+            var path = roomObject.getPath();
+            path.RoomObject = roomObject;
+            roomObject.Path = path;
+            return path;
         }
         return null;
     }
 
-    function getWallPath(dbRoomObject) {
-        var path = new paper.Path();
-        path.RoomObjectType = 'wall';
-        path.moveTo(new paper.Point([dbRoomObject.Points[0].X, dbRoomObject.Points[0].Y]));
-        path.lineTo(new paper.Point([dbRoomObject.Points[1].X, dbRoomObject.Points[1].Y]));
-        return path;
+    function wallRoomObject(dbRoomObject) {
+        this.getPath = function() {
+            var path = new paper.Path();
+            path.RoomObjectType = 'wall';
+            path.moveTo(new paper.Point([dbRoomObject.Points[0].X, dbRoomObject.Points[0].Y]));
+            path.lineTo(new paper.Point([dbRoomObject.Points[1].X, dbRoomObject.Points[1].Y]));
+            return path;
+        }
     }
 
-    function getTablePath(dbRoomObject) {
-        var point = new paper.Point(dbRoomObject.Rectangles[0].LeftTopX, dbRoomObject.Rectangles[0].LeftTopY);
-        var size = new paper.Size(dbRoomObject.Rectangles[0].Width, dbRoomObject.Rectangles[0].Height);
-        var tablePath = new paper.Path.Rectangle(point, size);
-        tablePath.dbRoomObjectId = dbRoomObject.Id;
-        tablePath.RoomObjectType = 'table';
-        //tablePath.strokeColor = color;
-        if (dbRoomObject.EmployeeFio != '') {
-            tablePath.dbEmployeeId = dbRoomObject.EmployeeId;
-            setEmployeeTableText(tablePath, dbRoomObject.EmployeeFio);
+    function tableRoomObject(dbRoomObject) {
+        this.getPath = function() {
+            var point = new paper.Point(dbRoomObject.Rectangles[0].LeftTopX, dbRoomObject.Rectangles[0].LeftTopY);
+            var size = new paper.Size(dbRoomObject.Rectangles[0].Width, dbRoomObject.Rectangles[0].Height);
+            var tablePath = new paper.Path.Rectangle(point, size);
+            tablePath.dbRoomObjectId = dbRoomObject.Id;
+            tablePath.RoomObjectType = 'table';
+            //tablePath.strokeColor = color;
+            if (dbRoomObject.EmployeeFio != '') {
+                tablePath.dbEmployeeId = dbRoomObject.EmployeeId;
+                setEmployeeTableText(tablePath, dbRoomObject.EmployeeFio);
+            }
+            return tablePath;
         }
-        return tablePath;
     }
 
     function setEmployeeTableText(tableFigure, employeeFio) {
