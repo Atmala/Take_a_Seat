@@ -157,6 +157,7 @@
     <Content Include="img\assign.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\delete.png" />
     <Content Include="img\discard.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
