@@ -11,6 +11,7 @@ seatApp
                     var color = '#ACCCE2';
                     var globalOffset = new paper.Point();
                     var pathToMove;
+                    var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
 
                     function mouseDown(event) {
                         isDrawing = true;
@@ -43,7 +44,7 @@ seatApp
                             savePathToMove();
                             pathToMove = undefined;
                         }
-                        
+
                         if (path && scope.mode === 'line') {
                             var lineInfo = {
                                 X1: view2ProjectX(path.segments[0].point.x),
@@ -206,7 +207,7 @@ seatApp
                             Width: rectangleWidth,
                             Height: rectangleHeight
                         };
-                        mapProvider.SaveTable(rectangleInfo, function(response) {
+                        mapProvider.SaveTable(rectangleInfo, function (response) {
                             newPath.dbRoomObjectId = response.Id;
                         });
 
@@ -235,7 +236,7 @@ seatApp
                         var factory = new RoomObjectFactory(scope, mapProvider);
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
-                                var newPath = factory.getPathByDbRoomObject(roomObject);
+                                var newPath = roomObjectFactory.getPathByDbRoomObject(roomObject);
                                 newPath.strokeColor = color;
                             });
                             paper.view.draw();
