@@ -23,6 +23,11 @@
         return path;
     }
 
+    this.createWall = function(path) {
+        var roomObject = new wallRoomObject();
+        roomObject.createNew(path);
+    }
+
     function wallRoomObject() {
         this.RoomObjectType = 'wall';
 
@@ -31,12 +36,33 @@
             this.y1 = dbRoomObject.Points[0].Y;
             this.x2 = dbRoomObject.Points[1].X;
             this.y2 = dbRoomObject.Points[1].Y;
+            this.roomObjectId = dbRoomObject.Id;
+        }
+
+        this.createNew = function(path) {
+            this.x1 = path.segments[0].point.x;
+            this.y1 = path.segments[0].point.y;
+            this.x2 = path.segments[1].point.x;
+            this.y2 = path.segments[1].point.y;
+            var lineInfo = {
+                X1: scope.view2ProjectX(this.x1),
+                Y1: scope.view2ProjectY(this.y1),
+                X2: scope.view2ProjectX(this.x2),
+                Y2: scope.view2ProjectY(this.y2)
+            };
+            this.attachedPath = path;
+            path.RoomObject = this;
+
+            mapProvider.SaveWall(lineInfo, function(response) {
+                this.roomObjectId = response.Id;
+            });
+
         }
 
         this.getPath = function () {
             var path = new paper.Path();
-            path.moveTo(new paper.Point(this.x1, this.y1));
-            path.lineTo(new paper.Point(this.x2, this.y2));
+            path.add(new paper.Point(this.x1, this.y1));
+            path.add(new paper.Point(this.x2, this.y2));
             path.strokeColor = scope.color;
             path.RoomObject = this;
             this.attachedPath = path;

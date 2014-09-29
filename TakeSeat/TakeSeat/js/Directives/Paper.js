@@ -9,9 +9,9 @@ seatApp
                     var isDrawing = false;
                     var rectangleWidth = 30, rectangleHeight = 50;
                     var color;
-                    //var globalOffset = new paper.Point();
                     var pathToMove;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
+                    var selectedPath;
 
                     scope.color = '#ACCCE2';
                     scope.globalOffset = new paper.Point();
@@ -24,9 +24,7 @@ seatApp
                         if (scope.mode === 'line') {
                             path = getNewPath();
                         } else if (scope.mode === 'table') {
-                            //path = createNewRectangle(x, y);
                             path = roomObjectFactory.createTable(x, y, rectangleWidth, rectangleHeight);
-                            //path.strokeColor = color;
                         } else if (scope.mode === 'delete') {
                             var pathToDelete = getTableByCoordinates(x, y);
                             if (pathToDelete) {
@@ -34,7 +32,7 @@ seatApp
                                 pathToDelete.remove();
                             }
                         } else {
-                            pathToMove = getTableByCoordinates(x, y);
+                            pathToMove = selectedPath;
                         }
 
                         if (scope.mode !== 'delete') {
@@ -53,13 +51,7 @@ seatApp
                         }
 
                         if (path && scope.mode === 'line') {
-                            var lineInfo = {
-                                X1: view2ProjectX(path.segments[0].point.x),
-                                Y1: view2ProjectY(path.segments[0].point.y),
-                                X2: view2ProjectX(path.segments[1].point.x),
-                                Y2: view2ProjectY(path.segments[1].point.y)
-                            };
-                            mapProvider.SaveWall(lineInfo);
+                            roomObjectFactory.createWall(path);
                         }
 
                         if (scope.mode === 'assign') {
@@ -80,21 +72,6 @@ seatApp
 
                         var x = event.offsetX;
                         var y = event.offsetY;
-
-                        var hitOptions = {
-                            segments: true,
-                            stroke: true,
-                            fill: true,
-                            tolerance: 5
-                        };
-                        var point = new paper.Point(event.offsetX, event.offsetY);
-                        var hitResult = project.hitTest(point, hitOptions);
-                        scope.HitResult = hitResult;
-                        scope.$apply();
-
-                        project.deselectAll();
-                        var table = getTableByCoordinates(x, y);
-                        if (table) table.selected = true;
 
                         if (scope.mode === 'line' && isDrawing) {
                             if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
@@ -125,6 +102,14 @@ seatApp
                                 }
                                 mouseDownPoint = new paper.Point(x, y);
                             }
+                        } else {
+                            project.deselectAll();
+                            selectedPath = getSelectedRoomObject(x, y);
+
+                            if (selectedPath) {
+                                selectedPath.selected = true;
+                            }
+                            
                         }
                     }
 
@@ -223,8 +208,7 @@ seatApp
                         project.activeLayer.remove();
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
-                                var newPath = roomObjectFactory.getPathByDbRoomObject(roomObject);
-                                //newPath.strokeColor = color;
+                                roomObjectFactory.getPathByDbRoomObject(roomObject);
                             });
                             paper.view.draw();
                         });
@@ -267,6 +251,24 @@ seatApp
 
                     function getTableByCoordinates(x, y) {
                         return getTableByPoint(new paper.Point(x, y));
+                    }
+
+                    function getSelectedRoomObject(x, y) {
+                        var point = new paper.Point(x, y);
+                        var table = getTableByPoint(point);
+                        if (table) return table;
+
+                        var hitOptions = {
+                            segments: true,
+                            stroke: true,
+                            fill: true,
+                            tolerance: 5
+                        };
+                        
+                        var hitResult = project.hitTest(point, hitOptions);
+                        scope.HitResult = hitResult;
+                        scope.$apply();
+                        return hitResult.item;
                     }
 
                     element.on('mousedown', mouseDown)

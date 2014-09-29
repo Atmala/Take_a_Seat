@@ -50,10 +50,11 @@ namespace TakeSeat.Controllers
         }
 
         [HttpPost]
-        public void SaveWall(LineInfo lineInfo)
+        public JsonResult SaveWall(LineInfo lineInfo)
         {
-            ServiceProxy.SaveWall(Room.Id, lineInfo.X1, lineInfo.Y1, lineInfo.X2, lineInfo.Y2);
-            //return Json(ServiceProxy.SaveWall(Room.Id, x1, y1, x2, y2));
+            var id = ServiceProxy.SaveWall(Room.Id, lineInfo.X1, lineInfo.Y1, lineInfo.X2, lineInfo.Y2);
+            var response = new {Id = id};
+            return Json(response);
         }
 
         [HttpPost]
