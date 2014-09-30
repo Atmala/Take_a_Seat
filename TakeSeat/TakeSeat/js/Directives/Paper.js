@@ -9,9 +9,8 @@ seatApp
                     var isDrawing = false;
                     var rectangleWidth = 30, rectangleHeight = 50;
                     var color;
-                    var pathToMove;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
-                    var selectedPath;
+                    var selectedPath, selectedSegment, pathToMove, segmentToMove;
 
                     scope.color = '#ACCCE2';
                     scope.globalOffset = new paper.Point();
@@ -32,7 +31,8 @@ seatApp
                                 pathToDelete.remove();
                             }
                         } else {
-                            pathToMove = getSelectedRoomObject(x, y);
+                            pathToMove = selectedPath;
+                            segmentToMove = selectedSegment;
                         }
 
                         if (scope.mode !== 'delete') {
@@ -96,18 +96,24 @@ seatApp
                         var offsetY = y - mouseDownPoint.y;
                         if (Math.abs(offsetX) < 2 && Math.abs(offsetY) < 2) return;
 
-                        if (pathToMove) movePathToMove(offsetX, offsetY);
+                        if (pathToMove) movePath(offsetX, offsetY);
+                        else if (segmentToMove) moveSegment(offsetX, offsetY);
                         else moveAllItems(offsetX, offsetY);
                         mouseDownPoint = new paper.Point(x, y);
                     }
 
-                    function movePathToMove(offsetX, offsetY) {
+                    function movePath(offsetX, offsetY) {
                         pathToMove.position.x += offsetX;
                         pathToMove.position.y += offsetY;
                         if (pathToMove.text) {
                             pathToMove.text.point.x += offsetX;
                             pathToMove.text.point.y += offsetY;
                         }
+                    }
+
+                    function moveSegment(offsetX, offsetY) {
+                        segmentToMove.point.x += offsetX;
+                        segmentToMove.point.y += offsetY;
                     }
 
                     function moveAllItems(offsetX, offsetY) {
@@ -122,8 +128,35 @@ seatApp
 
                     function selectItemByCoordinates(x, y) {
                         project.deselectAll();
-                        selectedPath = getSelectedRoomObject(x, y);
+                        selectedPath = null;
+                        selectedSegment = null;
 
+                        var point = new paper.Point(x, y);
+                        var table = getTableByPoint(point);
+                        if (table) {
+                            selectedPath = table;
+                            return;
+                        }
+
+                        var hitOptions = {
+                            segments: true,
+                            stroke: true,
+                            fill: false,
+                            tolerance: 5
+                        };
+
+                        var hitResult = project.hitTest(point, hitOptions);
+                        scope.HitResult = hitResult;
+                        scope.$apply();
+
+                        if (!hitResult) return;
+                        if (hitResult.type === 'stroke') {
+                            selectedPath = hitResult.item;
+                        }
+                        else if (hitResult.type === 'segment') {
+                            selectedSegment = hitResult.segment;
+                        }
+                        
                         if (selectedPath) {
                             selectedPath.selected = true;
                         }
@@ -276,8 +309,7 @@ seatApp
                         var hitResult = project.hitTest(point, hitOptions);
                         scope.HitResult = hitResult;
                         scope.$apply();
-                        if (hitResult) return hitResult.item;
-                        return null;
+                        return hitResult;
                     }
 
                     element.on('mousedown', mouseDown)
