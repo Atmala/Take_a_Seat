@@ -32,7 +32,7 @@ seatApp
                                 pathToDelete.remove();
                             }
                         } else {
-                            pathToMove = selectedPath;
+                            pathToMove = getSelectedRoomObject(x, y);
                         }
 
                         if (scope.mode !== 'delete') {
@@ -85,31 +85,47 @@ seatApp
                         } else if (scope.mode === 'table' && isDrawing) {
                             path.position = new paper.Point([x, y]);
                         } else if (scope.mode === 'view' && mouseDownPoint) {
-                            var offsetX = x - mouseDownPoint.x;
-                            var offsetY = y - mouseDownPoint.y;
-                            if (Math.abs(offsetX) > 2 || Math.abs(offsetY) > 2) {
-                                if (pathToMove) {
-                                    pathToMove.position.x += offsetX;
-                                    pathToMove.position.y += offsetY;
-                                    if (pathToMove.text) {
-                                        pathToMove.text.point.x += offsetX;
-                                        pathToMove.text.point.y += offsetY;
-                                    }
-                                } else {
-                                    scope.globalOffset.x += offsetX;
-                                    scope.globalOffset.y += offsetY;
-                                    moveAllItems(offsetX, offsetY);
-                                }
-                                mouseDownPoint = new paper.Point(x, y);
-                            }
+                            moveMapObjects(x, y);
                         } else {
-                            project.deselectAll();
-                            selectedPath = getSelectedRoomObject(x, y);
+                            selectItemByCoordinates(x, y);
+                        }
+                    }
 
-                            if (selectedPath) {
-                                selectedPath.selected = true;
+                    function moveMapObjects(x, y) {
+                        var offsetX = x - mouseDownPoint.x;
+                        var offsetY = y - mouseDownPoint.y;
+                        if (Math.abs(offsetX) < 2 && Math.abs(offsetY) < 2) return;
+
+                        if (pathToMove) movePathToMove(offsetX, offsetY);
+                        else moveAllItems(offsetX, offsetY);
+                        mouseDownPoint = new paper.Point(x, y);
+                    }
+
+                    function movePathToMove(offsetX, offsetY) {
+                        pathToMove.position.x += offsetX;
+                        pathToMove.position.y += offsetY;
+                        if (pathToMove.text) {
+                            pathToMove.text.point.x += offsetX;
+                            pathToMove.text.point.y += offsetY;
+                        }
+                    }
+
+                    function moveAllItems(offsetX, offsetY) {
+                        scope.globalOffset.x += offsetX;
+                        scope.globalOffset.y += offsetY;
+                        project.activeLayer.children.forEach(function (item) {
+                            if (item.position) {
+                                item.position = new paper.Point(item.position.x + offsetX, item.position.y + offsetY);
                             }
-                            
+                        });
+                    }
+
+                    function selectItemByCoordinates(x, y) {
+                        project.deselectAll();
+                        selectedPath = getSelectedRoomObject(x, y);
+
+                        if (selectedPath) {
+                            selectedPath.selected = true;
                         }
                     }
 
@@ -195,14 +211,6 @@ seatApp
                         paper.view.draw();
                     }
 
-                    function moveAllItems(offsetX, offsetY) {
-                        project.activeLayer.children.forEach(function (item) {
-                            if (item.position) {
-                                item.position = new paper.Point(item.position.x + offsetX, item.position.y + offsetY);
-                            }
-                        });
-                    }
-
                     scope.initAllFigures = function () {
                         scope.RoomCaption = scope.room.Id;
                         project.activeLayer.remove();
@@ -268,7 +276,8 @@ seatApp
                         var hitResult = project.hitTest(point, hitOptions);
                         scope.HitResult = hitResult;
                         scope.$apply();
-                        return hitResult.item;
+                        if (hitResult) return hitResult.item;
+                        return null;
                     }
 
                     element.on('mousedown', mouseDown)
