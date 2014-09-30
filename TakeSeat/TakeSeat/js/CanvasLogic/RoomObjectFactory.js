@@ -39,24 +39,11 @@
             this.roomObjectId = dbRoomObject.Id;
         }
 
-        this.createNew = function(path) {
-            this.x1 = path.segments[0].point.x;
-            this.y1 = path.segments[0].point.y;
-            this.x2 = path.segments[1].point.x;
-            this.y2 = path.segments[1].point.y;
-            var lineInfo = {
-                X1: scope.view2ProjectX(this.x1),
-                Y1: scope.view2ProjectY(this.y1),
-                X2: scope.view2ProjectX(this.x2),
-                Y2: scope.view2ProjectY(this.y2)
-            };
-            this.attachedPath = path;
+        this.createNew = function (path) {
             path.RoomObject = this;
-
-            mapProvider.SaveWall(lineInfo, function(response) {
-                this.roomObjectId = response.Id;
-            });
-
+            this.attachedPath = path;
+            this.roomObjectId = 0;
+            this.save();
         }
 
         this.getPath = function () {
@@ -67,6 +54,32 @@
             path.RoomObject = this;
             this.attachedPath = path;
             return path;
+        }
+
+        this.save = function() {
+            this.x1 = this.attachedPath.segments[0].point.x;
+            this.y1 = this.attachedPath.segments[0].point.y;
+            this.x2 = this.attachedPath.segments[1].point.x;
+            this.y2 = this.attachedPath.segments[1].point.y;
+            var lineInfo = {
+                RoomObjectId: this.roomObjectId,
+                X1: scope.view2ProjectX(this.x1),
+                Y1: scope.view2ProjectY(this.y1),
+                X2: scope.view2ProjectX(this.x2),
+                Y2: scope.view2ProjectY(this.y2)
+            };
+
+            mapProvider.SaveWall(lineInfo, function (response) {
+                this.roomObjectId = response.Id;
+            });
+        }
+
+        this.deleteRoomObject = function () {
+            if (this.attachedPath.text) {
+                this.attachedPath.text.remove();
+                scope.loadEmployees();
+            }
+            mapProvider.DeleteRoomObject({ id: this.roomObjectId });
         }
     }
 
@@ -88,6 +101,7 @@
             this.leftTopY = y;
             this.width = width;
             this.height = height;
+            var thisObject = this;
 
             var rectangleInfo = {
                 RoomObjectId: 0,
@@ -96,8 +110,8 @@
                 Width: width,
                 Height: height
             };
-            mapProvider.SaveTable(rectangleInfo, function (response) {
-                this.roomObjectId = response.Id;
+            mapProvider.SaveTable(rectangleInfo, function(response) {
+                thisObject.roomObjectId = response.Id;
             });
         }
 

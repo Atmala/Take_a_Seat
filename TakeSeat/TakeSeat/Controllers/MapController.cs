@@ -33,6 +33,7 @@ namespace TakeSeat.Controllers
         public JsonResult Get()
         {
             //var json = new JavaScriptSerializer().Serialize(Room);
+            Room = null;
             var result = Json(Room, JsonRequestBehavior.AllowGet);
             return result;
         }
@@ -52,7 +53,7 @@ namespace TakeSeat.Controllers
         [HttpPost]
         public JsonResult SaveWall(LineInfo lineInfo)
         {
-            var id = ServiceProxy.SaveWall(Room.Id, lineInfo.X1, lineInfo.Y1, lineInfo.X2, lineInfo.Y2);
+            var id = ServiceProxy.SaveWall(Room.Id, lineInfo.RoomObjectId, lineInfo.X1, lineInfo.Y1, lineInfo.X2, lineInfo.Y2);
             var response = new {Id = id};
             return Json(response);
         }

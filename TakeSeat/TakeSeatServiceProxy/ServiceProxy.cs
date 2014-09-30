@@ -31,11 +31,11 @@ namespace TakeSeatServiceProxy
             }
         }
 
-        public static int SaveWall(int roomId, int x1, int y1, int x2, int y2)
+        public static int SaveWall(int roomId, int roomObjectId, int x1, int y1, int x2, int y2)
         {
             using (var dbRepository = new DbRepository())
             {
-                return dbRepository.SaveWall(roomId, x1, y1, x2, y2);
+                return dbRepository.SaveWall(roomId, roomObjectId, x1, y1, x2, y2);
             }
         }
 

@@ -203,16 +203,37 @@ namespace DbLayer
             return Save(rectangle);
         }
 
-        public int SaveWall(int roomId, int x1, int y1, int x2, int y2)
+        public int SaveWall(int roomId, int roomObjectId, int x1, int y1, int x2, int y2)
+        {
+            return roomObjectId == 0
+                ? SaveNewWall(roomId, x1, y1, x2, y2)
+                : UpdateWall(roomObjectId, x1, y1, x2, y2);
+        }
+
+        private int SaveNewWall(int roomId, int x1, int y1, int x2, int y2)
         {
             var roomObject = new RoomObject()
-                             {
-                                 RoomId = roomId,
-                                 RoomObjectTypeId = GetRoomObjectTypeId("wall")
-                             };
+            {
+                RoomId = roomId,
+                RoomObjectTypeId = GetRoomObjectTypeId("wall")
+            };
             int roomObjectId = Save(roomObject);
             SavePoint(roomObjectId, x1, y1);
             SavePoint(roomObjectId, x2, y2);
+            return roomObjectId;
+        }
+
+        private int UpdateWall(int roomObjectId, int x1, int y1, int x2, int y2)
+        {
+            var points = _db.Points.Where(r => r.RoomObjectId == roomObjectId).ToList();
+            if (points.Count != 2) return -1;
+            points[0].X = x1;
+            points[0].Y = y1;
+            Save(points[0]);
+            points[1].X = x2;
+            points[1].Y = y2;
+            Save(points[1]);
+            _db.SaveChanges();
             return roomObjectId;
         }
 

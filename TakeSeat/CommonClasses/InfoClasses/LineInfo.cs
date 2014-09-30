@@ -8,6 +8,7 @@ namespace CommonClasses.InfoClasses
 {
     public class LineInfo
     {
+        public int RoomObjectId { get; set; }
         public int X1 { get; set; }
         public int Y1 { get; set; }
         public int X2 { get; set; }

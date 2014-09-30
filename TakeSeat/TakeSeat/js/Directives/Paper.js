@@ -25,10 +25,9 @@ seatApp
                         } else if (scope.mode === 'table') {
                             path = roomObjectFactory.createTable(x, y, rectangleWidth, rectangleHeight);
                         } else if (scope.mode === 'delete') {
-                            var pathToDelete = getTableByCoordinates(x, y);
-                            if (pathToDelete) {
-                                pathToDelete.RoomObject.deleteRoomObject();
-                                pathToDelete.remove();
+                            if (selectedPath) {
+                                selectedPath.RoomObject.deleteRoomObject();
+                                selectedPath.remove();
                             }
                         } else {
                             pathToMove = selectedPath;
@@ -46,7 +45,6 @@ seatApp
                         if (pathToMove) {
                             if (pathToMove.RoomObject.save)
                                 pathToMove.RoomObject.save();
-                            //savePathToMove();
                             pathToMove = undefined;
                         }
 
