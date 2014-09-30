@@ -61,6 +61,8 @@
             this.y1 = this.attachedPath.segments[0].point.y;
             this.x2 = this.attachedPath.segments[1].point.x;
             this.y2 = this.attachedPath.segments[1].point.y;
+            var thisObject = this;
+
             var lineInfo = {
                 RoomObjectId: this.roomObjectId,
                 X1: scope.view2ProjectX(this.x1),
@@ -70,7 +72,7 @@
             };
 
             mapProvider.SaveWall(lineInfo, function (response) {
-                this.roomObjectId = response.Id;
+                thisObject.roomObjectId = response.Id;
             });
         }
 

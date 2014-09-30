@@ -94,8 +94,8 @@ seatApp
                         var offsetY = y - mouseDownPoint.y;
                         if (Math.abs(offsetX) < 2 && Math.abs(offsetY) < 2) return;
 
-                        if (pathToMove) movePath(offsetX, offsetY);
-                        else if (segmentToMove) moveSegment(offsetX, offsetY);
+                        if (segmentToMove) moveSegment(offsetX, offsetY);
+                        else if (pathToMove) movePath(offsetX, offsetY);
                         else moveAllItems(offsetX, offsetY);
                         mouseDownPoint = new paper.Point(x, y);
                     }
@@ -152,12 +152,12 @@ seatApp
                             selectedPath = hitResult.item;
                         }
                         else if (hitResult.type === 'segment') {
+                            selectedPath = hitResult.item;
                             selectedSegment = hitResult.segment;
                         }
                         
-                        if (selectedPath) {
-                            selectedPath.selected = true;
-                        }
+                        if (selectedPath) selectedPath.selected = true;
+                        if (selectedSegment) selectedSegment.selected = true;
                     }
 
                     function assignEmployee(x, y) {
@@ -290,24 +290,6 @@ seatApp
 
                     function getTableByCoordinates(x, y) {
                         return getTableByPoint(new paper.Point(x, y));
-                    }
-
-                    function getSelectedRoomObject(x, y) {
-                        var point = new paper.Point(x, y);
-                        var table = getTableByPoint(point);
-                        if (table) return table;
-
-                        var hitOptions = {
-                            segments: true,
-                            stroke: true,
-                            fill: true,
-                            tolerance: 5
-                        };
-                        
-                        var hitResult = project.hitTest(point, hitOptions);
-                        scope.HitResult = hitResult;
-                        scope.$apply();
-                        return hitResult;
                     }
 
                     element.on('mousedown', mouseDown)
