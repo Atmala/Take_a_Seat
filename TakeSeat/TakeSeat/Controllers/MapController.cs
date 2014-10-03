@@ -88,9 +88,24 @@ namespace TakeSeat.Controllers
         [HttpDelete]
         public void DeleteRoomObject(int id)
         {
-            var roomObject = Room.RoomObjects.First(ro => ro.Id == id);
-            Room.RoomObjects.Remove(roomObject);
+            var roomObject = Room.RoomObjects.FirstOrDefault(ro => ro.Id == id);
+            if (roomObject != null) Room.RoomObjects.Remove(roomObject);
             ServiceProxy.DeleteRoomObject(id);
+        }
+
+        [HttpGet]
+        public JsonResult GetRooms()
+        {
+            var response = ServiceProxy.GetRooms();
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult ChangeRoom(int roomId)
+        {
+            Room = ServiceProxy.GetRoom(roomId);
+            var result = Json(Room, JsonRequestBehavior.AllowGet);
+            return result;
         }
     }
 }

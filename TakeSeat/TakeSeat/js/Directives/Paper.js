@@ -165,7 +165,7 @@ seatApp
                         var table = getTableByCoordinates(x, y);
                         if (table) {
                             setEmployeeTableText(table, scope.selectedEmployee.FioShort);
-                            saveEmployeeTableLink(scope.selectedEmployee.Id, table.roomObjectId);
+                            saveEmployeeTableLink(scope.selectedEmployee.Id, table.RoomObject.roomObjectId);
                             scope.loadEmployees();
                         }
                     }
@@ -174,7 +174,7 @@ seatApp
                         var table = getTableByCoordinates(x, y);
                         if (table) {
                             setEmployeeTableText(table, '');
-                            removeEmployeeTableLink(table.dbEmployeeId, table.roomObjectId);
+                            removeEmployeeTableLink(table.dbEmployeeId, table.RoomObject.roomObjectId);
                             scope.loadEmployees();
                         }
                     }
@@ -188,7 +188,7 @@ seatApp
                         tableFigure.text = new PointText({
                             point: [tableFigure.position.x - 18, tableFigure.position.y - 35],
                             content: employeeFio,
-                            fillColor: color,
+                            fillColor: scope.color,
                             fontFamily: 'Courier New',
                             fontWeight: 'bold',
                             fontSize: 15
@@ -243,7 +243,8 @@ seatApp
                     }
 
                     scope.initAllFigures = function () {
-                        scope.RoomCaption = scope.room.Id;
+                        scope.RoomCaption = scope.room.Caption;
+                        scope.globalOffset = new paper.Point(0, 0);
                         project.activeLayer.remove();
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {

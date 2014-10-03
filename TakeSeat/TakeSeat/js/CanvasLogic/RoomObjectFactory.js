@@ -154,7 +154,6 @@
         }
 
         function setEmployeeTableText(tableFigure, employeeFio) {
-            //tableFigure.strokeWidth = 5;
             if (tableFigure.text) {
                 tableFigure.text.remove();
             }

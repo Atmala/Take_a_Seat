@@ -8,7 +8,9 @@
                 'SaveTable': { method: 'POST', params: { action: 'SaveTable' } },
                 'SaveEmployeeTableLink': { method: 'POST', params: { action: 'SaveEmployeeTableLink' } },
                 'RemoveEmployeeTableLink': { method: 'POST', params: { action: 'RemoveEmployeeTableLink' } },
-                'DeleteRoomObject': { method: 'DELETE', params: { action: 'DeleteRoomObject'}},
+                'DeleteRoomObject': { method: 'DELETE', params: { action: 'DeleteRoomObject' } },
+                'GetRooms': { method: 'GET', params: { action: 'GetRooms' }, isArray: true },
+                'ChangeRoom': { method: 'GET', params: { action: 'ChangeRoom' } },
             });
         }])
  .factory('EmployeeProvider', [

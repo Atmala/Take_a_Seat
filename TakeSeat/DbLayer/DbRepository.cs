@@ -324,6 +324,11 @@ namespace DbLayer
             return room == null ? null : GetRoomModel(room.Id);
         }
 
+        public RoomModel GetRoom(int roomId)
+        {
+            return GetRoomModel(roomId);
+        }
+
         public List<EmployeeInfo> GetEmployeesWithoutSeat()
         {
             return (from e in _db.Employees
@@ -334,6 +339,16 @@ namespace DbLayer
                            FioShort = e.Surname + (string.IsNullOrEmpty(e.FirstName) ? ""
                                : " " + e.FirstName)
                        }).ToList();
+        }
+
+        public List<RoomInfo> GetRooms()
+        {
+            return (from r in _db.Rooms
+                select new RoomInfo
+                {
+                    Id = r.Id,
+                    Caption = r.Caption
+                }).ToList();
         }
 
         #endregion

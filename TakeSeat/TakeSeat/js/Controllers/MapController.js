@@ -9,6 +9,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     $scope.Init = function () {
         initMode();
         $scope.loadEmployees();
+        $scope.loadRooms();
     }
 
     $scope.isSelected = function (section) {
@@ -42,6 +43,21 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         employeeProvider.query(function (response) {
             $scope.employeeList = response;
             $scope.$apply();
+        });
+    }
+
+    $scope.loadRooms = function() {
+        mapProvider.GetRooms(function(response) {
+            $scope.rooms = response;
+            $scope.selectedRoom = response[0];
+            $scope.apply();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+        });
+    }
+
+    $scope.changeRoom = function(roomId) {
+        mapProvider.ChangeRoom({ roomId: roomId }, function(response) {
+            $scope.room = response;
+            $scope.initAllFigures();
         });
     }
 

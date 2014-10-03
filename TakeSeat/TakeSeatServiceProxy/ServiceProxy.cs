@@ -15,6 +15,14 @@ namespace TakeSeatServiceProxy
             }
         }
 
+        public static RoomModel GetRoom(int roomId)
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                return dbRepository.GetRoom(roomId);
+            }
+        }
+
         public static RoomModel SaveRoom(RoomModel roomModel)
         {
             using (var dbRepository = new DbRepository())
@@ -68,6 +76,14 @@ namespace TakeSeatServiceProxy
             using (var dbRepository = new DbRepository())
             {
                 dbRepository.DeleteRoomObject(id);
+            }
+        }
+
+        public static List<RoomInfo> GetRooms()
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                return dbRepository.GetRooms();
             }
         }
     }
