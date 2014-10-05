@@ -11,6 +11,7 @@
                 'DeleteRoomObject': { method: 'DELETE', params: { action: 'DeleteRoomObject' } },
                 'GetRooms': { method: 'GET', params: { action: 'GetRooms' }, isArray: true },
                 'ChangeRoom': { method: 'GET', params: { action: 'ChangeRoom' } },
+                'CreateNewRoom': { method: 'GET', params: { action: 'CreateNewRoom' } },
             });
         }])
  .factory('EmployeeProvider', [

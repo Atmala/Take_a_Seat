@@ -80,3 +80,14 @@ s .show-grid [class*="span"]:hover {
     padding-bottom: 9.5px;
     margin: 42px 0 21px;
 }
+
+#editRoomInputDiv {
+    padding-right: 110px;
+    padding-top: 0px;
+}
+
+#editRoomButtonsDiv {
+    float: right;
+    width: 100px;
+    padding: 0px;
+}

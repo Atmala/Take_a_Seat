@@ -245,7 +245,7 @@ seatApp
                     scope.initAllFigures = function () {
                         scope.RoomCaption = scope.room.Caption;
                         scope.globalOffset = new paper.Point(0, 0);
-                        project.activeLayer.remove();
+                        if (project.activeLayer) project.activeLayer.remove();
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
                                 roomObjectFactory.getPathByDbRoomObject(roomObject);

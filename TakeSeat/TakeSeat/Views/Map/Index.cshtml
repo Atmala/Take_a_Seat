@@ -23,7 +23,8 @@
                     <button title="Add Table"
                             type="button" class="btn-tool" ng-click="changeMode('table')"
                             ng-class="{activeBtn : isSelected('table')}">
-                    <img src="..\img\table.png" />
+                        <img src="..\img\table.png" />
+                    </button>
                 </div>
                 <div class="md-overlay">
                     <button title="Assign Employee"
@@ -68,13 +69,27 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
     <div class="canvasPanel">
-        <select class="form-control" ng-model="selectedRoom" 
-                ng-options="r.Caption for r in rooms"
-                ng-change="changeRoom(selectedRoom.Id)">
-        </select>
+        <div id="selectRoomDiv">
+            <select class="form-control" ng-model="selectedRoom"
+                    ng-options="r.Caption for r in rooms"
+                    ng-change="changeRoom(selectedRoom.Id)"></select>
+        </div>
+        <div id="editRoomDiv">
+            <div id="editRoomButtonsDiv">
+                <button title="Save" type="button" ng-click="saveRoom()">
+                    <img src="..\img\save.png" />
+                </button>
+                <button title="Cancel" type="button" ng-click="undoRoom()">
+                    <img src="..\img\undo.png" />
+                </button>
+            </div>
+            <div id="editRoomInputDiv">
+                <input id="roomCaptionInput" class="form-control" />
+            </div>
+        </div>
     </div>
     <div class="canvasPanel">
         <div>{{'Room: ' + RoomCaption}}</div>

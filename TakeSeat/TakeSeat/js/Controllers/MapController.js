@@ -8,6 +8,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     $scope.Init = function () {
         initMode();
+        $scope.showSelectRoom();
         $scope.loadEmployees();
         $scope.loadRooms();
     }
@@ -33,11 +34,18 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.showRoom = function() {
-        mapProvider.Get(function(response) {
-            $scope.room = response;
-            $scope.initAllFigures();
-        });
+        $scope.showEditRoom();
     };
+
+    $scope.showSelectRoom = function () {
+        $("#selectRoomDiv").show();
+        $("#editRoomDiv").hide();
+    }
+
+    $scope.showEditRoom = function() {
+        $("#selectRoomDiv").hide();
+        $("#editRoomDiv").show();
+    }
 
     $scope.loadEmployees = function() {
         employeeProvider.query(function (response) {
@@ -50,7 +58,8 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         mapProvider.GetRooms(function(response) {
             $scope.rooms = response;
             $scope.selectedRoom = response[0];
-            $scope.apply();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+            $scope.$apply();
+            $scope.changeRoom($scope.selectedRoom.Id);
         });
     }
 
@@ -59,6 +68,31 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             $scope.room = response;
             $scope.initAllFigures();
         });
+    }
+
+    $scope.undoRoom = function() {
+        $scope.showSelectRoom();
+    }
+
+    $scope.saveRoom = function () {
+        var caption = $("#roomCaptionInput").val();
+        mapProvider.CreateNewRoom({ caption: caption }, function (roomInfo) {
+            $scope.showSelectRoom();
+            $scope.rooms.push(roomInfo);
+            $scope.selectedRoom = roomInfo;
+            $scope.$apply();
+            $scope.changeRoom(roomInfo.Id);
+        });
+    }
+
+    function setSelectedRoom(roomId) {
+        for (var i = $scope.rooms.length - 1; i >= 0; i--) {
+            var room = $scope.rooms[i];
+            if (room.Id == roomId) {
+                $scope.selectedRoom = room;
+                $scope.apply();
+            }
+        }
     }
 
 }]);

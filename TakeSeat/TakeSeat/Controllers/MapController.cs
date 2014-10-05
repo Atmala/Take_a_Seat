@@ -107,5 +107,15 @@ namespace TakeSeat.Controllers
             var result = Json(Room, JsonRequestBehavior.AllowGet);
             return result;
         }
+
+        [HttpGet]
+        public JsonResult CreateNewRoom(string caption)
+        {
+            var roomInfo = ServiceProxy.CreateNewRoom(caption);
+            return Json(roomInfo, JsonRequestBehavior.AllowGet);
+            //Room = ServiceProxy.GetRoom(roomId);
+            //var result = Json(Room, JsonRequestBehavior.AllowGet);
+            //return result;
+        }
     }
 }

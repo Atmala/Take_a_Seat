@@ -315,6 +315,17 @@ namespace DbLayer
             }
         }
 
+        public RoomInfo CreateNewRoom(string caption)
+        {
+            var room = new Room {Caption = caption, Order = 0};
+            Save(room);
+            return new RoomInfo
+                   {
+                       Id = room.Id,
+                       Caption = room.Caption
+                   };
+        }
+
         #endregion
 
         #region Get Methods

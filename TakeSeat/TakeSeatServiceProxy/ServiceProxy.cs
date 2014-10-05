@@ -86,5 +86,13 @@ namespace TakeSeatServiceProxy
                 return dbRepository.GetRooms();
             }
         }
+
+        public static RoomInfo CreateNewRoom(string caption)
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                return dbRepository.CreateNewRoom(caption);
+            }
+        }
     }
 }

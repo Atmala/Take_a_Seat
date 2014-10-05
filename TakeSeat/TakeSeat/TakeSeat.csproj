@@ -168,9 +168,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="img\newroom.png" />
+    <Content Include="img\save.png" />
     <Content Include="img\table.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\undo.png" />
     <Content Include="img\wall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
