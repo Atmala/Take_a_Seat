@@ -9,14 +9,19 @@
     <meta name="viewport" content="width=device-width" />
 
     <link href="~/assets/css/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/jquery.ui.all.css">
     <link href="~/css/main.css" rel="stylesheet" />
 
-    <script src="~/assets/js/jquery-2.1.1.min.js"></script>
+    <script src="~/assets/js/jquery-1.7.1.js"></script>
     <script src="~/assets/js/paper-full.js"></script>
     <script src="~/assets/js/angular.js"></script>
     <script src="~/assets/js/bootstrap.js"></script>
     <script src="~/assets/js/angular-resource.js"></script>
     <script src="~/assets/js/underscore.js"></script>
+    <script src="~/assets/js/jquery.ui.core.js"></script>
+    <script src="~/assets/js/jquery.ui.widget.js"></script>
+    <script src="~/assets/js/jquery.ui.position.js"></script>
+    <script src="~/assets/js/jquery.ui.autocomplete.js"></script>
 </head>
 <body>
     <div ng-app="seatApp">
@@ -65,7 +70,10 @@
                         </li>
                     </ul>
                     <form class="navbar-form navbar-right">
-                        <input type="text" class="form-control col-lg-8" placeholder="Search">
+                        <input id="inputSearch" type="text"
+                               class="form-control col-lg-8 ui-autocomplete-input"
+                               role="textbox" aria-autocomplete="list" aria-haspopup="true"
+                               placeholder="Search">
                     </form>
                 </div>
             </div>
