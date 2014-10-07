@@ -91,3 +91,10 @@ s .show-grid [class*="span"]:hover {
     width: 100px;
     padding: 0px;
 }
+
+.dropDownMenu {
+    visibility: visible;
+    position: absolute;
+    left: 200px;
+    top: 200px;
+}

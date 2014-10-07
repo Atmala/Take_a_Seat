@@ -123,23 +123,23 @@
             tablePath.add(new paper.Point(this.leftTopX + this.width, this.leftTopY));
             tablePath.add(new paper.Point(this.leftTopX + this.width, this.leftTopY + this.height));
             tablePath.add(new paper.Point(this.leftTopX, this.leftTopY + this.height));
-            //tablePath.closed = true;
+            tablePath.closed = true;
             
             //var point = new paper.Point(this.leftTopX, this.leftTopY);
             //var size = new paper.Size(this.width, this.height);
             //var tablePath = new paper.Path.Rectangle(point, size);
             var smallWidth = this.width / 3;
             var smallHeight = this.height / 2;
-            tablePath.moveTo(this.leftTopX, this.leftTopY + (this.height - smallHeight) / 2);
-            tablePath.lineTo(this.leftTopX - smallWidth, this.leftTopY + (this.height - smallHeight) / 2);
+            //tablePath.moveTo(this.leftTopX, this.leftTopY + (this.height - smallHeight) / 2);
+            //tablePath.lineTo(this.leftTopX - smallWidth, this.leftTopY + (this.height - smallHeight) / 2);
 
-            tablePath.addChild(
-                new Path.Rectangle(
-                    new paper.Point(
-                        this.leftTopX - smallWidth,
-                        this.leftTopY + (this.height - smallHeight) / 2),
-                    new paper.Size(smallWidth, smallHeight)
-                ));
+            //tablePath.addChild(
+            //    new Path.Rectangle(
+            //        new paper.Point(
+            //            this.leftTopX - smallWidth,
+            //            this.leftTopY + (this.height - smallHeight) / 2),
+            //        new paper.Size(smallWidth, smallHeight)
+            //    ));
             tablePath.strokeColor = scope.color;
             if (this.employeeFio != '') {
                 setEmployeeTableText(tablePath, this.employeeFio);

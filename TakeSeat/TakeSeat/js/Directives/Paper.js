@@ -20,6 +20,15 @@ seatApp
                         var x = event.offsetX;
                         var y = event.offsetY;
 
+                        $("#tableDropDownMenu").css({
+                            position: 'absolute',
+                            left: event.clientX + 'px',
+                            top: event.clientY + 'px',
+                        });
+                        //$("tableDropDownMenu").hide();
+                        //menu.show();
+                        return;
+
                         if (scope.mode === 'line') {
                             path = getNewPath();
                         } else if (scope.mode === 'table') {
