@@ -1,0 +1,130 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Import Project="$(MSBuildExtensionsPath)\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+<PropertyGroup>
+	<Configuration>Debug</Configuration>
+	<SourceFolder>.</SourceFolder>
+	<WebSiteBinFolder>$(SourceFolder)\TakeSeat\bin</WebSiteBinFolder>
+	<HudsonBuildNumber>#$(BUILD_NUMBER)</HudsonBuildNumber>
+	<TempFolder>d:\Temp\TakeASeat</TempFolder>
+	<TempWebSiteFolder>$(TempFolder)\_PublishedWebsites\TakeSeat</TempWebSiteFolder>
+	<WebSiteQA>d:\TakeSeat\TakeSeatQA</WebSiteQA>
+</PropertyGroup>
+
+<Target Name="Build">
+	<MSBuild Projects="$(SourceFolder)\TakeSeat.sln" Properties="Configuration=$(Configuration)" Targets="Clean;Build" />	
+</Target>
+
+<Target Name="DeployQA">
+	<CallTarget Targets="Build;PublishWebSite;CopyFromTempToDestinationQA" />
+</Target>
+
+<Target Name="DeployUAT">
+	<CallTarget Targets="CopyFromQA;UpdateConfigUAT;CopyFromTempToDestinationUAT" />
+</Target>
+
+<Target Name="DeployProd">
+	<CallTarget Targets="CopyFromUAT;UpdateConfigPROD;CopyFromTempToDestinationPROD" />
+</Target>
+
+<Target Name="PublishWebSite">
+	<MSBuild Projects="$(SourceFolder)\TakeSeat\TakeSeat.csproj" 
+		Targets="_CopyWebApplication;_BuiltWebOutputGroupOutput" 
+		Properties="OutDir=$(TempFolder)"></MSBuild>
+	<XMLUpdate 
+		Namespace="http://schemas.microsoft.com/.NetConfiguration/v2.0"
+		XMLFileName="$(TempWebSiteFolder)\Web.config"
+		Xpath="//configuration/appSettings/add[@key='HudsonBuildNumber']/@value"
+		Value="$(HudsonBuildNumber)"
+	/>
+	<Exec Command="xcopy $(WebSiteBinFolder) $(TempWebSiteFolder)\bin /E /Y" />
+</Target>
+
+<Target Name="PublishWebService">
+	<MSBuild Projects="$(SourceFolder)\AasService\AasService.csproj" 
+		Targets="_CopyWebApplication;_BuiltWebOutputGroupOutput" 
+		Properties="OutDir=$(TempFolder)"></MSBuild>
+	<XMLUpdate 
+		Namespace="http://schemas.microsoft.com/.NetConfiguration/v2.0"
+		XMLFileName="$(TempServiceFolder)\Web.config"
+		Xpath="//configuration/appSettings/add[@key='HudsonBuildNumber']/@value"
+		Value="$(HudsonBuildNumber)"
+	/>
+	<Exec Command="xcopy $(ServiceBinFolder) $(TempServiceFolder)\bin /E /Y" />
+</Target>
+
+<Target Name="CopyFromQA">
+	<Exec Command="xcopy $(WebSiteQA)\*.* $(TempWebSiteFolder)  /E /Y" />
+	<Exec Command="xcopy $(WebServiceQA)\*.* $(TempServiceFolder) /E /Y" />
+</Target>
+
+<Target Name="CopyFromUAT">
+	<Exec Command="xcopy $(WebSiteUAT)\*.* $(TempWebSiteFolder)  /E /Y" />
+	<Exec Command="xcopy $(WebServiceUAT)\*.* $(TempServiceFolder) /E /Y" />
+</Target>
+
+<Target Name="UpdateConfigQA">
+	<XMLUpdate 
+		Namespace="http://schemas.microsoft.com/.NetConfiguration/v2.0"
+		XMLFileName="$(TempServiceFolder)\Web.config"
+		Xpath="//configuration/connectionStrings/add[@name='AASEntities']/@connectionString"
+		Value="metadata=res://*/DataModel.AasDataModel.csdl|res://*/DataModel.AasDataModel.ssdl|res://*/DataModel.AasDataModel.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=kibris;initial catalog=AAS_QA;persist security info=True;user id=AasUser;password=ngoQrLRCOv;multipleactiveresultsets=True;App=EntityFramework&quot;"
+	/>
+	<XMLUpdate 
+		Namespace="http://schemas.microsoft.com/.NetConfiguration/v2.0"
+		XMLFileName="$(TempWebSiteFolder)\Web.config"
+		Xpath="//configuration/appSettings/add[@key='AasServiceUrl']/@value"
+		Value="http://aas/aas-qa-service/AasRest.svc/"
+	/>
+</Target>
+
+<Target Name="UpdateConfigUAT">
+	<XMLUpdate 
+		Namespace="http://schemas.microsoft.com/.NetConfiguration/v2.0"
+		XMLFileName="$(TempServiceFolder)\Web.config"
+		Xpath="//configuration/connectionStrings/add[@name='AASEntities']/@connectionString"
+		Value="metadata=res://*/DataModel.AasDataModel.csdl|res://*/DataModel.AasDataModel.ssdl|res://*/DataModel.AasDataModel.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=kibris;initial catalog=AAS_UAT;persist security info=True;user id=AasUser;password=ngoQrLRCOv;multipleactiveresultsets=True;App=EntityFramework&quot;"
+	/>
+	<XMLUpdate 
+		Namespace="http://schemas.microsoft.com/.NetConfiguration/v2.0"
+		XMLFileName="$(TempWebSiteFolder)\Web.config"
+		Xpath="//configuration/appSettings/add[@key='AasServiceUrl']/@value"
+		Value="http://aas/aas-uat-service/AasRest.svc/"
+	/>
+</Target>
+
+<Target Name="UpdateConfigPROD">
+	<XMLUpdate 
+		Namespace="http://schemas.microsoft.com/.NetConfiguration/v2.0"
+		XMLFileName="$(TempServiceFolder)\Web.config"
+		Xpath="//configuration/connectionStrings/add[@name='AASEntities']/@connectionString"
+		Value="metadata=res://*/DataModel.AasDataModel.csdl|res://*/DataModel.AasDataModel.ssdl|res://*/DataModel.AasDataModel.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=kibris;initial catalog=AAS_PROD;persist security info=True;user id=AasProdUser;password=QkEUblIE9I;multipleactiveresultsets=True;App=EntityFramework&quot;"
+	/>
+	<XMLUpdate 
+		Namespace="http://schemas.microsoft.com/.NetConfiguration/v2.0"
+		XMLFileName="$(TempWebSiteFolder)\Web.config"
+		Xpath="//configuration/appSettings/add[@key='AasServiceUrl']/@value"
+		Value="http://aas/aas-prod-service/AasRest.svc/"
+	/>
+	<XMLUpdate 
+		Namespace="http://schemas.microsoft.com/.NetConfiguration/v2.0"
+		XMLFileName="$(TempWebSiteFolder)\Web.config"
+		Xpath="//configuration/appSettings/add[@key='AuthenticationMethod']/@value"
+		Value="ActiveDirectory"
+	/>
+</Target>
+
+<Target Name="CopyFromTempToDestinationQA">
+	<Exec Command="xcopy $(TempWebSiteFolder)\*.* $(WebSiteQA) /E /Y" />
+</Target>
+
+<Target Name="CopyFromTempToDestinationUAT">
+	<Exec Command="xcopy $(TempWebSiteFolder)\*.* d:\\AAS\\aas-uat /E /Y" />
+	<Exec Command="xcopy $(TempServiceFolder)\*.* d:\\AAS\\aas-uat-service /E /Y" />
+</Target>
+
+<Target Name="CopyFromTempToDestinationPROD">
+	<Exec Command="xcopy $(TempWebSiteFolder)\*.* d:\\AAS\\aas-prod /E /Y" />
+	<Exec Command="xcopy $(TempServiceFolder)\*.* d:\\AAS\\aas-prod-service /E /Y" />
+</Target>
+
+</Project>

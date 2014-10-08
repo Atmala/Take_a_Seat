@@ -16,55 +16,55 @@
                     <button title="Add Wall"
                             type="button" class="btn-tool" ng-click="changeMode('line')"
                             ng-class="{activeBtn : isSelected('line')}">
-                        <img src="..\img\wall.png" />
+                        <img src=@Url.Content("~/img/wall.png") />
                     </button>
                 </div>
                 <div class="md-overlay">
                     <button title="Add Table"
                             type="button" class="btn-tool" ng-click="changeMode('table')"
                             ng-class="{activeBtn : isSelected('table')}">
-                        <img src="..\img\table.png" />
+                        <img src=@Url.Content("~/img/table.png") />
                     </button>
                 </div>
                 <div class="md-overlay">
                     <button title="Assign Employee"
                             type="button" class="btn-tool" ng-click="changeMode('assign')"
                             ng-class="{activeBtn : isSelected('assign')}">
-                        <img src="..\img\assign.png" />
+                        <img src=@Url.Content("~/img/assign.png") />
                     </button>
                 </div>
                 <div class="md-overlay">
                     <button title="Discard Employee"
                             type="button" class="btn-tool" ng-click="changeMode('discard')"
                             ng-class="{activeBtn : isSelected('discard')}">
-                        <img src="..\img\discard.png" />
+                        <img src=@Url.Content("~/img/discard.png") />
                     </button>
                 </div>
                 <div class="md-overlay">
                     <button title="Show Room"
                             type="button" class="btn-tool" ng-click="showRoom()">
-                        <img src="..\img\newroom.png" />
+                        <img src=@Url.Content("~/img/newroom.png") />
                     </button>
                 </div>
                 <div class="md-overlay">
                     <button title="Add Window"
                             type="button" class="btn-tool" ng-click="changeMode('window')"
                             ng-class="{activeBtn : isSelected('window')}">
-                        <img src="..\img\window.png" />
+                        <img src=@Url.Content("~/img/window.png") />
                     </button>
                 </div>
                 <div class="md-overlay">
                     <button title="Add Door"
                             type="button" class="btn-tool" ng-click="changeMode('door')"
                             ng-class="{activeBtn : isSelected('door')}">
-                        <img src="..\img\door.png" />
+                        <img src=@Url.Content("~/img/door.png") />
                     </button>
                 </div>
                 <div class="md-overlay">
                     <button title="Delete"
                             type="button" class="btn-tool" ng-click="changeMode('delete')"
                             ng-class="{activeBtn : isSelected('delete')}">
-                        <img src="..\img\delete.png" />
+                        <img src=@Url.Content("~/img/delete.png") />
                     </button>
                 </div>
             </div>
@@ -80,10 +80,10 @@
         <div id="editRoomDiv">
             <div id="editRoomButtonsDiv">
                 <button title="Save" type="button" ng-click="saveRoom()">
-                    <img src="..\img\save.png" />
+                    <img src=@Url.Content("~/img/save.png") />
                 </button>
                 <button title="Cancel" type="button" ng-click="undoRoom()">
-                    <img src="..\img\undo.png" />
+                    <img src=@Url.Content("~/img/undo.png") />
                 </button>
             </div>
             <div id="editRoomInputDiv">
@@ -113,10 +113,10 @@
     </div>
     <div id="tableDropDownMenu" class="dropDownMenu">
         <button title="Save" type="button" ng-click="saveRoom()">
-            <img src="..\img\save.png" />
+            <img src=@Url.Content("~/img/save.png") />
         </button>
         <button title="Cancel" type="button" ng-click="undoRoom()">
-            <img src="..\img\undo.png" />
+            <img src=@Url.Content("~/img/undo.png") />
         </button>
     </div>
 </div>

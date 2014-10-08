@@ -2,12 +2,14 @@
 using System.Web.Mvc;
 using CommonClasses.InfoClasses;
 using CommonClasses.Models;
+using NLog;
 using TakeSeatServiceProxy;
 
 namespace TakeSeat.Controllers
 {
     public class MapController : Controller
     {
+        private static Logger _logger = LogManager.GetLogger("MapController.cs");
         public RoomModel Room
         {
             get
@@ -26,13 +28,13 @@ namespace TakeSeat.Controllers
         // GET: /Map/
         public ActionResult Index()
         {
+            _logger.Info("Index()");
             return View();
         }
 
         [HttpGet]
         public JsonResult Get()
         {
-            //var json = new JavaScriptSerializer().Serialize(Room);
             Room = null;
             var result = Json(Room, JsonRequestBehavior.AllowGet);
             return result;
@@ -47,6 +49,7 @@ namespace TakeSeat.Controllers
         [HttpGet]
         public JsonResult GetEmployeesWithoutSeat()
         {
+            _logger.Info("GetEmployeesWithoutSeat");
             return Json(ServiceProxy.GetEmployeesWithoutSeat(), JsonRequestBehavior.AllowGet);
         }
 

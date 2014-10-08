@@ -5,7 +5,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     var projects = [
 			{
 			    value: "shrek",
-			    label: "шрек, шрек",
+			    label: "Пушкин Александр",
 			    desc: "мультфильм шрек 2",
 			    icon: "shrek.jpg"
 			},
@@ -30,30 +30,32 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 			}
     ];
 
-    var search = $("#inputSearch");
-    search.autocomplete({
-        minLength: 0,
-        source: projects,
-        focus: function (event, ui) {
-            $("#project").val(ui.item.label);
-            return false;
-        },
-        select: function (event, ui) {
-            $("#project").val(ui.item.label);
-            $("#project-id").val(ui.item.value);
-            $("#project-description").html(ui.item.desc);
-            $("#project-icon").fadeOut('slow', function () {
-                $(this).attr("src", "images/" + ui.item.icon).fadeIn('slow');
-            });
-            return false;
-        }
-    })
+    function setSearchAutocomplete() {
+        $("#inputSearch").autocomplete({
+            minLength: 0,
+            source: projects,//$scope.employeeList,
+            focus: function (event, ui) {
+                $("#inputSearch").val(ui.item.FioShort);
+                return false;
+            },
+            select: function (event, ui) {
+                //$("#project").val(ui.item.label);
+                //$("#project-id").val(ui.item.value);
+                //$("#project-description").html(ui.item.desc);
+                //$("#project-icon").fadeOut('slow', function () {
+                //    $(this).attr("src", "images/" + ui.item.icon).fadeIn('slow');
+                //});
+                return false;
+            }
+        })
 		.data("autocomplete")._renderItem = function (ul, item) {
 		    return $("<li></li>")
 				.data("item.autocomplete", item)
-				.append("<a>" + item.label + "<br>" + item.desc + "</a>")
+				.append("<a>" + item.FioShort + "</a>")
 				.appendTo(ul);
 		};
+    }
+    
 
     function initMode() {
         $scope.mode = 'view';
@@ -112,6 +114,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     $scope.loadEmployees = function () {
         employeeProvider.query(function (response) {
             $scope.employeeList = response;
+            setSearchAutocomplete();
             $scope.$apply();
         });
     }

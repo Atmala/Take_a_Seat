@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CommonClasses.InfoClasses;
 using CommonClasses.Models;
 using DbLayer;
+using NLog;
 
 namespace TakeSeatServiceProxy
 {
     public static class ServiceProxy
     {
+        private static Logger _logger = LogManager.GetLogger("ServiceProxy");
         public static RoomModel GetFirstRoom()
         {
             using (var dbRepository = new DbRepository())
@@ -19,7 +22,16 @@ namespace TakeSeatServiceProxy
         {
             using (var dbRepository = new DbRepository())
             {
-                return dbRepository.GetRoom(roomId);
+                try
+                {
+                    _logger.Info("GetRoom");
+                    return dbRepository.GetRoom(roomId);
+                }
+                catch (Exception e)
+                {
+                    _logger.Error(e.Message);
+                    return null;
+                }
             }
         }
 
