@@ -27,20 +27,6 @@
                     </button>
                 </div>
                 <div class="md-overlay">
-                    <button title="Assign Employee"
-                            type="button" class="btn-tool" ng-click="changeMode('assign')"
-                            ng-class="{activeBtn : isSelected('assign')}">
-                        <img src=@Url.Content("~/img/assign.png") />
-                    </button>
-                </div>
-                <div class="md-overlay">
-                    <button title="Discard Employee"
-                            type="button" class="btn-tool" ng-click="changeMode('discard')"
-                            ng-class="{activeBtn : isSelected('discard')}">
-                        <img src=@Url.Content("~/img/discard.png") />
-                    </button>
-                </div>
-                <div class="md-overlay">
                     <button title="Show Room"
                             type="button" class="btn-tool" ng-click="showRoom()">
                         <img src=@Url.Content("~/img/newroom.png") />
@@ -97,27 +83,20 @@
         <div>{{X +' : '+ Y}}</div>
         <div>{{'HitResult: ' + HitResult}}</div>
     </div>
-    <div class="employeePanel panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">Emploee List</h3>
-        </div>
-        <div class="employeeList panel-body">
-            <table class="table " id="tblEmployee">
-                <tbody>
-                    <tr ng-repeat="employee in employeeList" ng-class="{selected: isSelectedEmployee(employee)}" ng-click="selectEmployee(employee)">
-                        <td>{{employee.FioShort}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
     <div id="tableDropDownMenu" class="dropDownMenu">
-        <button class="dropDownButton" title="Assign Employee" type="button" ng-click="saveRoom()">
-            <img src=@Url.Content("~/img/assign.png") />
-        </button>
-        <button class="dropDownButton" title="Discard Employee" type="button" ng-click="undoRoom()">
-            <img src=@Url.Content("~/img/discard.png") />
-        </button>
+        <div id="tableDropDownMenuButtons">
+            <button class="dropDownButton" title="Assign Employee" type="button" ng-click="showTableEmployeeDropDownPanel()">
+                <img src=@Url.Content("~/img/assign.png") />
+            </button>
+            <button class="dropDownButton" title="Discard Employee" type="button" ng-click="discardEmployee()">
+                <img src=@Url.Content("~/img/discard.png") />
+            </button>
+        </div>
+        <div id="tableDropDownMenuEmployee" >
+            <div id="tableInputDiv">
+                <input id="tableDropDownEmployeeInput" class="form-control" />
+            </div>
+        </div>
     </div>
 </div>
 

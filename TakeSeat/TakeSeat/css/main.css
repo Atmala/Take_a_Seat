@@ -71,7 +71,7 @@ s .show-grid [class*="span"]:hover {
 }
 
 .canvasPanel {
-    width: 70%;
+    width: 90%;
     float: left;
     margin-left: 20px;
 }
@@ -101,4 +101,8 @@ s .show-grid [class*="span"]:hover {
 
 .dropDownButton {
     padding: 0;
+}
+
+.displaynone {
+    display: none;
 }

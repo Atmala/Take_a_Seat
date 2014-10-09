@@ -19,15 +19,6 @@ seatApp
                         var x = event.offsetX;
                         var y = event.offsetY;
 
-                        //$("#tableDropDownMenu").css({
-                        //    position: 'absolute',
-                        //    left: event.clientX + 'px',
-                        //    top: event.clientY + 'px',
-                        //});
-                        //$("tableDropDownMenu").hide();
-                        //menu.show();
-                        //return;
-
                         if (scope.mode === 'line') {
                             path = getNewPath();
                         } else if (scope.mode === 'table') {
@@ -56,8 +47,8 @@ seatApp
                                     pathToMove.RoomObject.save();
                                 pathToMove = undefined;
                             } else {
-                                pathToMove.RoomObject.showDropDownMenu();
-                                
+                                if (pathToMove.RoomObject.showDropDownMenu)
+                                    pathToMove.RoomObject.showDropDownMenu();
                             }
                         }
                         mouseDownPoint = undefined;
@@ -76,7 +67,7 @@ seatApp
                         }
 
                         if (scope.mode === 'discard') {
-                            discardEmployee(event.offsetX, event.offsetY);
+                            discardEmployeeByXY(event.offsetX, event.offsetY);
                         }
                     }
 
@@ -98,10 +89,15 @@ seatApp
                         } else if (scope.mode === 'table' && isDrawing) {
                             path.position = new paper.Point([x, y]);
                         } else if (scope.mode === 'view' && mouseDownPoint) {
-                            isMoved = true;
-                            moveMapObjects(x, y);
+                            if (Math.abs(x - mouseDownPoint.x) > 5 || Math.abs(y - mouseDownPoint.y) > 5) {
+                                isMoved = true;
+                                moveMapObjects(x, y);
+                            }
                         } else {
                             selectItemByCoordinates(x, y);
+                            if (!selectedPath || ! (selectedPath.RoomObject.RoomObjectType === 'table')) {
+                                $("#tableDropDownMenu").css({visibility: 'hidden'});
+                            }
                         }
                     }
 
@@ -176,7 +172,7 @@ seatApp
                         if (selectedSegment) selectedSegment.selected = true;
                     }
 
-                    function assignEmployee(x, y) {
+                    scope.asignEmployeeByXY = function(x, y) {
                         clearSelection();
                         var table = getTableByCoordinates(x, y);
                         if (table) {
@@ -186,13 +182,25 @@ seatApp
                         }
                     }
 
-                    function discardEmployee(x, y) {
+                    scope.assignEmployee = function(table, employee) {
+                        setEmployeeTableText(table, employee.FioShort);
+                        saveEmployeeTableLink(employee.Id, table.RoomObject.roomObjectId);
+                        scope.loadEmployees();
+                    }
+
+                    scope.discardEmployeeByXY = function (x, y) {
                         var table = getTableByCoordinates(x, y);
                         if (table) {
                             setEmployeeTableText(table, '');
                             removeEmployeeTableLink(table.dbEmployeeId, table.RoomObject.roomObjectId);
                             scope.loadEmployees();
                         }
+                    }
+
+                    scope.discardEmployeeByTable = function(table) {
+                        setEmployeeTableText(table, '');
+                        removeEmployeeTableLink(table.RoomObject.employeeId, table.RoomObject.roomObjectId);
+                        scope.loadEmployees();
                     }
 
                     function setEmployeeTableText(tableFigure, employeeFio) {

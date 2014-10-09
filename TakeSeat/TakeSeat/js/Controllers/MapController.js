@@ -2,49 +2,18 @@
 
 seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function ($scope, mapProvider, employeeProvider) {
 
-    var projects = [
-			{
-			    value: "shrek",
-			    label: "Пушкин Александр",
-			    desc: "мультфильм шрек 2",
-			    icon: "shrek.jpg"
-			},
-			{
-			    value: "рождественская история",
-			    label: "мультфильм рождественская история",
-			    desc: "мультфильм рождественская история",
-			    icon: "cristmas.jpg"
-			},
-			{
-			    value: "ледниковый период",
-			    label: "мультфильм ледниковый период",
-			    desc: "мультфильм ледниковый период",
-			    icon: "lp.jpg"
-			}
-			,
-			{
-			    value: "simpsoni",
-			    label: "симпсоны",
-			    desc: "описание, описание, описание...",
-			    icon: "simpsoni.jpg"
-			}
-    ];
-
     function setSearchAutocomplete() {
-        $("#inputSearch").autocomplete({
+        $("#tableDropDownEmployeeInput").autocomplete({
             minLength: 0,
-            source: projects,//$scope.employeeList,
+            source: $scope.employeeList,
             focus: function (event, ui) {
-                $("#inputSearch").val(ui.item.FioShort);
+                $("#tableDropDownEmployeeInput").val(ui.item.FioShort);
                 return false;
             },
             select: function (event, ui) {
-                //$("#project").val(ui.item.label);
-                //$("#project-id").val(ui.item.value);
-                //$("#project-description").html(ui.item.desc);
-                //$("#project-icon").fadeOut('slow', function () {
-                //    $(this).attr("src", "images/" + ui.item.icon).fadeIn('slow');
-                //});
+                $scope.assignEmployee($scope.tableDroppedDown, ui.item);
+                $('#tableDropDownEmployeeInput').val('');
+                loadEmployees();
                 return false;
             }
         })
@@ -64,6 +33,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     $scope.Init = function () {
         initMode();
         $scope.showSelectRoom();
+        $scope.showTableButtonsDropDownPanel();
         $scope.loadEmployees();
         $scope.loadRooms();
     }
@@ -113,7 +83,12 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     $scope.loadEmployees = function () {
         employeeProvider.query(function (response) {
+            for (var i = 0; i < response.length; i++) {
+                response[i].label = response[i].FioShort;
+                response[i].valueOf = response[i].Id;
+            }
             $scope.employeeList = response;
+            
             setSearchAutocomplete();
             $scope.$apply();
         });
@@ -150,14 +125,18 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         });
     }
 
-    function setSelectedRoom(roomId) {
-        for (var i = $scope.rooms.length - 1; i >= 0; i--) {
-            var room = $scope.rooms[i];
-            if (room.Id == roomId) {
-                $scope.selectedRoom = room;
-                $scope.apply();
-            }
-        }
+    $scope.showTableEmployeeDropDownPanel = function() {
+        $("#tableDropDownMenuButtons").hide();
+        $("#tableDropDownMenuEmployee").show();
+    }
+
+    $scope.showTableButtonsDropDownPanel = function () {
+        $("#tableDropDownMenuButtons").show();
+        $("#tableDropDownMenuEmployee").hide();
+    }
+
+    $scope.discardEmployee = function () {
+        $scope.discardEmployeeByTable($scope.tableDroppedDown);
     }
 
 }]);

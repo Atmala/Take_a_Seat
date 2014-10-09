@@ -177,12 +177,14 @@
         }
 
         this.showDropDownMenu = function () {
+            scope.tableDroppedDown = this.attachedPath;
             var canvas = $('#paperCanvas')[0];
             var x1 = this.attachedPath.segments[0].point.x;
             var y1 = this.attachedPath.segments[0].point.y;
             var x2 = this.attachedPath.segments[2].point.x;
             var y2 = this.attachedPath.segments[2].point.y;
             var dropDownMenu = $("#tableDropDownMenu");
+            scope.showTableButtonsDropDownPanel();
             dropDownMenu.css({
                 visibility: 'visible',
                 left: Math.min(x1, x2) + canvas.offsetLeft,
