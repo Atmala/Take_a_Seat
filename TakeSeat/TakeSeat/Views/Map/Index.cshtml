@@ -112,14 +112,12 @@
         </div>
     </div>
     <div id="tableDropDownMenu" class="dropDownMenu">
-        <button title="Save" type="button" ng-click="saveRoom()">
-            <img src=@Url.Content("~/img/save.png") />
+        <button class="dropDownButton" title="Assign Employee" type="button" ng-click="saveRoom()">
+            <img src=@Url.Content("~/img/assign.png") />
         </button>
-        <button title="Cancel" type="button" ng-click="undoRoom()">
-            <img src=@Url.Content("~/img/undo.png") />
+        <button class="dropDownButton" title="Discard Employee" type="button" ng-click="undoRoom()">
+            <img src=@Url.Content("~/img/discard.png") />
         </button>
     </div>
 </div>
-<script type="text/javascript">
-    window.GetEmployeesWithoutSeatPath = '@Url.Action("GetEmployeesWithoutSeat", "Map")';
-</script>
+

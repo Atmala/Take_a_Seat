@@ -162,14 +162,32 @@
             var y1 = scope.view2ProjectY(this.attachedPath.segments[0].point.y);
             var x2 = scope.view2ProjectX(this.attachedPath.segments[2].point.x);
             var y2 = scope.view2ProjectY(this.attachedPath.segments[2].point.y);
+            this.leftTopX = Math.min(x1, x2);
+            this.leftTopY = Math.min(y1, y2);
+            this.width = Math.abs(x1 - x2);
+            this.height = Math.abs(y1 - y2);
             var rectangleInfo = {
                 RoomObjectId: this.roomObjectId,
-                LeftTopX: Math.min(x1, x2),
-                LeftTopY: Math.min(y1, y2),
-                Width: Math.abs(x1 - x2),
-                Height: Math.abs(y1 - y2)
+                LeftTopX: this.leftTopX,
+                LeftTopY: this.leftTopY,
+                Width: this.width,
+                Height: this.height
             };
             mapProvider.SaveTable(rectangleInfo);
+        }
+
+        this.showDropDownMenu = function () {
+            var canvas = $('#paperCanvas')[0];
+            var x1 = this.attachedPath.segments[0].point.x;
+            var y1 = this.attachedPath.segments[0].point.y;
+            var x2 = this.attachedPath.segments[2].point.x;
+            var y2 = this.attachedPath.segments[2].point.y;
+            var dropDownMenu = $("#tableDropDownMenu");
+            dropDownMenu.css({
+                visibility: 'visible',
+                left: Math.min(x1, x2) + canvas.offsetLeft,
+                top: Math.min(y1, y2) + Math.abs(y1 - y2) + canvas.offsetTop,
+            });
         }
 
         function setEmployeeTableText(tableFigure, employeeFio) {

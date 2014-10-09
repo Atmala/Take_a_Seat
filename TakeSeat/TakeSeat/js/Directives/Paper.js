@@ -6,9 +6,8 @@ seatApp
                 link: function (scope, element, attrs) {
 
                     var path, mouseDownPoint;
-                    var isDrawing = false;
+                    var isDrawing = false, isMoved = false;
                     var rectangleWidth = 30, rectangleHeight = 50;
-                    var color;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
                     var selectedPath, selectedSegment, pathToMove, segmentToMove;
 
@@ -20,14 +19,14 @@ seatApp
                         var x = event.offsetX;
                         var y = event.offsetY;
 
-                        $("#tableDropDownMenu").css({
-                            position: 'absolute',
-                            left: event.clientX + 'px',
-                            top: event.clientY + 'px',
-                        });
+                        //$("#tableDropDownMenu").css({
+                        //    position: 'absolute',
+                        //    left: event.clientX + 'px',
+                        //    top: event.clientY + 'px',
+                        //});
                         //$("tableDropDownMenu").hide();
                         //menu.show();
-                        return;
+                        //return;
 
                         if (scope.mode === 'line') {
                             path = getNewPath();
@@ -50,12 +49,19 @@ seatApp
 
                     function mouseUp(event) {
                         isDrawing = false;
-                        mouseDownPoint = undefined;
+                        
                         if (pathToMove) {
-                            if (pathToMove.RoomObject.save)
-                                pathToMove.RoomObject.save();
-                            pathToMove = undefined;
+                            if (isMoved) {
+                                if (pathToMove.RoomObject.save)
+                                    pathToMove.RoomObject.save();
+                                pathToMove = undefined;
+                            } else {
+                                pathToMove.RoomObject.showDropDownMenu();
+                                
+                            }
                         }
+                        mouseDownPoint = undefined;
+                        isMoved = false;
 
                         if (path && scope.mode === 'line') {
                             roomObjectFactory.createWall(path);
@@ -92,6 +98,7 @@ seatApp
                         } else if (scope.mode === 'table' && isDrawing) {
                             path.position = new paper.Point([x, y]);
                         } else if (scope.mode === 'view' && mouseDownPoint) {
+                            isMoved = true;
                             moveMapObjects(x, y);
                         } else {
                             selectItemByCoordinates(x, y);
