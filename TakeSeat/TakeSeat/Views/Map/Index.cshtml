@@ -91,10 +91,19 @@
             <button class="dropDownButton" title="Discard Employee" type="button" ng-click="discardEmployee()">
                 <img src=@Url.Content("~/img/discard.png") />
             </button>
+            <button class="dropDownButton" title="Set Number" type="button" ng-click="showTableNumberDropDownPanel()">
+                <img src=@Url.Content("~/img/number.png") />
+            </button>
         </div>
         <div id="tableDropDownMenuEmployee" >
             <div id="tableInputDiv">
                 <input id="tableDropDownEmployeeInput" class="form-control" />
+            </div>
+        </div>
+        <div id="tableDropDownMenuNumber">
+            <div>
+                <input id="tableDropDownNumberInput" type="text" class="form-control"
+                       value={{tableDropDownNumber}} ng-keypress="tableNumberKeyPress($event)" />
             </div>
         </div>
     </div>

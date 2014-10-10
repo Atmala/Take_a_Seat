@@ -119,6 +119,7 @@ namespace DbLayer
             {
                 Id = roomObject.Id,
                 RoomObjectTypeStr = RoomObjectTypes.First(t => t.Id == roomObject.RoomObjectTypeId).Name,
+                IdentNumber = roomObject.IdentNumber,
                 Points = GetPointModels(roomObject.Id),
                 Rectangles = GetRectangleModels(roomObject.Id),
                 EmployeeId = employee == null ? 0 : employee.Id,
@@ -324,6 +325,14 @@ namespace DbLayer
                        Id = room.Id,
                        Caption = room.Caption
                    };
+        }
+
+        public void SaveIdentNumber(int roomObjectId, string identNumber)
+        {
+            var roomObject = _db.RoomObjects.FirstOrDefault(r => r.Id == roomObjectId);
+            if (roomObject == null) return;
+            roomObject.IdentNumber = string.IsNullOrEmpty(identNumber) ? null : identNumber;
+            Save(roomObject);
         }
 
         #endregion

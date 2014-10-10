@@ -186,6 +186,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="img\newroom.png" />
+    <Content Include="img\number.png" />
     <Content Include="img\save.png" />
     <Content Include="img\table.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

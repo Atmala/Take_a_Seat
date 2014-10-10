@@ -96,6 +96,7 @@
             this.roomObjectId = dbRoomObject.Id;
             this.employeeFio = dbRoomObject.EmployeeFio;
             this.employeeId = dbRoomObject.EmployeeId;
+            this.identNumber = dbRoomObject.IdentNumber;
         }
 
         this.createNew = function(x, y, width, height) {
@@ -115,6 +116,17 @@
             mapProvider.SaveTable(rectangleInfo, function(response) {
                 thisObject.roomObjectId = response.Id;
             });
+        }
+
+        this.setCaption = function(tablePath) {
+            var caption = '';
+            if (this.employeeFio)
+                caption = this.employeeFio;
+            if (this.identNumber)
+                caption = '[' + this.identNumber + '] ' + caption;
+            if (caption) {
+                setEmployeeTableText(tablePath, caption);
+            }
         }
 
         this.getPath = function () {
@@ -141,9 +153,7 @@
             //        new paper.Size(smallWidth, smallHeight)
             //    ));
             tablePath.strokeColor = scope.color;
-            if (this.employeeFio != '') {
-                setEmployeeTableText(tablePath, this.employeeFio);
-            }
+            this.setCaption(tablePath);
             tablePath.RoomObject = this;
             this.attachedPath = tablePath;
             return tablePath;
@@ -190,6 +200,13 @@
                 left: Math.min(x1, x2) + canvas.offsetLeft,
                 top: Math.min(y1, y2) + Math.abs(y1 - y2) + canvas.offsetTop,
             });
+        }
+
+        this.saveIdentNumber = function (identNumber) {
+            mapProvider.SaveIdentNumber({ RoomObjectId: this.roomObjectId, IdentNumber: identNumber });
+            this.identNumber = identNumber;
+            this.setCaption(this.attachedPath);
+            $("#tableDropDownMenu").css({ visibility: 'hidden' });
         }
 
         function setEmployeeTableText(tableFigure, employeeFio) {

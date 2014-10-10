@@ -12,6 +12,7 @@
                 'GetRooms': { method: 'GET', params: { action: '/Map/GetRooms' }, isArray: true },
                 'ChangeRoom': { method: 'GET', params: { action: '/Map/ChangeRoom' } },
                 'CreateNewRoom': { method: 'GET', params: { action: '/Map/CreateNewRoom' } },
+                'SaveIdentNumber': { method: 'POST', params: { action: '/Map/SaveIdentNumber' } },
             });
         }
     ])

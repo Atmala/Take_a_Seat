@@ -70,6 +70,10 @@
     <Compile Include="Migrations\201409022031562_EmployeeData.Designer.cs">
       <DependentUpon>201409022031562_EmployeeData.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410100629229_IdentNumber.cs" />
+    <Compile Include="Migrations\201410100629229_IdentNumber.Designer.cs">
+      <DependentUpon>201410100629229_IdentNumber.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TakeSeatDbContext.cs" />
@@ -96,6 +100,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201409022031562_EmployeeData.resx">
       <DependentUpon>201409022031562_EmployeeData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410100629229_IdentNumber.resx">
+      <DependentUpon>201410100629229_IdentNumber.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

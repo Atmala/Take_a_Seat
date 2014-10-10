@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CommonClasses.Database;
 using CommonClasses.InfoClasses;
 using CommonClasses.Models;
 using DbLayer;
@@ -104,6 +105,14 @@ namespace TakeSeatServiceProxy
             using (var dbRepository = new DbRepository())
             {
                 return dbRepository.CreateNewRoom(caption);
+            }
+        }
+
+        public static void SaveIdentNumber(int roomObjectId, string identNumber)
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                dbRepository.SaveIdentNumber(roomObjectId, identNumber);
             }
         }
     }

@@ -12,6 +12,7 @@ namespace CommonClasses.Database
         public int RoomObjectTypeId { get; set; }
         [ForeignKey("RoomObjectTypeId")]
         public RoomObjectType RoomObjectType { get; set; }
+        public string IdentNumber { get; set; }
 
         [Required]
         public int RoomId { get; set; }

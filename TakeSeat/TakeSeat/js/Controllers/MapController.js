@@ -128,16 +128,36 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     $scope.showTableEmployeeDropDownPanel = function() {
         $("#tableDropDownMenuButtons").hide();
         $("#tableDropDownMenuEmployee").show();
+        $("#tableDropDownMenuNumber").hide();
     }
 
     $scope.showTableButtonsDropDownPanel = function () {
         $("#tableDropDownMenuButtons").show();
         $("#tableDropDownMenuEmployee").hide();
+        $("#tableDropDownMenuNumber").hide();
+    }
+
+    $scope.showTableNumberDropDownPanel = function () {
+        $("#tableDropDownMenuButtons").hide();
+        $("#tableDropDownMenuEmployee").hide();
+        $("#tableDropDownMenuNumber").show();
+        $("#tableDropDownNumberInput").val('');
     }
 
     $scope.discardEmployee = function () {
         $scope.discardEmployeeByTable($scope.tableDroppedDown);
     }
+
+    $scope.tableNumberKeyPress = function(event) {
+        if (event.which === 13) {
+            var identNumber = $("#tableDropDownNumberInput").val();
+            $scope.tableDroppedDown.RoomObject.saveIdentNumber(identNumber);
+        }
+    }
+
+    //$('#tableDropDownEmployeeInput').keypress(function(e) {
+    //    alert(e.which);
+    //});
 
 }]);
 

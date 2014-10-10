@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using CommonClasses.InfoClasses;
 using CommonClasses.Models;
+using CommonClasses.Params;
 using NLog;
 using TakeSeatServiceProxy;
 
@@ -116,9 +117,12 @@ namespace TakeSeat.Controllers
         {
             var roomInfo = ServiceProxy.CreateNewRoom(caption);
             return Json(roomInfo, JsonRequestBehavior.AllowGet);
-            //Room = ServiceProxy.GetRoom(roomId);
-            //var result = Json(Room, JsonRequestBehavior.AllowGet);
-            //return result;
+        }
+
+        [HttpPost]
+        public void SaveIdentNumber(SaveIdentNumberParam param)
+        {
+            ServiceProxy.SaveIdentNumber(param.RoomObjectId, param.IdentNumber);
         }
     }
 }
