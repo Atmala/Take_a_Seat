@@ -11,7 +11,7 @@ seatApp
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
                     var selectedPath, selectedSegment, pathToMove, segmentToMove;
 
-                    scope.color = '#ACCCE2';
+                    scope.color = '#000000';
                     scope.globalOffset = new paper.Point();
 
                     function mouseDown(event) {

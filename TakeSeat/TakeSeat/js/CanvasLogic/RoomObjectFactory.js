@@ -219,8 +219,7 @@
                 content: employeeFio,
                 fillColor: scope.color,
                 fontFamily: 'Courier New',
-                fontWeight: 'bold',
-                fontSize: 15
+                fontSize: 10
             });
         }
     }

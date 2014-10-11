@@ -59,16 +59,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.showRoom = function () {
-        //$scope.showEditRoom();
-        var div = $('#tableDropDownMenu');
-        //console.log(div.style('left'));
-        div.css({
-            position: 'absolute',
-            left: event.clientX + 'px',
-            top: event.clientY + 'px',
-        });
-        //console.log(div.style('left'));
-        $("tableDropDownMenu").hide();
+        $scope.showEditRoom();
     };
 
     $scope.showSelectRoom = function () {
