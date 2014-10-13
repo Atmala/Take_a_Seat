@@ -73,6 +73,21 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.loadEmployees = function () {
+        //$http({
+        //    method: 'GET',
+        //    url: window.getEmployeesWithoutSeatPath
+        //}).success(function(response) {
+        //    for (var i = 0; i < response.length; i++) {
+        //        response[i].label = response[i].FioShort;
+        //        response[i].valueOf = response[i].Id;
+        //    }
+        //    $scope.employeeList = response;
+
+        //    setSearchAutocomplete();
+        //    $scope.$apply();
+        //}).error(function(e) {
+        //    alert(e);
+        //});
         employeeProvider.query(function (response) {
             for (var i = 0; i < response.length; i++) {
                 response[i].label = response[i].FioShort;
@@ -82,6 +97,8 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             
             setSearchAutocomplete();
             $scope.$apply();
+        }, function(error) {
+            alert(error);
         });
     }
 

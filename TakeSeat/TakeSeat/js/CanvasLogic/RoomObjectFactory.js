@@ -48,9 +48,11 @@
 
         this.getPath = function () {
             var path = new paper.Path();
+            path.strokeWidth = 4;
+            path.strokeColor = '#888888';
             path.add(new paper.Point(this.x1, this.y1));
             path.add(new paper.Point(this.x2, this.y2));
-            path.strokeColor = scope.color;
+            //path.strokeColor = scope.color;
             path.RoomObject = this;
             this.attachedPath = path;
             return path;

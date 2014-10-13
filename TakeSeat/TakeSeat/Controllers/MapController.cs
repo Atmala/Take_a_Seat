@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using CommonClasses.InfoClasses;
 using CommonClasses.Models;
@@ -33,14 +34,6 @@ namespace TakeSeat.Controllers
             return View();
         }
 
-        [HttpGet]
-        public JsonResult Get()
-        {
-            Room = null;
-            var result = Json(Room, JsonRequestBehavior.AllowGet);
-            return result;
-        }
-
         [HttpPost]
         public void SaveRoom(RoomModel room)
         {
@@ -51,7 +44,17 @@ namespace TakeSeat.Controllers
         public JsonResult GetEmployeesWithoutSeat()
         {
             _logger.Info("GetEmployeesWithoutSeat");
-            return Json(ServiceProxy.GetEmployeesWithoutSeat(), JsonRequestBehavior.AllowGet);
+            try
+            {
+                return Json(ServiceProxy.GetEmployeesWithoutSeat(), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e.Message);
+                if (e.InnerException != null)
+                    _logger.Error(e.InnerException.Message);
+                return null;
+            }
         }
 
         [HttpPost]

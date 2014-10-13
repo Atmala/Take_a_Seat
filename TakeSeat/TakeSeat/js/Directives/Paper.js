@@ -7,7 +7,7 @@ seatApp
 
                     var path, mouseDownPoint;
                     var isDrawing = false, isMoved = false;
-                    var rectangleWidth = 30, rectangleHeight = 50;
+                    var rectangleWidth = 50, rectangleHeight = 70;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
                     var selectedPath, selectedSegment, pathToMove, segmentToMove;
 
@@ -89,7 +89,7 @@ seatApp
                         } else if (scope.mode === 'table' && isDrawing) {
                             path.position = new paper.Point([x, y]);
                         } else if (scope.mode === 'view' && mouseDownPoint) {
-                            if (Math.abs(x - mouseDownPoint.x) > 5 || Math.abs(y - mouseDownPoint.y) > 5) {
+                            if (Math.abs(x - mouseDownPoint.x) > 0 || Math.abs(y - mouseDownPoint.y) > 0) {
                                 isMoved = true;
                                 moveMapObjects(x, y);
                             }
