@@ -86,12 +86,32 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.loadRooms = function () {
-        mapProvider.GetRooms(function (response) {
-            $scope.rooms = response;
-            $scope.selectedRoom = response[0];
-            $scope.$apply();
-            $scope.changeRoom($scope.selectedRoom.Id);
-        });
+        try {
+            $.ajax({
+                url: window.loadRoomsPath,
+                data: { },
+                success: function (response) {
+                    $scope.rooms = response;
+                    $scope.selectedRoom = response[0];
+                    $scope.$apply();
+                    $scope.changeRoom($scope.selectedRoom.Id);
+                },
+                error: function (req, status, error) {
+                    alert("Req: " + req);
+                    alert("Status: " + status);
+                    alert("Error: " + error);
+                }
+            });
+        }
+        catch (e) {
+            alert(e.description);
+        }
+        //mapProvider.GetRooms(function (response) {
+        //    $scope.rooms = response;
+        //    $scope.selectedRoom = response[0];
+        //    $scope.$apply();
+        //    $scope.changeRoom($scope.selectedRoom.Id);
+        //});
     }
 
     $scope.changeRoom = function (roomId) {
