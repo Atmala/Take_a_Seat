@@ -8,10 +8,10 @@
                 'SaveEmployeeTableLink': { method: 'POST', params: { action: window.saveEmployeeTableLinkPath } },
                 'RemoveEmployeeTableLink': { method: 'POST', params: { action: window.removeEmployeeTableLinkPath } },
                 'DeleteRoomObject': { method: 'DELETE', params: { action: window.deleteRoomObjectPath } },
-                'GetRooms': { method: 'GET', params: { action: window.getRooms }, isArray: true },
-                'ChangeRoom': { method: 'GET', params: { action: window.changeRoom } },
-                'CreateNewRoom': { method: 'GET', params: { action: window.createNewRoom } },
-                'SaveIdentNumber': { method: 'POST', params: { action: window.saveIdentNumber } },
+                'GetRooms': { method: 'GET', params: { action: window.getRoomsPath }, isArray: true },
+                'ChangeRoom': { method: 'GET', params: { action: window.changeRoomPath } },
+                'CreateNewRoom': { method: 'GET', params: { action: window.createNewRoomPath } },
+                'SaveIdentNumber': { method: 'POST', params: { action: window.saveIdentNumberPath } },
             });
         }
     ])
