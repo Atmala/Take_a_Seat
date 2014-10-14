@@ -73,62 +73,66 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.loadEmployees = function () {
-        //$http({
-        //    method: 'GET',
-        //    url: window.getEmployeesWithoutSeatPath
-        //}).success(function(response) {
+        $.ajax({
+            url: window.getEmployeesWithoutSeatPath,
+            data: { },
+            success: function(response) {
+                for (var i = 0; i < response.length; i++) {
+                    response[i].label = response[i].FioShort;
+                    response[i].valueOf = response[i].Id;
+                }
+                $scope.employeeList = response;
+
+                setSearchAutocomplete();
+                $scope.$apply();
+            }, error: function (req, status, error) {
+                alert("Req: " + req);
+                alert("Status: " + status);
+                alert("Error: " + error);
+            }
+        });
+
+        //employeeProvider.query(function (response) {
         //    for (var i = 0; i < response.length; i++) {
         //        response[i].label = response[i].FioShort;
         //        response[i].valueOf = response[i].Id;
         //    }
         //    $scope.employeeList = response;
-
+            
         //    setSearchAutocomplete();
         //    $scope.$apply();
-        //}).error(function(e) {
-        //    alert(e);
+        //}, function(error) {
+        //    alert(error);
         //});
-        employeeProvider.query(function (response) {
-            for (var i = 0; i < response.length; i++) {
-                response[i].label = response[i].FioShort;
-                response[i].valueOf = response[i].Id;
-            }
-            $scope.employeeList = response;
-            
-            setSearchAutocomplete();
-            $scope.$apply();
-        }, function(error) {
-            alert(error);
-        });
     }
 
     $scope.loadRooms = function () {
-        //try {
-        //    $.ajax({
-        //        url: window.loadRoomsPath,
-        //        data: { },
-        //        success: function (response) {
-        //            $scope.rooms = response;
-        //            $scope.selectedRoom = response[0];
-        //            $scope.$apply();
-        //            $scope.changeRoom($scope.selectedRoom.Id);
-        //        },
-        //        error: function (req, status, error) {
-        //            alert("Req: " + req);
-        //            alert("Status: " + status);
-        //            alert("Error: " + error);
-        //        }
-        //    });
-        //}
-        //catch (e) {
-        //    alert(e.description);
-        //}
-        mapProvider.GetRooms(function (response) {
-            $scope.rooms = response;
-            $scope.selectedRoom = response[0];
-            $scope.$apply();
-            $scope.changeRoom($scope.selectedRoom.Id);
-        });
+        try {
+            $.ajax({
+                url: window.getRoomsPath,
+                data: { },
+                success: function (response) {
+                    $scope.rooms = response;
+                    $scope.selectedRoom = response[0];
+                    $scope.$apply();
+                    $scope.changeRoom($scope.selectedRoom.Id);
+                },
+                error: function (req, status, error) {
+                    alert("Req: " + req);
+                    alert("Status: " + status);
+                    alert("Error: " + error);
+                }
+            });
+        }
+        catch (e) {
+            alert(e.description);
+        }
+        //mapProvider.GetRooms(function (response) {
+        //    $scope.rooms = response;
+        //    $scope.selectedRoom = response[0];
+        //    $scope.$apply();
+        //    $scope.changeRoom($scope.selectedRoom.Id);
+        //});
     }
 
     $scope.changeRoom = function (roomId) {

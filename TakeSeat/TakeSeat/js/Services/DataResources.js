@@ -18,7 +18,7 @@
     .factory('EmployeeProvider', [
         '$resource', function ($resource) {
             //return $resource('localhost:44039/Map/GetEmployeesWithoutSeat');
-            return $resource(':action', {}, {
+            return $resource('./:action', {}, {
                 //'query': { method: 'GET', params: { action: '/Map/GetEmployeesWithoutSeat' }, isArray: true }
                 'query': { method: 'GET', params: { action: window.getEmployeesWithoutSeatPath }, isArray: true }
             });

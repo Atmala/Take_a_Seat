@@ -9,7 +9,8 @@ namespace DbLayer.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
+            Database.SetInitializer<TakeSeatDbContext>(null);
         }
 
         protected override void Seed(DbLayer.TakeSeatDbContext context)

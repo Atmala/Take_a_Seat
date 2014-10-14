@@ -5,9 +5,9 @@
 	<SourceFolder>.</SourceFolder>
 	<WebSiteBinFolder>$(SourceFolder)\TakeSeat\bin</WebSiteBinFolder>
 	<HudsonBuildNumber>#$(BUILD_NUMBER)</HudsonBuildNumber>
-	<TempFolder>d:\Temp\TakeASeat</TempFolder>
+	<TempFolder>c:\Temp\TakeASeat</TempFolder>
 	<TempWebSiteFolder>$(TempFolder)\_PublishedWebsites\TakeSeat</TempWebSiteFolder>
-	<WebSiteQA>d:\TakeSeat\TakeSeatQA</WebSiteQA>
+	<WebSiteQA>c:\TakeSeat\TakeSeatQA</WebSiteQA>
 </PropertyGroup>
 
 <Target Name="Build">
