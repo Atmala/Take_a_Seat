@@ -224,7 +224,12 @@ seatApp
                             EmployeeId: employeeId,
                             RoomObjectId: roomObjectId
                         };
-                        mapProvider.SaveEmployeeTableLink(employeeTableLink);
+                        $.ajax({
+                            url: window.saveEmployeeTableLinkPath,
+                            type: 'POST',
+                            data: employeeTableLink
+                        });
+                        //mapProvider.SaveEmployeeTableLink(employeeTableLink);
                     }
 
                     function removeEmployeeTableLink(employeeId, roomObjectId) {
@@ -232,7 +237,12 @@ seatApp
                             EmployeeId: employeeId,
                             RoomObjectId: roomObjectId
                         };
-                        mapProvider.RemoveEmployeeTableLink(employeeTableLink);
+                        $.ajax({
+                            url: window.removeEmployeeTableLinkPath,
+                            type: 'POST',
+                            data: employeeTableLink
+                        });
+                        //mapProvider.RemoveEmployeeTableLink(employeeTableLink);
                     }
 
                     function clearSelection() {

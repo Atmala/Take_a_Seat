@@ -73,9 +73,17 @@
                 Y2: scope.view2ProjectY(this.y2)
             };
 
-            mapProvider.SaveWall(lineInfo, function (response) {
-                thisObject.roomObjectId = response.Id;
+            $.ajax({
+                url: window.saveWallPath,
+                type: 'POST',
+                data: lineInfo,
+                success: function (response) {
+                    thisObject.roomObjectId = response.Id;
+                }
             });
+            //mapProvider.SaveWall(lineInfo, function (response) {
+            //    thisObject.roomObjectId = response.Id;
+            //});
         }
 
         this.deleteRoomObject = function () {
@@ -83,7 +91,12 @@
                 this.attachedPath.text.remove();
                 scope.loadEmployees();
             }
-            mapProvider.DeleteRoomObject({ id: this.roomObjectId });
+            $.ajax({
+                url: window.deleteRoomObjectPath,
+                type: 'POST',
+                data: { id: this.roomObjectId }
+            });
+            //mapProvider.DeleteRoomObject({ id: this.roomObjectId });
         }
     }
 
@@ -115,9 +128,17 @@
                 Width: width,
                 Height: height
             };
-            mapProvider.SaveTable(rectangleInfo, function(response) {
-                thisObject.roomObjectId = response.Id;
+            $.ajax({
+                url: window.saveTablePath,
+                type: 'POST',
+                data: rectangleInfo,
+                success: function (response) {
+                    thisObject.roomObjectId = response.Id;
+                }
             });
+            //mapProvider.SaveTable(rectangleInfo, function(response) {
+            //    thisObject.roomObjectId = response.Id;
+            //});
         }
 
         this.setCaption = function(tablePath) {
@@ -166,7 +187,12 @@
                 this.attachedPath.text.remove();
                 scope.loadEmployees();
             }
-            mapProvider.DeleteRoomObject({ id: this.roomObjectId });
+            $.ajax({
+                url: window.deleteRoomObjectPath,
+                type: 'POST',
+                data: { id: this.roomObjectId }
+            });
+            //mapProvider.DeleteRoomObject({ id: this.roomObjectId });
         }
 
         this.save = function() {
@@ -185,7 +211,12 @@
                 Width: this.width,
                 Height: this.height
             };
-            mapProvider.SaveTable(rectangleInfo);
+            $.ajax({
+                url: window.saveTablePath,
+                type: 'POST',
+                data: rectangleInfo
+            });
+            //mapProvider.SaveTable(rectangleInfo);
         }
 
         this.showDropDownMenu = function () {
@@ -205,7 +236,12 @@
         }
 
         this.saveIdentNumber = function (identNumber) {
-            mapProvider.SaveIdentNumber({ RoomObjectId: this.roomObjectId, IdentNumber: identNumber });
+            $.ajax({
+                url: window.saveIdentNumberPath,
+                type: 'POST',
+                data: { RoomObjectId: this.roomObjectId, IdentNumber: identNumber }
+            });
+            //mapProvider.SaveIdentNumber({ RoomObjectId: this.roomObjectId, IdentNumber: identNumber });
             this.identNumber = identNumber;
             this.setCaption(this.attachedPath);
             $("#tableDropDownMenu").css({ visibility: 'hidden' });

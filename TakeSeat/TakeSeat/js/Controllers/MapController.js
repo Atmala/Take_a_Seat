@@ -136,10 +136,18 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.changeRoom = function (roomId) {
-        mapProvider.ChangeRoom({ roomId: roomId }, function (response) {
-            $scope.room = response;
-            $scope.initAllFigures();
+        $.ajax({
+            url: window.changeRoomPath,
+            data: { roomId: roomId },
+            success: function (response) {
+                $scope.room = response;
+                $scope.initAllFigures();
+            }
         });
+        //mapProvider.ChangeRoom({ roomId: roomId }, function (response) {
+        //    $scope.room = response;
+        //    $scope.initAllFigures();
+        //});
     }
 
     $scope.undoRoom = function () {
@@ -148,13 +156,24 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     $scope.saveRoom = function () {
         var caption = $("#roomCaptionInput").val();
-        mapProvider.CreateNewRoom({ caption: caption }, function (roomInfo) {
-            $scope.showSelectRoom();
-            $scope.rooms.push(roomInfo);
-            $scope.selectedRoom = roomInfo;
-            $scope.$apply();
-            $scope.changeRoom(roomInfo.Id);
+        $.ajax({
+            url: window.createNewRoomPath,
+            data: { caption: caption },
+            success: function (roomInfo) {
+                $scope.showSelectRoom();
+                $scope.rooms.push(roomInfo);
+                $scope.selectedRoom = roomInfo;
+                $scope.$apply();
+                $scope.changeRoom(roomInfo.Id);
+            }
         });
+        //mapProvider.CreateNewRoom({ caption: caption }, function (roomInfo) {
+        //    $scope.showSelectRoom();
+        //    $scope.rooms.push(roomInfo);
+        //    $scope.selectedRoom = roomInfo;
+        //    $scope.$apply();
+        //    $scope.changeRoom(roomInfo.Id);
+        //});
     }
 
     $scope.showTableEmployeeDropDownPanel = function() {

@@ -92,7 +92,7 @@ namespace TakeSeat.Controllers
             ServiceProxy.RemoveEmployeeTableLink(employeeTableLinkInfo);
         }
 
-        [HttpDelete]
+        [HttpPost]
         public void DeleteRoomObject(int id)
         {
             var roomObject = Room.RoomObjects.FirstOrDefault(ro => ro.Id == id);
