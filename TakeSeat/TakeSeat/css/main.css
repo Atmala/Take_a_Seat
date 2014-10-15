@@ -16,7 +16,7 @@ s .show-grid [class*="span"]:hover {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    outline: 3px solid #000000;
+    /*outline: 3px solid #000000;*/
 }
 
 .canvas2 {
@@ -60,7 +60,7 @@ s .show-grid [class*="span"]:hover {
 }
 
 .toolPanel {
-    width: 76px;
+    width: 80px;
     float: left;
 }
 
@@ -71,9 +71,11 @@ s .show-grid [class*="span"]:hover {
 }
 
 .canvasPanel {
-    width: 90%;
-    float: left;
-    margin-left: 20px;
+    margin-left: 78px;
+}
+
+.titlePanel {
+    margin-left: 76px;
 }
 
 .pageHeader {
@@ -111,3 +113,24 @@ body {
   color: #000000;
   background-color: #ffffff;
 }
+
+.container {
+    width: auto;
+}
+
+.doubleBorder { border: 2px solid #000000; }
+.doubleBorderLeft { border-left: 2px solid #000000; }
+.doubleBorderRight { border-right: 2px solid #000000; }
+.doubleBorderTop { border-top: 2px solid #000000; }
+.doubleBorderBottom { border-bottom: 2px solid #000000; }
+.noBorderTop { margin-top: -2px }
+.noBorderBottom { margin-bottom: -2px }
+.noBorderLeft { margin-left: -2px }
+.noBorderRight { margin-right: -2px }
+
+.panel {
+    background-color: white;
+}
+
+.margin0 { margin: 0; }
+.marginLeft16 { margin-left: 16px; }

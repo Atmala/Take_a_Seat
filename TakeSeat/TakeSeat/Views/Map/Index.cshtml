@@ -6,7 +6,7 @@
 <script src="~/js/Controllers/MapController.js"></script>
 <script src="~/js/CanvasLogic/RoomObjectFactory.js"></script>
 <div class="layout" ng-controller="Map" ng-init="Init()">
-    <div class="toolPanel">
+    <div class="toolPanel doubleBorder noBorderRight">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">Tools</h3>
@@ -57,7 +57,7 @@
         </div>
 
     </div>
-    <div class="canvasPanel">
+    <div class="canvasPanel doubleBorder noBorderBottom">
         <div id="selectRoomDiv">
             <select class="form-control" ng-model="selectedRoom"
                     ng-options="r.Caption for r in rooms"
@@ -77,8 +77,7 @@
             </div>
         </div>
     </div>
-    <div class="canvasPanel">
-        <div>{{'Room: ' + RoomCaption}}</div>
+    <div class="canvasPanel doubleBorder">
         <div class="canvas">@Html.Partial("Paper")</div>
         <div>{{X +' : '+ Y}}</div>
         <div>{{'HitResult: ' + HitResult}}</div>
