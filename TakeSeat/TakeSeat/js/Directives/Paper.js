@@ -7,7 +7,7 @@ seatApp
 
                     var path, mouseDownPoint;
                     var isDrawing = false, isMoved = false;
-                    var rectangleWidth = 50, rectangleHeight = 70;
+                    var rectangleWidth = 70, rectangleHeight = 100;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
                     var selectedPath, selectedSegment, pathToMove, segmentToMove;
 
@@ -115,9 +115,11 @@ seatApp
                     function movePath(offsetX, offsetY) {
                         pathToMove.position.x += offsetX;
                         pathToMove.position.y += offsetY;
-                        if (pathToMove.text) {
-                            pathToMove.text.point.x += offsetX;
-                            pathToMove.text.point.y += offsetY;
+                        if (pathToMove.captions) {
+                            for (var i = 0; i < pathToMove.captions.length; i++) {
+                                pathToMove.captions[i].point.x += offsetX;
+                                pathToMove.captions[i].point.y += offsetY;
+                            }
                         }
                     }
 

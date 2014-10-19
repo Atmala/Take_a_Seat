@@ -101,7 +101,26 @@
     }
 
     function tableRoomObject() {
+        this.setTextRectangle = function () {
+            switch (this.degree) {
+                case 0:
+                    this.textRectangle = { x: 4, y: 10, width: 40, height: 90 };
+                    break;
+                case 90:
+                    this.textRectangle = { x: 4, y: 10, width: 90, height: 40 };
+                    break;
+                case 180:
+                    this.textRectangle = { x: 20, y: 10, width: 40, height: 90 };
+                    break;
+                case 270:
+                    this.textRectangle = { x: 4, y: 30, width: 90, height: 40 };
+                    break;
+            }
+        }
+
         this.RoomObjectType = 'table';
+        this.degree = 0;
+        this.setTextRectangle();
 
         this.loadFromDb = function (dbRoomObject) {
             this.leftTopX = dbRoomObject.Rectangles[0].LeftTopX;
@@ -141,17 +160,6 @@
             //});
         }
 
-        this.setCaption = function(tablePath) {
-            var caption = '';
-            if (this.employeeFio)
-                caption = this.employeeFio;
-            if (this.identNumber)
-                caption = '[' + this.identNumber + '] ' + caption;
-            if (caption) {
-                setEmployeeTableText(tablePath, caption);
-            }
-        }
-
         function getPointText(x, y, str, fontSize, width) {
             var pointText = new PointText({
                 point: [x, y],
@@ -176,61 +184,28 @@
             return result;
         }
 
+        this.removeCaptions = function() {
+            if (! this.attachedPath.captions) return;
+            for (var i = 0; i < this.attachedPath.captions.length; i++) {
+                this.attachedPath.captions[i].remove();
+            }
+            this.attachedPath.captions = undefined;
+        }
+
+        this.setCaptions = function () {
+            this.removeCaptions();
+            this.attachedPath.captions = this.getTableText('Михаил', 'Лермонтов', '2345',
+                this.attachedPath.bounds.x + this.textRectangle.x, this.attachedPath.bounds.y + this.textRectangle.y,
+                this.textRectangle.width, this.textRectangle.height);
+        }
+
         this.getPath = function () {
             var raster = new paper.Raster("maptable");
-            raster.position = new paper.Point(this.leftTopX, this.leftTopY);
+            raster.position = new paper.Point(this.leftTopX + this.width / 2, this.leftTopY + this.height / 2);
             raster.RoomObject = this;
             this.attachedPath = raster;
-            //raster.rotate(90);
-
-            raster.captions = this.getTableText('Михаил', 'Лермонтов', '2345', raster.position.x - 40, raster.position.y - 20, 80, 40);
-            raster.addChild(raster.captions[0]);
-
-            //raster.text = new PointText({
-            //    point: [raster.position.x - 40, raster.position.y - 20],
-            //    content: this.employeeFio,
-            //    fillColor: scope.color,
-            //    fontFamily: 'Courier New',
-            //    fontSize: 10
-            //});
-            //if (this.identNumber) {
-            //    raster.text2 = new PointText({
-            //        point: [raster.position.x - 40, raster.position.y],
-            //        content: this.identNumber,
-            //        fillColor: scope.color,
-            //        fontFamily: 'Courier New',
-            //        fontSize: 10
-            //    });
-            //    raster.text2.rotate(90);
-            //}
+            this.setCaptions();
             return raster;
-            //var tablePath = new paper.Path();
-            //tablePath.add(new paper.Point(this.leftTopX, this.leftTopY));
-            //tablePath.add(new paper.Point(this.leftTopX + this.width, this.leftTopY));
-            //tablePath.add(new paper.Point(this.leftTopX + this.width, this.leftTopY + this.height));
-            //tablePath.add(new paper.Point(this.leftTopX, this.leftTopY + this.height));
-            //tablePath.closed = true;
-
-            ////var point = new paper.Point(this.leftTopX, this.leftTopY);
-            ////var size = new paper.Size(this.width, this.height);
-            ////var tablePath = new paper.Path.Rectangle(point, size);
-            //var smallWidth = this.width / 3;
-            //var smallHeight = this.height / 2;
-            ////tablePath.moveTo(this.leftTopX, this.leftTopY + (this.height - smallHeight) / 2);
-            ////tablePath.lineTo(this.leftTopX - smallWidth, this.leftTopY + (this.height - smallHeight) / 2);
-
-            ////tablePath.addChild(
-            ////    new Path.Rectangle(
-            ////        new paper.Point(
-            ////            this.leftTopX - smallWidth,
-            ////            this.leftTopY + (this.height - smallHeight) / 2),
-            ////        new paper.Size(smallWidth, smallHeight)
-            ////    ));
-            //tablePath.strokeColor = scope.color;
-            //this.setCaption(tablePath);
-            //tablePath.RoomObject = this;
-            //this.attachedPath = tablePath;
-            //return tablePath;
         }
 
         this.deleteRoomObject = function () {
@@ -247,18 +222,10 @@
         }
 
         this.save = function() {
-            var x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x);
-            var y1 = scope.view2ProjectY(this.attachedPath.segments[0].point.y);
-            var x2 = scope.view2ProjectX(this.attachedPath.segments[2].point.x);
-            var y2 = scope.view2ProjectY(this.attachedPath.segments[2].point.y);
-            this.leftTopX = Math.min(x1, x2);
-            this.leftTopY = Math.min(y1, y2);
-            this.width = Math.abs(x1 - x2);
-            this.height = Math.abs(y1 - y2);
             var rectangleInfo = {
                 RoomObjectId: this.roomObjectId,
-                LeftTopX: this.leftTopX,
-                LeftTopY: this.leftTopY,
+                LeftTopX: this.attachedPath.position.x - this.width / 2,
+                LeftTopY: this.attachedPath.position.y - this.height / 2,
                 Width: this.width,
                 Height: this.height
             };
@@ -277,7 +244,7 @@
             scope.showTableButtonsDropDownPanel();
             dropDownMenu.css({
                 visibility: 'visible',
-                left: this.attachedPath.bounds.left + canvas.offsetLeft,
+                left: this.attachedPath.bounds.left + canvas.offsetLeft - 56,
                 top: this.attachedPath.bounds.bottom + canvas.offsetTop,
             });
         }
@@ -294,18 +261,14 @@
             $("#tableDropDownMenu").css({ visibility: 'hidden' });
         }
 
-        function setEmployeeTableText(tableFigure, employeeFio) {
-            if (tableFigure.text) {
-                tableFigure.text.remove();
-            }
-
-            tableFigure.text = new PointText({
-                point: [tableFigure.position.x - 18, tableFigure.position.y - 35],
-                content: employeeFio,
-                fillColor: scope.color,
-                fontFamily: 'Courier New',
-                fontSize: 10
-            });
+        this.rotate = function() {
+            this.attachedPath.rotate(90);
+            this.degree += 90;
+            if (this.degree == 360) this.degree = 0;
+            this.setTextRectangle();
+            this.setCaptions();
         }
+
+        
     }
 }

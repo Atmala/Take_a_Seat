@@ -91,19 +91,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 alert("Error: " + error);
             }
         });
-
-        //employeeProvider.query(function (response) {
-        //    for (var i = 0; i < response.length; i++) {
-        //        response[i].label = response[i].FioShort;
-        //        response[i].valueOf = response[i].Id;
-        //    }
-        //    $scope.employeeList = response;
-            
-        //    setSearchAutocomplete();
-        //    $scope.$apply();
-        //}, function(error) {
-        //    alert(error);
-        //});
     }
 
     $scope.loadRooms = function () {
@@ -127,12 +114,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         catch (e) {
             alert(e.description);
         }
-        //mapProvider.GetRooms(function (response) {
-        //    $scope.rooms = response;
-        //    $scope.selectedRoom = response[0];
-        //    $scope.$apply();
-        //    $scope.changeRoom($scope.selectedRoom.Id);
-        //});
     }
 
     $scope.changeRoom = function (roomId) {
@@ -144,10 +125,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 $scope.initAllFigures();
             }
         });
-        //mapProvider.ChangeRoom({ roomId: roomId }, function (response) {
-        //    $scope.room = response;
-        //    $scope.initAllFigures();
-        //});
     }
 
     $scope.undoRoom = function () {
@@ -167,13 +144,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 $scope.changeRoom(roomInfo.Id);
             }
         });
-        //mapProvider.CreateNewRoom({ caption: caption }, function (roomInfo) {
-        //    $scope.showSelectRoom();
-        //    $scope.rooms.push(roomInfo);
-        //    $scope.selectedRoom = roomInfo;
-        //    $scope.$apply();
-        //    $scope.changeRoom(roomInfo.Id);
-        //});
     }
 
     $scope.showTableEmployeeDropDownPanel = function() {
@@ -199,16 +169,16 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         $scope.discardEmployeeByTable($scope.tableDroppedDown);
     }
 
+    $scope.rotateTable = function() {
+        $scope.tableDroppedDown.RoomObject.rotate();
+    }
+
     $scope.tableNumberKeyPress = function(event) {
         if (event.which === 13) {
             var identNumber = $("#tableDropDownNumberInput").val();
             $scope.tableDroppedDown.RoomObject.saveIdentNumber(identNumber);
         }
     }
-
-    //$('#tableDropDownEmployeeInput').keypress(function(e) {
-    //    alert(e.which);
-    //});
 
 }]);
 
