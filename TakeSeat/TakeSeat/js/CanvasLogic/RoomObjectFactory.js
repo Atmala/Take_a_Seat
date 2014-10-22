@@ -104,16 +104,16 @@
         this.setTextRectangle = function () {
             switch (this.degree) {
                 case 0:
-                    this.textRectangle = { x: 4, y: 10, width: 40, height: 90 };
+                    this.textRectangle = { x: 4, y: 12, width: 44, height: 90 };
                     break;
                 case 90:
-                    this.textRectangle = { x: 4, y: 10, width: 90, height: 40 };
+                    this.textRectangle = { x: 4, y: 12, width: 90, height: 44 };
                     break;
                 case 180:
-                    this.textRectangle = { x: 20, y: 10, width: 40, height: 90 };
+                    this.textRectangle = { x: 20, y: 12, width: 44, height: 90 };
                     break;
                 case 270:
-                    this.textRectangle = { x: 4, y: 30, width: 90, height: 40 };
+                    this.textRectangle = { x: 4, y: 30, width: 90, height: 44 };
                     break;
             }
         }
@@ -160,27 +160,63 @@
             //});
         }
 
-        function getPointText(x, y, str, fontSize, width) {
-            var pointText = new PointText({
-                point: [x, y],
+        function getPointText(rect, style, str) {
+            return new PointText({
+                point: [rect.left, rect.top],
                 content: str,
                 fillColor: '#000000',
                 fontFamily: 'Courier New',
-                fontSize: fontSize
+                fontSize: style.fontSize
             });
-            if (width && pointText.bounds.width < width) {
+        }
+
+        function fitToWidth(pointText, width) {
+            if (pointText.bounds.width <= width) return;
+            var index = pointText.content.indexOf(' ');
+            if (index == -1) index = pointText.content.length - 1;
+            while (pointText.bounds.width > width && pointText.content.length > 0) {
+                pointText.content = pointText.content.substring(0, index);
+                index--;
+            }
+        }
+
+        function fitCaptionsToCenter(captions, width) {
+            for (var i = 0; i < captions.length; i++) {
+                var pointText = captions[i];
                 var offset = (width - pointText.bounds.width) / 2;
                 pointText.point.x += offset;
             }
-            return pointText;
+        }
+
+        function getMultiLineText(rect, style, str) {
+            var result = [];
+            var pointText = getPointText(rect, style, str);
+            result.push(pointText);
+
+            if (pointText.bounds.width > rect.width) {
+                fitToWidth(pointText, rect.width);
+                
+                var newStr = str.substring(pointText.content.length, str.length).trim();
+                var restCaptions = getMultiLineText(
+                    { left: rect.left, top: rect.top + style.fontSize + 2, width: rect.width, height: rect.height },
+                    style, newStr);
+                for (var i = 0; i < restCaptions.length; i++) {
+                    result.push(restCaptions[i]);
+                }
+            }
+            
+            return result;
         }
 
         this.getTableText = function(name, surname, identNumber, leftTopX, leftTopY, width, height) {
-            var fontSize = 8;
-            var result = [];
-            result.push(getPointText(leftTopX, leftTopY, surname, fontSize, width));
-            result.push(getPointText(leftTopX, leftTopY + fontSize + 2, name, fontSize, width));
-            result.push(getPointText(leftTopX, leftTopY + height - fontSize, identNumber, fontSize, width));
+            var style = { fitToCenter: true, fontSize: 11 };
+            var result = getMultiLineText(
+                { left: leftTopX, top: leftTopY, width: width, height: height },
+                style, surname + ' ' + name);
+            result.push(getPointText(
+                { left: leftTopX, top: leftTopY + height - style.fontSize, width: width, height: height },
+                style, identNumber));
+            fitCaptionsToCenter(result, width);
             return result;
         }
 
