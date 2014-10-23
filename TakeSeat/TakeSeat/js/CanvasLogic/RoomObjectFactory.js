@@ -102,7 +102,7 @@
 
     function tableRoomObject() {
         this.setTextRectangle = function () {
-            switch (this.degree) {
+            switch (this.angle) {
                 case 0:
                     this.textRectangle = { x: 4, y: 12, width: 44, height: 90 };
                     break;
@@ -119,7 +119,7 @@
         }
 
         this.RoomObjectType = 'table';
-        this.degree = 0;
+        this.angle = 0;
         this.setTextRectangle();
 
         this.loadFromDb = function (dbRoomObject) {
@@ -131,6 +131,7 @@
             this.employeeFio = dbRoomObject.EmployeeFio;
             this.employeeId = dbRoomObject.EmployeeId;
             this.identNumber = dbRoomObject.IdentNumber;
+            this.angle = dbRoomObject.Angle;
         }
 
         this.createNew = function(x, y, width, height) {
@@ -240,6 +241,8 @@
             raster.position = new paper.Point(this.leftTopX + this.width / 2, this.leftTopY + this.height / 2);
             raster.RoomObject = this;
             this.attachedPath = raster;
+            raster.rotate(this.angle);
+            this.setTextRectangle();
             this.setCaptions();
             return raster;
         }
@@ -299,10 +302,18 @@
 
         this.rotate = function() {
             this.attachedPath.rotate(90);
-            this.degree += 90;
-            if (this.degree == 360) this.degree = 0;
+            this.angle += 90;
+            if (this.angle == 360) this.angle = 0;
             this.setTextRectangle();
             this.setCaptions();
+        }
+
+        this.saveAngle = function() {
+            $.ajax({
+                url: window.saveAnglePath,
+                type: 'POST',
+                data: { RoomObjectId: this.roomObjectId, Angle: this.angle }
+            });
         }
 
         

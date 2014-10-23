@@ -127,5 +127,11 @@ namespace TakeSeat.Controllers
         {
             ServiceProxy.SaveIdentNumber(param.RoomObjectId, param.IdentNumber);
         }
+
+        [HttpPost]
+        public void SaveAngle(SaveAngleParam param)
+        {
+            ServiceProxy.SaveAngle(param);
+        }
     }
 }

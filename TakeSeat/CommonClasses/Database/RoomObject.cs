@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,6 +14,9 @@ namespace CommonClasses.Database
         [ForeignKey("RoomObjectTypeId")]
         public RoomObjectType RoomObjectType { get; set; }
         public string IdentNumber { get; set; }
+        [Required]
+        [DefaultValue(0)]
+        public int Angle { get; set; }
 
         [Required]
         public int RoomId { get; set; }

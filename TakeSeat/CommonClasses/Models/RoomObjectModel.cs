@@ -8,6 +8,7 @@ namespace CommonClasses.Models
         public int Id { get; set; }
         public string RoomObjectTypeStr { get; set; }
         public string IdentNumber { get; set; }
+        public int Angle { get; set; }
         public List<PointModel> Points { get; set; }
         public List<RectangleModel> Rectangles { get; set; }
         public int EmployeeId { get; set; }

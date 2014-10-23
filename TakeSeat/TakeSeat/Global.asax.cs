@@ -1,6 +1,8 @@
-﻿using System.Web.Http;
+﻿using System.Data.Entity;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using TakeSeatServiceProxy;
 
 namespace TakeSeat
 {
@@ -13,6 +15,7 @@ namespace TakeSeat
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            ServiceProxy.CheckAndUpdateDatabaseSchema();
         }
     }
 }

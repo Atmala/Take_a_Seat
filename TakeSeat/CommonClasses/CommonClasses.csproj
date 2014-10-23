@@ -71,6 +71,7 @@
     <Compile Include="Models\RectangleModel.cs" />
     <Compile Include="Models\RoomModel.cs" />
     <Compile Include="Models\RoomObjectModel.cs" />
+    <Compile Include="Params\SaveAngleParam.cs" />
     <Compile Include="Params\SaveIdentNumberParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

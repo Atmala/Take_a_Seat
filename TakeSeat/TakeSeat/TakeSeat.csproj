@@ -236,6 +236,10 @@
       <Project>{bf8bd8d4-6f7a-4adc-bd0a-f4ca5fa595ed}</Project>
       <Name>CommonClasses</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DbLayer\DbLayer.csproj">
+      <Project>{af693853-0e97-4744-8253-8c2bc1eb7564}</Project>
+      <Name>DbLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TakeSeatServiceProxy\TakeSeatServiceProxy.csproj">
       <Project>{ae75b3e7-f2f7-4531-a084-afbd1e699c9d}</Project>
       <Name>TakeSeatServiceProxy</Name>

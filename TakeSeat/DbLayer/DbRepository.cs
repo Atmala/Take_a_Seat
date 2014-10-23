@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
@@ -11,12 +12,19 @@ using CommonClasses.Database;
 using CommonClasses.Helpers;
 using CommonClasses.InfoClasses;
 using CommonClasses.Models;
+using CommonClasses.Params;
+using DbLayer.Migrations;
 
 namespace DbLayer
 {
     public class DbRepository: IDisposable
     {
         private TakeSeatDbContext _db = new TakeSeatDbContext();
+
+        public void CheckAndUpdateDatabaseSchema()
+        {
+            Database.SetInitializer(new TakeSeatDbContextInitializer());
+        }
 
         #region Save
 
@@ -120,6 +128,7 @@ namespace DbLayer
                 Id = roomObject.Id,
                 RoomObjectTypeStr = RoomObjectTypes.First(t => t.Id == roomObject.RoomObjectTypeId).Name,
                 IdentNumber = roomObject.IdentNumber,
+                Angle = roomObject.Angle,
                 Points = GetPointModels(roomObject.Id),
                 Rectangles = GetRectangleModels(roomObject.Id),
                 EmployeeId = employee == null ? 0 : employee.Id,
@@ -332,6 +341,14 @@ namespace DbLayer
             var roomObject = _db.RoomObjects.FirstOrDefault(r => r.Id == roomObjectId);
             if (roomObject == null) return;
             roomObject.IdentNumber = string.IsNullOrEmpty(identNumber) ? null : identNumber;
+            Save(roomObject);
+        }
+
+        public void SaveAngle(SaveAngleParam param)
+        {
+            var roomObject = _db.RoomObjects.FirstOrDefault(r => r.Id == param.RoomObjectId);
+            if (roomObject == null) return;
+            roomObject.Angle = param.Angle;
             Save(roomObject);
         }
 

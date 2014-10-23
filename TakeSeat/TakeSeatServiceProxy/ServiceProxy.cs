@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CommonClasses.Database;
 using CommonClasses.InfoClasses;
 using CommonClasses.Models;
+using CommonClasses.Params;
 using DbLayer;
 using NLog;
 
@@ -11,6 +12,14 @@ namespace TakeSeatServiceProxy
     public static class ServiceProxy
     {
         private static Logger _logger = LogManager.GetLogger("ServiceProxy");
+
+        public static void CheckAndUpdateDatabaseSchema()
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                dbRepository.CheckAndUpdateDatabaseSchema();
+            }
+        }
         public static RoomModel GetFirstRoom()
         {
             using (var dbRepository = new DbRepository())
@@ -113,6 +122,14 @@ namespace TakeSeatServiceProxy
             using (var dbRepository = new DbRepository())
             {
                 dbRepository.SaveIdentNumber(roomObjectId, identNumber);
+            }
+        }
+
+        public static void SaveAngle(SaveAngleParam param)
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                dbRepository.SaveAngle(param);
             }
         }
     }

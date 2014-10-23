@@ -171,6 +171,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     $scope.rotateTable = function() {
         $scope.tableDroppedDown.RoomObject.rotate();
+        $scope.tableDroppedDown.RoomObject.saveAngle();
     }
 
     $scope.tableNumberKeyPress = function(event) {
