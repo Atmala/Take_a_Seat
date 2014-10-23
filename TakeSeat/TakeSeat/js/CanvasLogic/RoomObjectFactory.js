@@ -191,6 +191,7 @@
 
         function getMultiLineText(rect, style, str) {
             var result = [];
+            if (! str) return result;
             var pointText = getPointText(rect, style, str);
             result.push(pointText);
 
@@ -209,7 +210,7 @@
             return result;
         }
 
-        this.getTableText = function(name, surname, identNumber, leftTopX, leftTopY, width, height) {
+        this.getTableText = function(rect, employeeFio, identNumber, leftTopX, leftTopY, width, height) {
             var style = { fitToCenter: true, fontSize: 11 };
             var result = getMultiLineText(
                 { left: leftTopX, top: leftTopY, width: width, height: height },
@@ -230,10 +231,21 @@
         }
 
         this.setCaptions = function () {
+            var style = { fitToCenter: true, fontSize: 11 };
             this.removeCaptions();
-            this.attachedPath.captions = this.getTableText('Михаил', 'Лермонтов', '2345',
-                this.attachedPath.bounds.x + this.textRectangle.x, this.attachedPath.bounds.y + this.textRectangle.y,
-                this.textRectangle.width, this.textRectangle.height);
+            var rect = {
+                left: this.attachedPath.bounds.x + this.textRectangle.x,
+                top: this.attachedPath.bounds.y + this.textRectangle.y,
+                width: this.textRectangle.width,
+                height: this.textRectangle.height
+            }
+            this.attachedPath.captions = getMultiLineText(rect, style, this.employeeFio);
+            if (this.identNumber) {
+                this.attachedPath.captions.push(getPointText(
+                    { left: rect.left, top: rect.top + rect.height - style.fontSize, width: rect.width, height: rect.height },
+                    style, this.identNumber));
+            }
+            fitCaptionsToCenter(this.attachedPath.captions, rect.width);
         }
 
         this.getPath = function () {
@@ -294,9 +306,8 @@
                 type: 'POST',
                 data: { RoomObjectId: this.roomObjectId, IdentNumber: identNumber }
             });
-            //mapProvider.SaveIdentNumber({ RoomObjectId: this.roomObjectId, IdentNumber: identNumber });
             this.identNumber = identNumber;
-            this.setCaption(this.attachedPath);
+            this.setCaptions();
             $("#tableDropDownMenu").css({ visibility: 'hidden' });
         }
 
@@ -316,6 +327,42 @@
             });
         }
 
-        
+        function saveEmployeeTableLink(employeeId, roomObjectId) {
+            var employeeTableLink = {
+                EmployeeId: employeeId,
+                RoomObjectId: roomObjectId
+            };
+            $.ajax({
+                url: window.saveEmployeeTableLinkPath,
+                type: 'POST',
+                data: employeeTableLink
+            });
+        }
+
+        function removeEmployeeTableLink(employeeId, roomObjectId) {
+            var employeeTableLink = {
+                EmployeeId: employeeId,
+                RoomObjectId: roomObjectId
+            };
+            $.ajax({
+                url: window.removeEmployeeTableLinkPath,
+                type: 'POST',
+                data: employeeTableLink
+            });
+        }
+
+        this.assignEmployee = function (employee) {
+            this.employeeId = employee.Id;
+            this.employeeFio = employee.FioShort;
+            this.setCaptions();
+            saveEmployeeTableLink(employee.Id, this.roomObjectId);
+        }
+
+        this.discardEmployee = function (table) {
+            removeEmployeeTableLink(this.employeeId, this.roomObjectId);
+            this.employeeId = undefined;
+            this.employeeFio = undefined;
+            this.setCaptions();
+        }
     }
 }

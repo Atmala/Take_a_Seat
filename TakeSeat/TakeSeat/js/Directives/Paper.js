@@ -57,18 +57,6 @@ seatApp
                         if (path && scope.mode === 'line') {
                             roomObjectFactory.createWall(path);
                         }
-
-                        if (scope.mode === 'assign') {
-                            if (!scope.selectedEmployee)
-                                alert("Please select Employee");
-                            else {
-                                assignEmployee(event.offsetX, event.offsetY);
-                            }
-                        }
-
-                        if (scope.mode === 'discard') {
-                            discardEmployeeByXY(event.offsetX, event.offsetY);
-                        }
                     }
 
                     function mouseMove(event) {
@@ -172,79 +160,6 @@ seatApp
                         
                         if (selectedPath) selectedPath.selected = true;
                         if (selectedSegment) selectedSegment.selected = true;
-                    }
-
-                    scope.asignEmployeeByXY = function(x, y) {
-                        clearSelection();
-                        var table = getTableByCoordinates(x, y);
-                        if (table) {
-                            setEmployeeTableText(table, scope.selectedEmployee.FioShort);
-                            saveEmployeeTableLink(scope.selectedEmployee.Id, table.RoomObject.roomObjectId);
-                            scope.loadEmployees();
-                        }
-                    }
-
-                    scope.assignEmployee = function(table, employee) {
-                        setEmployeeTableText(table, employee.FioShort);
-                        saveEmployeeTableLink(employee.Id, table.RoomObject.roomObjectId);
-                        scope.loadEmployees();
-                    }
-
-                    scope.discardEmployeeByXY = function (x, y) {
-                        var table = getTableByCoordinates(x, y);
-                        if (table) {
-                            setEmployeeTableText(table, '');
-                            removeEmployeeTableLink(table.dbEmployeeId, table.RoomObject.roomObjectId);
-                            scope.loadEmployees();
-                        }
-                    }
-
-                    scope.discardEmployeeByTable = function(table) {
-                        setEmployeeTableText(table, '');
-                        removeEmployeeTableLink(table.RoomObject.employeeId, table.RoomObject.roomObjectId);
-                        scope.loadEmployees();
-                    }
-
-                    function setEmployeeTableText(tableFigure, employeeFio) {
-                        //tableFigure.strokeWidth = 5;
-                        if (tableFigure.text) {
-                            tableFigure.text.remove();
-                        }
-
-                        tableFigure.text = new PointText({
-                            point: [tableFigure.position.x - 18, tableFigure.position.y - 35],
-                            content: employeeFio,
-                            fillColor: scope.color,
-                            fontFamily: 'Courier New',
-                            fontWeight: 'bold',
-                            fontSize: 15
-                        });
-                    }
-
-                    function saveEmployeeTableLink(employeeId, roomObjectId) {
-                        var employeeTableLink = {
-                            EmployeeId: employeeId,
-                            RoomObjectId: roomObjectId
-                        };
-                        $.ajax({
-                            url: window.saveEmployeeTableLinkPath,
-                            type: 'POST',
-                            data: employeeTableLink
-                        });
-                        //mapProvider.SaveEmployeeTableLink(employeeTableLink);
-                    }
-
-                    function removeEmployeeTableLink(employeeId, roomObjectId) {
-                        var employeeTableLink = {
-                            EmployeeId: employeeId,
-                            RoomObjectId: roomObjectId
-                        };
-                        $.ajax({
-                            url: window.removeEmployeeTableLinkPath,
-                            type: 'POST',
-                            data: employeeTableLink
-                        });
-                        //mapProvider.RemoveEmployeeTableLink(employeeTableLink);
                     }
 
                     function clearSelection() {

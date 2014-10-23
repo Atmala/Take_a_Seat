@@ -11,7 +11,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 return false;
             },
             select: function (event, ui) {
-                $scope.assignEmployee($scope.tableDroppedDown, ui.item);
+                $scope.tableDroppedDown.RoomObject.assignEmployee(ui.item);
                 $('#tableDropDownEmployeeInput').val('');
                 loadEmployees();
                 return false;
@@ -25,7 +25,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 		};
     }
     
-
     function initMode() {
         $scope.mode = 'view';
     }
@@ -166,7 +165,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.discardEmployee = function () {
-        $scope.discardEmployeeByTable($scope.tableDroppedDown);
+        $scope.tableDroppedDown.RoomObject.discardEmployee();
     }
 
     $scope.rotateTable = function() {
