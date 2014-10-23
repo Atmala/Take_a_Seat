@@ -49,10 +49,9 @@
         this.getPath = function () {
             var path = new paper.Path();
             path.strokeWidth = 4;
-            path.strokeColor = '#888888';
+            path.strokeColor = scope.wallColor;
             path.add(new paper.Point(this.x1, this.y1));
             path.add(new paper.Point(this.x2, this.y2));
-            //path.strokeColor = scope.color;
             path.RoomObject = this;
             this.attachedPath = path;
             return path;
@@ -81,9 +80,6 @@
                     thisObject.roomObjectId = response.Id;
                 }
             });
-            //mapProvider.SaveWall(lineInfo, function (response) {
-            //    thisObject.roomObjectId = response.Id;
-            //});
         }
 
         this.deleteRoomObject = function () {
@@ -96,7 +92,6 @@
                 type: 'POST',
                 data: { id: this.roomObjectId }
             });
-            //mapProvider.DeleteRoomObject({ id: this.roomObjectId });
         }
     }
 
@@ -156,9 +151,6 @@
                     thisObject.roomObjectId = response.Id;
                 }
             });
-            //mapProvider.SaveTable(rectangleInfo, function(response) {
-            //    thisObject.roomObjectId = response.Id;
-            //});
         }
 
         function getPointText(rect, style, str) {
@@ -260,16 +252,12 @@
         }
 
         this.deleteRoomObject = function () {
-            if (this.attachedPath.text) {
-                this.attachedPath.text.remove();
-                scope.loadEmployees();
-            }
+            this.removeCaptions();
             $.ajax({
                 url: window.deleteRoomObjectPath,
                 type: 'POST',
                 data: { id: this.roomObjectId }
             });
-            //mapProvider.DeleteRoomObject({ id: this.roomObjectId });
         }
 
         this.save = function() {
@@ -285,7 +273,6 @@
                 type: 'POST',
                 data: rectangleInfo
             });
-            //mapProvider.SaveTable(rectangleInfo);
         }
 
         this.showDropDownMenu = function () {
@@ -358,7 +345,7 @@
             saveEmployeeTableLink(employee.Id, this.roomObjectId);
         }
 
-        this.discardEmployee = function (table) {
+        this.discardEmployee = function () {
             removeEmployeeTableLink(this.employeeId, this.roomObjectId);
             this.employeeId = undefined;
             this.employeeFio = undefined;

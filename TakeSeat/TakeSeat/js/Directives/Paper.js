@@ -12,6 +12,7 @@ seatApp
                     var selectedPath, selectedSegment, pathToMove, segmentToMove;
 
                     scope.color = '#000000';
+                    scope.wallColor = '#888888';
                     scope.globalOffset = new paper.Point();
 
                     function mouseDown(event) {
@@ -162,12 +163,6 @@ seatApp
                         if (selectedSegment) selectedSegment.selected = true;
                     }
 
-                    function clearSelection() {
-                        project.activeLayer.children.forEach(function (fig) {
-                            if (fig) fig.strokeWidth = 1;
-                        });
-                    }
-
                     function setCurrentCoords(x, y) {
                         scope.X = x;
                         scope.Y = y;
@@ -181,7 +176,8 @@ seatApp
 
                     function getNewPath() {
                         var newPath = new paper.Path();
-                        newPath.strokeColor = scope.color;
+                        newPath.strokeWidth = 4;
+                        newPath.strokeColor = scope.wallColor;
                         return newPath;
                     }
 
@@ -214,22 +210,6 @@ seatApp
                         return viewY - scope.globalOffset.y;
                     }
 
-                    function view2ProjectPoint(point) {
-                        return new paper.Point(view2ProjectX(point.x), view2ProjectY(point.y));
-                    }
-
-                    function project2ViewX(viewX) {
-                        return viewX + globalOffset.x;
-                    }
-
-                    function project2ViewY(viewY) {
-                        return viewY + globalOffset.y;
-                    }
-
-                    function project2ViewPoint(point) {
-                        return new paper.Point(project2ViewX(point.x), project2ViewY(point.y));
-                    }
-
                     function getTableByPoint(point) {
                         for (var i = 0; i < project.activeLayer.children.length; i++) {
                             var item = project.activeLayer.children[i];
@@ -238,10 +218,6 @@ seatApp
                             }
                         }
                         return undefined;
-                    }
-
-                    function getTableByCoordinates(x, y) {
-                        return getTableByPoint(new paper.Point(x, y));
                     }
 
                     element.on('mousedown', mouseDown)
