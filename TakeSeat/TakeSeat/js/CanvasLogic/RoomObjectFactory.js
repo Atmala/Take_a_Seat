@@ -127,6 +127,7 @@
             this.employeeId = dbRoomObject.EmployeeId;
             this.identNumber = dbRoomObject.IdentNumber;
             this.angle = dbRoomObject.Angle;
+            this.isFoundItem = this.roomObjectId === scope.foundRoomObjectId;
         }
 
         this.createNew = function(x, y, width, height) {
@@ -157,7 +158,7 @@
             return new PointText({
                 point: [rect.left, rect.top],
                 content: str,
-                fillColor: '#000000',
+                fillColor: style.fontColor,
                 fontFamily: 'Courier New',
                 fontSize: style.fontSize
             });
@@ -202,18 +203,6 @@
             return result;
         }
 
-        this.getTableText = function(rect, employeeFio, identNumber, leftTopX, leftTopY, width, height) {
-            var style = { fitToCenter: true, fontSize: 11 };
-            var result = getMultiLineText(
-                { left: leftTopX, top: leftTopY, width: width, height: height },
-                style, surname + ' ' + name);
-            result.push(getPointText(
-                { left: leftTopX, top: leftTopY + height - style.fontSize, width: width, height: height },
-                style, identNumber));
-            fitCaptionsToCenter(result, width);
-            return result;
-        }
-
         this.removeCaptions = function() {
             if (! this.attachedPath.captions) return;
             for (var i = 0; i < this.attachedPath.captions.length; i++) {
@@ -223,7 +212,12 @@
         }
 
         this.setCaptions = function () {
-            var style = { fitToCenter: true, fontSize: 11 };
+            var style = {
+                fitToCenter: true,
+                fontSize: 11,
+                fontColor: this.isFoundItem ? scope.foundColor : scope.color
+            };
+            
             this.removeCaptions();
             var rect = {
                 left: this.attachedPath.bounds.x + this.textRectangle.x,
@@ -295,6 +289,7 @@
             });
             this.identNumber = identNumber;
             this.setCaptions();
+            scope.loadEmployees();
             $("#tableDropDownMenu").css({ visibility: 'hidden' });
         }
 

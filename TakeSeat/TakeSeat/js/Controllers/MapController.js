@@ -2,7 +2,7 @@
 
 seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function ($scope, mapProvider, employeeProvider) {
 
-    function setSearchAutocomplete() {
+    function setDropDownEmployeeInputAutocomplete() {
         $("#tableDropDownEmployeeInput").autocomplete({
             minLength: 0,
             source: $scope.employeeList,
@@ -13,7 +13,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             select: function (event, ui) {
                 $scope.tableDroppedDown.RoomObject.assignEmployee(ui.item);
                 $('#tableDropDownEmployeeInput').val('');
-                loadEmployees();
+                $scope.loadEmployees();
                 return false;
             }
         })
@@ -21,6 +21,29 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 		    return $("<li></li>")
 				.data("item.autocomplete", item)
 				.append("<a>" + item.FioShort + "</a>")
+				.appendTo(ul);
+		};
+    }
+
+    function setSearchAutocomplete() {
+        $("#inputSearch").autocomplete({
+            minLength: 0,
+            source: $scope.searchList,
+            focus: function (event, ui) {
+                $("#inputSearch").val(ui.item.label);
+                return false;
+            },
+            select: function (event, ui) {
+                $scope.doSearch(ui.item);
+                $('#inputSearch').val('');
+                
+                return false;
+            }
+        })
+		.data("autocomplete")._renderItem = function (ul, item) {
+		    return $("<li></li>")
+				.data("item.autocomplete", item)
+				.append("<a>" + item.label + "</a>")
 				.appendTo(ul);
 		};
     }
@@ -78,15 +101,26 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             success: function(response) {
                 for (var i = 0; i < response.length; i++) {
                     response[i].label = response[i].FioShort;
-                    response[i].valueOf = response[i].Id;
+                    response[i].value = response[i].Id;
                 }
                 $scope.employeeList = response;
+
+                setDropDownEmployeeInputAutocomplete();
+                $scope.$apply();
+            }, error: function (req, status, error) {
+                alert("Error: " + error);
+            }
+        });
+
+        $.ajax({
+            url: window.getElementsForSearchPath,
+            data: {},
+            success: function (response) {
+                $scope.searchList = response;
 
                 setSearchAutocomplete();
                 $scope.$apply();
             }, error: function (req, status, error) {
-                alert("Req: " + req);
-                alert("Status: " + status);
                 alert("Error: " + error);
             }
         });
@@ -178,6 +212,23 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             var identNumber = $("#tableDropDownNumberInput").val();
             $scope.tableDroppedDown.RoomObject.saveIdentNumber(identNumber);
         }
+    }
+
+    $scope.doSearch = function(searchElement) {
+        $scope.foundRoomObjectId = searchElement.RoomObjectId;
+        $scope.foundRoomObjectId = searchElement.RoomObjectId;
+        $scope.changeRoom(searchElement.RoomId);
+        
+        //for (var i = 0; i < project.activeLayer.children.length; i++) {
+        //    var item = project.activeLayer.children[i];
+        //    if (item.RoomObject && item.RoomObject.setCaptions) {
+        //        var isFound = item.RoomObject.roomObjectId === searchElement.RoomObjectId;
+        //        if (item.RoomObject.isFoundItem != isFound) {
+        //            item.RoomObject.isFoundItem = isFound;
+        //            item.RoomObject.setCaptions();
+        //        }
+        //    }
+        //}
     }
 
 }]);

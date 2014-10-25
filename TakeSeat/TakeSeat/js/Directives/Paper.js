@@ -13,6 +13,7 @@ seatApp
 
                     scope.color = '#000000';
                     scope.wallColor = '#888888';
+                    scope.foundColor = '#ff0000';
                     scope.globalOffset = new paper.Point();
 
                     function mouseDown(event) {

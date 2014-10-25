@@ -132,5 +132,13 @@ namespace TakeSeatServiceProxy
                 dbRepository.SaveAngle(param);
             }
         }
+
+        public static List<SearchElementInfo> GetElementsForSearch()
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                return dbRepository.GetElementsForSearch();
+            }
+        }
     }
 }

@@ -1,17 +1,13 @@
 ﻿@{
     Layout = null;
 }
-
 <!DOCTYPE html>
-
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-
     <link href="~/assets/css/bootstrap.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/assets/css/jquery.ui.all.css">
     <link href="~/css/main.css" rel="stylesheet" />
-
     <script src="~/assets/js/jquery-1.7.1.js"></script>
     <script src="~/assets/js/paper-full.js"></script>
     <script src="~/assets/js/angular.js"></script>
@@ -83,10 +79,12 @@
                 <div class="toolPanel">
                 </div>
                 <div class="titlePanel doubleBorder noBorderTop noBorderBottom noBorderRight">
-                    <h1 class="marginLeft16">Take a Seat!</h1>
-                    @*<p class="lead">Find your place in the world of DIO</p>*@
+                    <h1 class="takeSeatHeader">Take a Seat!</h1>
+                    <input id="inputSearch" type="text"
+                           class="ui-autocomplete-input"
+                           role="textbox" aria-autocomplete="list" aria-haspopup="true"
+                           placeholder="Search">
                 </div>
-
             </div>
             <div class="bs-docs-section">
                 @RenderBody()
@@ -95,4 +93,3 @@
     </div>
 </body>
 </html>
-

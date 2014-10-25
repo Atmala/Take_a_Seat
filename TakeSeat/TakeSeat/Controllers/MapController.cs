@@ -133,5 +133,11 @@ namespace TakeSeat.Controllers
         {
             ServiceProxy.SaveAngle(param);
         }
+
+        [HttpGet]
+        public JsonResult GetElementsForSearch()
+        {
+            return Json(ServiceProxy.GetElementsForSearch(), JsonRequestBehavior.AllowGet);
+        }
     }
 }

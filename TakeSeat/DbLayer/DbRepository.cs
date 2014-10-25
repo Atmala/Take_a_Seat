@@ -378,6 +378,56 @@ namespace DbLayer
                        }).ToList();
         }
 
+        private string GetSearchLabel(string fioShort, string identNumber)
+        {
+            var result = new StringBuilder();
+            if (!string.IsNullOrEmpty(fioShort))
+            {
+                result.Append(fioShort);
+                if (!string.IsNullOrEmpty(identNumber))
+                    result.Append(" ");
+            }
+            if (!string.IsNullOrEmpty(identNumber))
+                result.Append("[" + identNumber + "]");
+            return result.ToString();
+        }
+
+        public List<SearchElementInfo> GetElementsForSearch()
+        {
+            var result =
+                (from e in _db.Employees
+                    from etl in _db.EmployeeTableLinks.Where(r => r.EmployeeId == e.Id).DefaultIfEmpty()
+                    from ro in _db.RoomObjects.Where(r => r.Id == etl.RoomObjectId).DefaultIfEmpty()
+                    select new { Employee = e, RoomObject = ro}).AsEnumerable().
+                Select(r => new
+                           {
+                               RoomId = r.RoomObject == null ? 0 : r.RoomObject.RoomId,
+                               EmployeeId = r.Employee.Id, 
+                               RoomObjectId = r.RoomObject == null ? 0 : r.RoomObject.Id,
+                               FioShort = r.Employee.Surname + " " + r.Employee.FirstName,
+                               IdentNumber = r.RoomObject == null ? string.Empty : r.RoomObject.IdentNumber
+                           }).ToList();
+            result.AddRange(
+                from ro in _db.RoomObjects
+                where !_db.EmployeeTableLinks.Any(etl => etl.RoomObjectId == ro.Id)
+                    && ro.IdentNumber != "" && ro.IdentNumber != null
+                select new
+                       {
+                           ro.RoomId, 
+                           EmployeeId = 0,
+                           RoomObjectId = ro.Id,
+                           FioShort = "",
+                           ro.IdentNumber
+                       });
+            return result.Select(r => new SearchElementInfo
+                                 {
+                                     RoomId = r.RoomId,
+                                     EmployeeId = r.EmployeeId,
+                                     RoomObjectId = r.RoomObjectId,
+                                     label = GetSearchLabel(r.FioShort, r.IdentNumber)
+                                 }).ToList();
+        }
+
         public List<RoomInfo> GetRooms()
         {
             return (from r in _db.Rooms

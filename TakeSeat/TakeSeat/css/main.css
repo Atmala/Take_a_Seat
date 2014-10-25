@@ -135,6 +135,18 @@ body {
 .margin0 { margin: 0; }
 .marginLeft16 { margin-left: 16px; }
 
+.takeSeatHeader {
+    margin-left: 16px;
+    display: inline-block;
+}
+
+#inputSearch {
+    float: right;
+    margin: 24px 16px 0 0;
+    padding: 4px;
+    width: 200px;
+}
+
 .visuallyhidden {
     border: 0;
     clip: rect(0 0 0 0);
