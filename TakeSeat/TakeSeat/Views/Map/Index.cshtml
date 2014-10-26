@@ -12,12 +12,17 @@
                 <h3 class="panel-title">Tools</h3>
             </div>
             <div class="panel-body">
-                <div class="md-overlay">
+                <div class="md-overlay dropdown">
                     <button title="Add Wall"
-                            type="button" class="btn-tool" ng-click="changeMode('line')"
+                            type="button" class="btn-tool"
+                            data-toggle="dropdown"
                             ng-class="{activeBtn : isSelected('line')}">
                         <img src=@Url.Content("~/img/wall.png") />
                     </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownCountry">
+                        <li><a ng-click="changeMode('line', 1)">External</a></li>
+                        <li><a ng-click="changeMode('line', 2)">Internal</a></li>
+                    </ul>
                 </div>
                 <div class="md-overlay">
                     <button title="Add Table"

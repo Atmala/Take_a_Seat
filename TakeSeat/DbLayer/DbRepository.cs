@@ -17,7 +17,7 @@ using DbLayer.Migrations;
 
 namespace DbLayer
 {
-    public class DbRepository: IDisposable
+    public class DbRepository : IDisposable
     {
         private TakeSeatDbContext _db = new TakeSeatDbContext();
 
@@ -108,27 +108,29 @@ namespace DbLayer
         public RoomModel GetRoomModel(int roomId)
         {
             RoomModel roomModel;
-                var room = _db.Rooms.FirstOrDefault(r => r.Id == roomId);
-                if (room == null) return new RoomModel();
-                roomModel = new RoomModel
-                {
-                    Id = room.Id,
-                    Caption = room.Caption, 
-                    Description = room.Description,
-                    Order = room.Order,
-                    RoomObjects = GetRoomObjectModels(roomId)
-                };
+            var room = _db.Rooms.FirstOrDefault(r => r.Id == roomId);
+            if (room == null) return new RoomModel();
+            roomModel = new RoomModel
+            {
+                Id = room.Id,
+                Caption = room.Caption,
+                Description = room.Description,
+                Order = room.Order,
+                RoomObjects = GetRoomObjectModels(roomId)
+            };
             return roomModel;
         }
 
         private RoomObjectModel GetRoomObjectModel(RoomObject roomObject, Employee employee)
         {
-           return new RoomObjectModel
+            var roomObjectTypeStr = RoomObjectTypes.First(t => t.Id == roomObject.RoomObjectTypeId).Name;
+            return new RoomObjectModel
             {
                 Id = roomObject.Id,
-                RoomObjectTypeStr = RoomObjectTypes.First(t => t.Id == roomObject.RoomObjectTypeId).Name,
+                RoomObjectTypeStr = roomObjectTypeStr,
                 IdentNumber = roomObject.IdentNumber,
                 Angle = roomObject.Angle,
+                SubType = roomObjectTypeStr.ToLower() == "wall" ? roomObject.SubType ?? 1 : roomObject.SubType,
                 Points = GetPointModels(roomObject.Id),
                 Rectangles = GetRectangleModels(roomObject.Id),
                 EmployeeId = employee == null ? 0 : employee.Id,
@@ -145,7 +147,7 @@ namespace DbLayer
                     where ro.RoomId == roomId
                     select new
                            {
-                               RoomObject = ro, 
+                               RoomObject = ro,
                                Employee = emp
                            };
 
@@ -159,15 +161,15 @@ namespace DbLayer
         private List<PointModel> GetPointModels(int roomObjectId)
         {
             return (from p in _db.Points
-                where p.RoomObjectId == roomObjectId
-                orderby p.Order
-                select new PointModel
-                       {
-                           Id = p.Id,
-                           X = p.X,
-                           Y = p.Y, 
-                           Order = p.Order
-                       }).ToList();
+                    where p.RoomObjectId == roomObjectId
+                    orderby p.Order
+                    select new PointModel
+                           {
+                               Id = p.Id,
+                               X = p.X,
+                               Y = p.Y,
+                               Order = p.Order
+                           }).ToList();
         }
 
         private List<RectangleModel> GetRectangleModels(int roomObjectId)
@@ -177,8 +179,8 @@ namespace DbLayer
                     select new RectangleModel
                     {
                         Id = p.Id,
-                        RoomObjectId = roomObjectId, 
-                        LeftTopX = p.LeftTopX, 
+                        RoomObjectId = roomObjectId,
+                        LeftTopX = p.LeftTopX,
                         LeftTopY = p.LeftTopY,
                         Width = p.Width,
                         Height = p.Height
@@ -194,7 +196,7 @@ namespace DbLayer
             var point = new Point
                         {
                             RoomObjectId = roomObjectId,
-                            X = x, 
+                            X = x,
                             Y = y
                         };
             return Save(point);
@@ -204,47 +206,48 @@ namespace DbLayer
         {
             var rectangle = new Rectangle
                 {
-                    RoomObjectId = roomObjectId, 
-                    LeftTopX = leftTopX, 
-                    LeftTopY = leftTopY, 
-                    Width = width, 
+                    RoomObjectId = roomObjectId,
+                    LeftTopX = leftTopX,
+                    LeftTopY = leftTopY,
+                    Width = width,
                     Height = height
                 };
             return Save(rectangle);
         }
 
-        public int SaveWall(int roomId, int roomObjectId, int x1, int y1, int x2, int y2)
+        public int SaveWall(int roomId, LineInfo lineInfo)
         {
-            return roomObjectId == 0
-                ? SaveNewWall(roomId, x1, y1, x2, y2)
-                : UpdateWall(roomObjectId, x1, y1, x2, y2);
+            return lineInfo.RoomObjectId == 0
+                ? SaveNewWall(roomId, lineInfo)
+                : UpdateWall(lineInfo);
         }
 
-        private int SaveNewWall(int roomId, int x1, int y1, int x2, int y2)
+        private int SaveNewWall(int roomId, LineInfo lineInfo)
         {
             var roomObject = new RoomObject()
             {
                 RoomId = roomId,
-                RoomObjectTypeId = GetRoomObjectTypeId("wall")
+                RoomObjectTypeId = GetRoomObjectTypeId("wall"),
+                SubType = lineInfo.SubType
             };
             int roomObjectId = Save(roomObject);
-            SavePoint(roomObjectId, x1, y1);
-            SavePoint(roomObjectId, x2, y2);
+            SavePoint(roomObjectId, lineInfo.X1, lineInfo.Y1);
+            SavePoint(roomObjectId, lineInfo.X2, lineInfo.Y2);
             return roomObjectId;
         }
 
-        private int UpdateWall(int roomObjectId, int x1, int y1, int x2, int y2)
+        private int UpdateWall(LineInfo lineInfo)
         {
-            var points = _db.Points.Where(r => r.RoomObjectId == roomObjectId).ToList();
+            var points = _db.Points.Where(r => r.RoomObjectId == lineInfo.RoomObjectId).ToList();
             if (points.Count != 2) return -1;
-            points[0].X = x1;
-            points[0].Y = y1;
+            points[0].X = lineInfo.X1;
+            points[0].Y = lineInfo.Y1;
             Save(points[0]);
-            points[1].X = x2;
-            points[1].Y = y2;
+            points[1].X = lineInfo.X2;
+            points[1].Y = lineInfo.Y2;
             Save(points[1]);
             _db.SaveChanges();
-            return roomObjectId;
+            return lineInfo.RoomObjectId;
         }
 
         private int SaveNewTable(int roomId, int leftTopX, int leftTopY, int width, int height)
@@ -295,10 +298,10 @@ namespace DbLayer
             DeleteOtherEmployeeTableLinks(employeeTableLinkInfo.EmployeeId, employeeTableLinkInfo.RoomObjectId);
 
             var link = (from etl in _db.EmployeeTableLinks
-                where etl.EmployeeId == employeeTableLinkInfo.EmployeeId
-                      && etl.RoomObjectId == employeeTableLinkInfo.RoomObjectId
-                select etl).FirstOrDefault();
-            
+                        where etl.EmployeeId == employeeTableLinkInfo.EmployeeId
+                              && etl.RoomObjectId == employeeTableLinkInfo.RoomObjectId
+                        select etl).FirstOrDefault();
+
             if (link == null)
             {
                 link = new EmployeeTableLink
@@ -327,7 +330,7 @@ namespace DbLayer
 
         public RoomInfo CreateNewRoom(string caption)
         {
-            var room = new Room {Caption = caption, Order = 0};
+            var room = new Room { Caption = caption, Order = 0 };
             Save(room);
             return new RoomInfo
                    {
@@ -396,13 +399,13 @@ namespace DbLayer
         {
             var result =
                 (from e in _db.Employees
-                    from etl in _db.EmployeeTableLinks.Where(r => r.EmployeeId == e.Id).DefaultIfEmpty()
-                    from ro in _db.RoomObjects.Where(r => r.Id == etl.RoomObjectId).DefaultIfEmpty()
-                    select new { Employee = e, RoomObject = ro}).AsEnumerable().
+                 from etl in _db.EmployeeTableLinks.Where(r => r.EmployeeId == e.Id)
+                 from ro in _db.RoomObjects.Where(r => r.Id == etl.RoomObjectId)
+                 select new { Employee = e, RoomObject = ro }).AsEnumerable().
                 Select(r => new
                            {
                                RoomId = r.RoomObject == null ? 0 : r.RoomObject.RoomId,
-                               EmployeeId = r.Employee.Id, 
+                               EmployeeId = r.Employee.Id,
                                RoomObjectId = r.RoomObject == null ? 0 : r.RoomObject.Id,
                                FioShort = r.Employee.Surname + " " + r.Employee.FirstName,
                                IdentNumber = r.RoomObject == null ? string.Empty : r.RoomObject.IdentNumber
@@ -413,7 +416,7 @@ namespace DbLayer
                     && ro.IdentNumber != "" && ro.IdentNumber != null
                 select new
                        {
-                           ro.RoomId, 
+                           ro.RoomId,
                            EmployeeId = 0,
                            RoomObjectId = ro.Id,
                            FioShort = "",
@@ -431,11 +434,11 @@ namespace DbLayer
         public List<RoomInfo> GetRooms()
         {
             return (from r in _db.Rooms
-                select new RoomInfo
-                {
-                    Id = r.Id,
-                    Caption = r.Caption
-                }).ToList();
+                    select new RoomInfo
+                    {
+                        Id = r.Id,
+                        Caption = r.Caption
+                    }).ToList();
         }
 
         #endregion

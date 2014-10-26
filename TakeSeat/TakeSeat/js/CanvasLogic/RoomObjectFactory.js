@@ -36,6 +36,7 @@
             this.y1 = dbRoomObject.Points[0].Y;
             this.x2 = dbRoomObject.Points[1].X;
             this.y2 = dbRoomObject.Points[1].Y;
+            this.subType = dbRoomObject.SubType;
             this.roomObjectId = dbRoomObject.Id;
         }
 
@@ -43,13 +44,13 @@
             path.RoomObject = this;
             this.attachedPath = path;
             this.roomObjectId = 0;
+            this.subType = scope.roomObjectSubType;
             this.save();
         }
 
         this.getPath = function () {
             var path = new paper.Path();
-            path.strokeWidth = 4;
-            path.strokeColor = scope.wallColor;
+            scope.setWallAppearance(path, this.subType);
             path.add(new paper.Point(this.x1, this.y1));
             path.add(new paper.Point(this.x2, this.y2));
             path.RoomObject = this;
@@ -66,6 +67,7 @@
 
             var lineInfo = {
                 RoomObjectId: this.roomObjectId,
+                SubType: this.subType,
                 X1: scope.view2ProjectX(this.x1),
                 Y1: scope.view2ProjectY(this.y1),
                 X2: scope.view2ProjectX(this.x2),
@@ -160,6 +162,7 @@
                 content: str,
                 fillColor: style.fontColor,
                 fontFamily: 'Courier New',
+                fontWeight: 'bold',
                 fontSize: style.fontSize
             });
         }

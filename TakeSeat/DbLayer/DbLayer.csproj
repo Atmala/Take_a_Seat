@@ -78,6 +78,10 @@
     <Compile Include="Migrations\201410231611317_Angle.Designer.cs">
       <DependentUpon>201410231611317_Angle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410262049203_SubType.cs" />
+    <Compile Include="Migrations\201410262049203_SubType.Designer.cs">
+      <DependentUpon>201410262049203_SubType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\TakeSeatDbContextInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -111,6 +115,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410231611317_Angle.resx">
       <DependentUpon>201410231611317_Angle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410262049203_SubType.resx">
+      <DependentUpon>201410262049203_SubType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

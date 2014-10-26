@@ -48,12 +48,13 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 		};
     }
     
-    function initMode() {
+    function setDefaultMode() {
         $scope.mode = 'view';
+        $scope.roomObjectSubType = undefined;
     }
 
     $scope.Init = function () {
-        initMode();
+        setDefaultMode();
         $scope.showSelectRoom();
         $scope.showTableButtonsDropDownPanel();
         $scope.loadEmployees();
@@ -72,11 +73,13 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         return $scope.selectedEmployee = employee;
     }
 
-    $scope.changeMode = function (mode) {
-        if ($scope.isSelected(mode))
-            initMode();
-        else
+    $scope.changeMode = function (mode, subtype) {
+        if ($scope.isSelected(mode) && (!subtype || subtype === $scope.roomObjectSubType))
+            setDefaultMode();
+        else {
             $scope.mode = mode;
+            $scope.roomObjectSubType = subtype;
+        }
         $scope.$apply();
     }
 
@@ -138,8 +141,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                     $scope.changeRoom($scope.selectedRoom.Id);
                 },
                 error: function (req, status, error) {
-                    alert("Req: " + req);
-                    alert("Status: " + status);
                     alert("Error: " + error);
                 }
             });
@@ -214,11 +215,20 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         }
     }
 
+    function getRoomById(roomId) {
+        for (var i = 0; i < $scope.rooms.length; i++) {
+            if ($scope.rooms[i].Id === roomId) return $scope.rooms[i];
+        }
+        return null;
+    }
+
     $scope.doSearch = function(searchElement) {
         $scope.foundRoomObjectId = searchElement.RoomObjectId;
         $scope.foundRoomObjectId = searchElement.RoomObjectId;
         $scope.changeRoom(searchElement.RoomId);
-        
+        var room = getRoomById(searchElement.RoomId);
+        if (room) $scope.selectedRoom = room;
+
         //for (var i = 0; i < project.activeLayer.children.length; i++) {
         //    var item = project.activeLayer.children[i];
         //    if (item.RoomObject && item.RoomObject.setCaptions) {

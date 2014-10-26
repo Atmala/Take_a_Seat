@@ -17,6 +17,7 @@ namespace CommonClasses.Database
         [Required]
         [DefaultValue(0)]
         public int Angle { get; set; }
+        public int? SubType { get; set; }
 
         [Required]
         public int RoomId { get; set; }

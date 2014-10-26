@@ -14,7 +14,7 @@ seatApp
                     scope.color = '#000000';
                     scope.fontColor = '#ffffff';
                     scope.wallColor = '#888888';
-                    scope.foundColor = '#ff0000';
+                    scope.foundColor = '#66FF33';
                     scope.globalOffset = new paper.Point();
 
                     function mouseDown(event) {
@@ -176,10 +176,19 @@ seatApp
                         path.lineTo(endPoint);
                     }
 
+                    scope.setWallAppearance = function(wallPath, subtype) {
+                        if (subtype === 1) {
+                            wallPath.strokeWidth = 4;
+                            wallPath.strokeColor = scope.wallColor;
+                        } else {
+                            wallPath.strokeWidth = 2;
+                            wallPath.strokeColor = scope.wallColor;
+                        }
+                    }
+
                     function getNewPath() {
                         var newPath = new paper.Path();
-                        newPath.strokeWidth = 4;
-                        newPath.strokeColor = scope.wallColor;
+                        scope.setWallAppearance(newPath, scope.roomObjectSubType);
                         return newPath;
                     }
 
