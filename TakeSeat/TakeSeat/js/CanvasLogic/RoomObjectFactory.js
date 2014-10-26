@@ -215,7 +215,7 @@
             var style = {
                 fitToCenter: true,
                 fontSize: 11,
-                fontColor: this.isFoundItem ? scope.foundColor : scope.color
+                fontColor: this.isFoundItem ? scope.foundColor : scope.fontColor
             };
             
             this.removeCaptions();
