@@ -253,7 +253,12 @@
             $.ajax({
                 url: window.deleteRoomObjectPath,
                 type: 'POST',
-                data: { id: this.roomObjectId }
+                data: { id: this.roomObjectId },
+                success: function(response) {
+                    scope.loadEmployees();
+                }, error: function (req, status, error) {
+                    alert("Error: " + error);
+                }
             });
         }
 
@@ -288,11 +293,13 @@
             $.ajax({
                 url: window.saveIdentNumberPath,
                 type: 'POST',
-                data: { RoomObjectId: this.roomObjectId, IdentNumber: identNumber }
+                data: { RoomObjectId: this.roomObjectId, IdentNumber: identNumber },
+                success: function(response) {
+                    scope.loadEmployees();
+                }
             });
             this.identNumber = identNumber;
             this.setCaptions();
-            scope.loadEmployees();
             $("#tableDropDownMenu").css({ visibility: 'hidden' });
         }
 
@@ -320,7 +327,10 @@
             $.ajax({
                 url: window.saveEmployeeTableLinkPath,
                 type: 'POST',
-                data: employeeTableLink
+                data: employeeTableLink,
+                success: function (response) {
+                    scope.loadEmployees();
+                }
             });
         }
 
@@ -332,7 +342,10 @@
             $.ajax({
                 url: window.removeEmployeeTableLinkPath,
                 type: 'POST',
-                data: employeeTableLink
+                data: employeeTableLink,
+                success: function (response) {
+                    scope.loadEmployees();
+                }
             });
         }
 
