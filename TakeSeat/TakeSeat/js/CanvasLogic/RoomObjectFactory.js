@@ -51,8 +51,8 @@
         this.getPath = function () {
             var path = new paper.Path();
             scope.setWallAppearance(path, this.subType);
-            path.add(new paper.Point(this.x1, this.y1));
-            path.add(new paper.Point(this.x2, this.y2));
+            path.add(new paper.Point(this.x1 * scope.scale, this.y1 * scope.scale));
+            path.add(new paper.Point(this.x2 * scope.scale, this.y2 * scope.scale));
             path.RoomObject = this;
             this.attachedPath = path;
             return path;
@@ -113,6 +113,10 @@
                     this.textRectangle = { x: 4, y: 30, width: 90, height: 44 };
                     break;
             }
+            this.textRectangle.x *= scope.scale;
+            this.textRectangle.y *= scope.scale;
+            this.textRectangle.width *= scope.scale;
+            this.textRectangle.height *= scope.scale;
         }
 
         this.RoomObjectType = 'table';
@@ -217,7 +221,7 @@
         this.setCaptions = function () {
             var style = {
                 fitToCenter: true,
-                fontSize: 11,
+                fontSize: 11 * scope.scale,
                 fontColor: this.isFoundItem ? scope.foundColor : scope.fontColor
             };
             
@@ -239,8 +243,10 @@
 
         this.getPath = function () {
             var raster = new paper.Raster("maptable");
-            raster.position = new paper.Point(this.leftTopX + this.width / 2, this.leftTopY + this.height / 2);
+            raster.position = new paper.Point((this.leftTopX + this.width / 2) * scope.scale,
+                (this.leftTopY + this.height / 2) * scope.scale);
             raster.RoomObject = this;
+            raster.scale(scope.scale);
             this.attachedPath = raster;
             raster.rotate(this.angle);
             this.setTextRectangle();

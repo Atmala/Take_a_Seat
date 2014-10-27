@@ -16,6 +16,7 @@ seatApp
                     scope.wallColor = '#888888';
                     scope.foundColor = '#66FF33';
                     scope.globalOffset = new paper.Point();
+                    scope.scale = 1.0;
 
                     function mouseDown(event) {
                         isDrawing = true;
