@@ -186,8 +186,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="img\maptable.png" />
+    <Content Include="img\minus.png" />
     <Content Include="img\newroom.png" />
     <Content Include="img\number.png" />
+    <Content Include="img\plus.png" />
     <Content Include="img\rotate.png" />
     <Content Include="img\save.png" />
     <Content Include="img\table.png">

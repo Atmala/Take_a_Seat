@@ -215,19 +215,19 @@ seatApp
                     }
 
                     scope.view2ProjectX = function(viewX) {
-                        return viewX / scope.scale - scope.globalOffset.x;
+                        return Math.round(viewX / scope.scale - scope.globalOffset.x);
                     }
 
                     scope.view2ProjectY = function(viewY) {
-                        return viewY / scope.scale - scope.globalOffset.y;
+                        return Math.round(viewY / scope.scale - scope.globalOffset.y);
                     }
 
                     scope.project2ViewX = function(projectX) {
-                        return projectX * scope.scale + scope.globalOffset.x;
+                        return Math.round(projectX * scope.scale + scope.globalOffset.x);
                     }
 
                     scope.project2ViewY = function (projectY) {
-                        return projectY * scope.scale + scope.globalOffset.y;
+                        return Math.round(projectY * scope.scale + scope.globalOffset.y);
                     }
 
                     function getTableByPoint(point) {

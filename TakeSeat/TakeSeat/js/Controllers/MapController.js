@@ -242,12 +242,12 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.scaleMinus = function() {
-        $scope.scale -= 0.2;
+        $scope.scale -= 0.1;
         $scope.changeRoom($scope.room.Id);
     }
 
     $scope.scalePlus = function () {
-        $scope.scale += 0.2;
+        $scope.scale += 0.1;
         $scope.changeRoom($scope.room.Id);
     }
 

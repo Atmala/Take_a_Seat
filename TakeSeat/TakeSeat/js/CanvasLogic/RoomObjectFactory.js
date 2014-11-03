@@ -221,7 +221,7 @@
         this.setCaptions = function () {
             var style = {
                 fitToCenter: true,
-                fontSize: 11 * scope.scale,
+                fontSize: Math.min(11 * scope.scale, 14),
                 fontColor: this.isFoundItem ? scope.foundColor : scope.fontColor
             };
             
@@ -271,8 +271,8 @@
         this.save = function() {
             var rectangleInfo = {
                 RoomObjectId: this.roomObjectId,
-                LeftTopX: this.attachedPath.position.x - this.width / 2,
-                LeftTopY: this.attachedPath.position.y - this.height / 2,
+                LeftTopX: scope.view2ProjectX(this.attachedPath.position.x) - this.width / 2,
+                LeftTopY: scope.view2ProjectY(this.attachedPath.position.y) - this.height / 2,
                 Width: this.width,
                 Height: this.height
             };
