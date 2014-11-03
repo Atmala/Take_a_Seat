@@ -203,7 +203,7 @@ seatApp
 
                     scope.initAllFigures = function () {
                         scope.RoomCaption = scope.room.Caption;
-                        scope.globalOffset = new paper.Point(0, 0);
+                        //scope.globalOffset = new paper.Point(0, 0);
                         if (project.activeLayer) project.activeLayer.remove();
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
@@ -215,11 +215,19 @@ seatApp
                     }
 
                     scope.view2ProjectX = function(viewX) {
-                        return viewX - scope.globalOffset.x;
+                        return viewX / scope.scale - scope.globalOffset.x;
                     }
 
                     scope.view2ProjectY = function(viewY) {
-                        return viewY - scope.globalOffset.y;
+                        return viewY / scope.scale - scope.globalOffset.y;
+                    }
+
+                    scope.project2ViewX = function(projectX) {
+                        return projectX * scope.scale + scope.globalOffset.x;
+                    }
+
+                    scope.project2ViewY = function (projectY) {
+                        return projectY * scope.scale + scope.globalOffset.y;
                     }
 
                     function getTableByPoint(point) {

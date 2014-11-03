@@ -51,8 +51,8 @@
         this.getPath = function () {
             var path = new paper.Path();
             scope.setWallAppearance(path, this.subType);
-            path.add(new paper.Point(this.x1 * scope.scale, this.y1 * scope.scale));
-            path.add(new paper.Point(this.x2 * scope.scale, this.y2 * scope.scale));
+            path.add(new paper.Point(scope.project2ViewX(this.x1), scope.project2ViewY(this.y1)));
+            path.add(new paper.Point(scope.project2ViewX(this.x2), scope.project2ViewY(this.y2)));
             path.RoomObject = this;
             this.attachedPath = path;
             return path;
@@ -137,16 +137,16 @@
         }
 
         this.createNew = function(x, y, width, height) {
-            this.leftTopX = x;
-            this.leftTopY = y;
+            this.leftTopX = scope.view2ProjectX(x) - width / 2;
+            this.leftTopY = scope.view2ProjectY(y) - height / 2;
             this.width = width;
             this.height = height;
             var thisObject = this;
 
             var rectangleInfo = {
                 RoomObjectId: 0,
-                LeftTopX: scope.view2ProjectX(x),
-                LeftTopY: scope.view2ProjectY(y),
+                LeftTopX: this.leftTopX,
+                LeftTopY: this.leftTopY,
                 Width: width,
                 Height: height
             };
@@ -243,8 +243,8 @@
 
         this.getPath = function () {
             var raster = new paper.Raster("maptable");
-            raster.position = new paper.Point((this.leftTopX + this.width / 2) * scope.scale,
-                (this.leftTopY + this.height / 2) * scope.scale);
+            raster.position = new paper.Point(scope.project2ViewX(this.leftTopX + this.width / 2),
+                scope.project2ViewY(this.leftTopY + this.height / 2));
             raster.RoomObject = this;
             raster.scale(scope.scale);
             this.attachedPath = raster;
