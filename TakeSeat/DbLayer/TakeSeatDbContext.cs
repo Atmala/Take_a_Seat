@@ -38,7 +38,10 @@ namespace DbLayer
             {
                 if (propertyInfo.PropertyType.FullName != null && propertyInfo.PropertyType.FullName.StartsWith("System.Data.Entity.DbSet"))
                 {
-                    _dbSetDict.Add(propertyInfo.PropertyType.GenericTypeArguments[0], propertyInfo.GetValue(this));
+                    var genericArguments = propertyInfo.PropertyType.GetGenericArguments();
+                    var param = genericArguments.First();
+                    var value = propertyInfo.GetValue(this, null);
+                    _dbSetDict.Add(param, value);
                 }
             }
         }
