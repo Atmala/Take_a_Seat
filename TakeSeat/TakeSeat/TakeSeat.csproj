@@ -200,6 +200,8 @@
     <Content Include="img\window.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="js\CanvasLogic\TableRoomObject.js" />
+    <Content Include="js\CanvasLogic\WallRoomObject.js" />
     <Content Include="js\Controllers\MapController.js" />
     <Content Include="js\Directives\Paper.js" />
     <Content Include="js\CanvasLogic\RoomObjectFactory.js" />

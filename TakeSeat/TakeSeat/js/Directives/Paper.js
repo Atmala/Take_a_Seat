@@ -91,6 +91,7 @@ seatApp
                                 $("#tableDropDownMenu").css({visibility: 'hidden'});
                             }
                         }
+                        scope.$apply();
                     }
 
                     function moveMapObjects(x, y) {
@@ -151,7 +152,7 @@ seatApp
 
                         var hitResult = project.hitTest(point, hitOptions);
                         scope.HitResult = hitResult;
-                        scope.$apply();
+                        //scope.$apply();
 
                         if (!hitResult) return;
                         if (hitResult.type === 'stroke') {
@@ -169,7 +170,7 @@ seatApp
                     function setCurrentCoords(x, y) {
                         scope.X = x;
                         scope.Y = y;
-                        scope.$apply();
+                        //scope.$apply();
                     }
 
                     function drawLine(startPoint, endPoint) {

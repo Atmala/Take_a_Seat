@@ -80,7 +80,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             $scope.mode = mode;
             $scope.roomObjectSubType = subtype;
         }
-        $scope.$apply();
+        //$scope.$apply();
     }
 
     $scope.showRoom = function () {
@@ -109,7 +109,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 $scope.employeeList = response;
 
                 setDropDownEmployeeInputAutocomplete();
-                $scope.$apply();
+                //$scope.$apply();
             }, error: function (req, status, error) {
                 alert("Error: " + error);
             }
@@ -122,7 +122,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 $scope.searchList = response;
 
                 setSearchAutocomplete();
-                $scope.$apply();
+                //$scope.$apply();
             }, error: function (req, status, error) {
                 alert("Error: " + error);
             }
@@ -137,7 +137,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 success: function (response) {
                     $scope.rooms = response;
                     $scope.selectedRoom = response[0];
-                    $scope.$apply();
+                    //$scope.$apply();
                     $scope.changeRoom($scope.selectedRoom.Id);
                 },
                 error: function (req, status, error) {
