@@ -1,4 +1,4 @@
-﻿function TableRoomObject() {
+﻿function TableRoomObject(scope, mapProvider) {
     this.setTextRectangle = function () {
         switch (this.angle) {
             case 0:
@@ -188,9 +188,9 @@
         scope.tableDroppedDown = this.attachedPath;
         var canvas = $('#paperCanvas')[0];
         var dropDownMenu = $("#tableDropDownMenu");
-        scope.showTableButtonsDropDownPanel();
+        scope.setTableDropDownMenuMode('buttons');
         dropDownMenu.css({
-            visibility: 'visible',
+            //visibility: 'visible',
             left: this.attachedPath.bounds.left + canvas.offsetLeft - 56,
             top: this.attachedPath.bounds.bottom + canvas.offsetTop,
         });

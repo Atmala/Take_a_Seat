@@ -1,4 +1,4 @@
-﻿function WallRoomObject() {
+﻿function WallRoomObject(scope, mapProvider) {
     this.RoomObjectType = 'wall';
 
     this.loadFromDb = function (dbRoomObject) {

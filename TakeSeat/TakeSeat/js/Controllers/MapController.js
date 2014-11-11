@@ -56,7 +56,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     $scope.Init = function () {
         setDefaultMode();
         $scope.showSelectRoom();
-        $scope.showTableButtonsDropDownPanel();
+        $scope.tableDropDownMenuMode = undefined;
         $scope.loadEmployees();
         $scope.loadRooms();
     }
@@ -197,6 +197,11 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         $("#tableDropDownMenuEmployee").hide();
         $("#tableDropDownMenuNumber").show();
         $("#tableDropDownNumberInput").val('');
+    }
+
+    $scope.setTableDropDownMenuMode = function(mode) {
+        $scope.tableDropDownMenuMode = mode;
+        $scope.$apply();
     }
 
     $scope.discardEmployee = function () {
