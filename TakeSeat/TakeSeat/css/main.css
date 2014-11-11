@@ -99,7 +99,6 @@ s .show-grid [class*="span"]:hover {
 }
 
 .dropDownMenu {
-    visibility: hidden;
     position: absolute;
     left: 200px;
     top: 200px;

@@ -56,7 +56,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     $scope.Init = function () {
         setDefaultMode();
         $scope.showSelectRoom();
-        $scope.tableDropDownMenuMode = undefined;
+        $scope.tableDropDownMenuMode = 'buttons';
         $scope.loadEmployees();
         $scope.loadRooms();
     }
@@ -80,7 +80,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             $scope.mode = mode;
             $scope.roomObjectSubType = subtype;
         }
-        //$scope.$apply();
     }
 
     $scope.showRoom = function () {
@@ -88,13 +87,13 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     };
 
     $scope.showSelectRoom = function () {
-        $("#selectRoomDiv").show();
-        $("#editRoomDiv").hide();
+        $scope.roomMode = "select";
+        $scope.$apply();
     }
 
     $scope.showEditRoom = function () {
-        $("#selectRoomDiv").hide();
-        $("#editRoomDiv").show();
+        $scope.roomMode = "edit";
+        $scope.$apply();
     }
 
     $scope.loadEmployees = function () {
@@ -166,10 +165,9 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.saveRoom = function () {
-        var caption = $("#roomCaptionInput").val();
         $.ajax({
             url: window.createNewRoomPath,
-            data: { caption: caption },
+            data: { caption: $scope.roomCaption },
             success: function (roomInfo) {
                 $scope.showSelectRoom();
                 $scope.rooms.push(roomInfo);
@@ -178,25 +176,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 $scope.changeRoom(roomInfo.Id);
             }
         });
-    }
-
-    $scope.showTableEmployeeDropDownPanel = function() {
-        $("#tableDropDownMenuButtons").hide();
-        $("#tableDropDownMenuEmployee").show();
-        $("#tableDropDownMenuNumber").hide();
-    }
-
-    $scope.showTableButtonsDropDownPanel = function () {
-        $("#tableDropDownMenuButtons").show();
-        $("#tableDropDownMenuEmployee").hide();
-        $("#tableDropDownMenuNumber").hide();
-    }
-
-    $scope.showTableNumberDropDownPanel = function () {
-        $("#tableDropDownMenuButtons").hide();
-        $("#tableDropDownMenuEmployee").hide();
-        $("#tableDropDownMenuNumber").show();
-        $("#tableDropDownNumberInput").val('');
     }
 
     $scope.setTableDropDownMenuMode = function(mode) {
@@ -215,8 +194,8 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     $scope.tableNumberKeyPress = function(event) {
         if (event.which === 13) {
-            var identNumber = $("#tableDropDownNumberInput").val();
-            $scope.tableDroppedDown.RoomObject.saveIdentNumber(identNumber);
+            $scope.tableDroppedDown.RoomObject.saveIdentNumber($scope.tableDropDownNumber);
+            $scope.tableDropDownNumber = "";
         }
     }
 

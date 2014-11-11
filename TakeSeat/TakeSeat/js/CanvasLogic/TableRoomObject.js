@@ -187,10 +187,12 @@
     this.showDropDownMenu = function () {
         scope.tableDroppedDown = this.attachedPath;
         var canvas = $('#paperCanvas')[0];
-        var dropDownMenu = $("#tableDropDownMenu");
         scope.setTableDropDownMenuMode('buttons');
+        scope.tableDropDownMenuVisible = 'true';
+        scope.$apply();
+        
+        var dropDownMenu = $("#tableDropDownMenu");
         dropDownMenu.css({
-            //visibility: 'visible',
             left: this.attachedPath.bounds.left + canvas.offsetLeft - 56,
             top: this.attachedPath.bounds.bottom + canvas.offsetTop,
         });
@@ -207,7 +209,7 @@
         });
         this.identNumber = identNumber;
         this.setCaptions();
-        $("#tableDropDownMenu").css({ visibility: 'hidden' });
+        scope.tableDropDownMenuVisible = 'false';
     }
 
     this.rotate = function () {

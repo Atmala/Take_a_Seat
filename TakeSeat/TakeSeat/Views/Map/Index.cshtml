@@ -77,12 +77,12 @@
 
     </div>
     <div class="canvasPanel doubleBorder noBorderBottom">
-        <div id="selectRoomDiv">
+        <div ng-show="roomMode == 'select'">
             <select class="form-control" ng-model="selectedRoom"
                     ng-options="r.Caption for r in rooms"
                     ng-change="changeRoom(selectedRoom.Id)"></select>
         </div>
-        <div id="editRoomDiv">
+        <div ng-show="roomMode == 'edit'">
             <div id="editRoomButtonsDiv">
                 <button title="Save" type="button" ng-click="saveRoom()">
                     <img src=@Url.Content("~/img/save.png") />
@@ -92,7 +92,7 @@
                 </button>
             </div>
             <div id="editRoomInputDiv">
-                <input id="roomCaptionInput" class="form-control" />
+                <input class="form-control" ng-model="roomCaption" />
             </div>
         </div>
     </div>
@@ -101,7 +101,8 @@
         <div>{{X +' : '+ Y}}</div>
         <div>{{'HitResult: ' + HitResult}}</div>
     </div>
-    <div id="tableDropDownMenu" class="dropDownMenu">
+    <div id="tableDropDownMenu" class="dropDownMenu" ng-show="tableDropDownMenuVisible"
+         style="left: {{tableDropDownMenuLeft}}; right: {{tableDropDownMenuRight}}">
         <div id="tableDropDownMenuButtons" ng-show="tableDropDownMenuMode == 'buttons'">
             <button class="dropDownButton" title="Assign Employee" type="button" ng-click="setTableDropDownMenuMode('employee')">
                 <img src=@Url.Content("~/img/assign.png") />
@@ -124,7 +125,7 @@
         <div id="tableDropDownMenuNumber" class="dropDownInput" ng-show="tableDropDownMenuMode == 'number'">
             <div>
                 <input id="tableDropDownNumberInput" type="text" class="form-control"
-                       value={{tableDropDownNumber}} ng-keypress="tableNumberKeyPress($event)" />
+                       ng-model="tableDropDownNumber" ng-keypress="tableNumberKeyPress($event)" />
             </div>
         </div>
     </div>

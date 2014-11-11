@@ -87,8 +87,9 @@ seatApp
                             }
                         } else {
                             selectItemByCoordinates(x, y);
-                            if (!selectedPath || ! (selectedPath.RoomObject.RoomObjectType === 'table')) {
-                                $("#tableDropDownMenu").css({visibility: 'hidden'});
+                            if (!selectedPath || !(selectedPath.RoomObject.RoomObjectType === 'table')) {
+                                scope.tableDropDownMenuVisible = 'false';
+                                //$("#tableDropDownMenu").css({visibility: 'hidden'});
                             }
                         }
                         scope.$apply();
