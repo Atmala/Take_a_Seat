@@ -235,5 +235,10 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         $scope.changeRoom($scope.room.Id);
     }
 
+    $scope.showSettings = function () {
+        var div = $("#settingsDialog");
+        div.dialog();
+    }
+
 }]);
 

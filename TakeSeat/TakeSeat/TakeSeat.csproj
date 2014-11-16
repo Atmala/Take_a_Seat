@@ -138,6 +138,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="assets\css\bootstrap.css" />
     <Content Include="assets\css\bootstrap.min.css" />
+    <Content Include="assets\css\jquery-ui.css" />
     <Content Include="assets\css\jquery.ui.all.css" />
     <Content Include="assets\css\jquery.ui.autocomplete.css" />
     <Content Include="assets\css\jquery.ui.base.css" />
@@ -147,7 +148,9 @@
     <Content Include="assets\js\angular-resource.js" />
     <Content Include="assets\js\angular.js" />
     <Content Include="assets\js\jquery-1.7.1.js" />
+    <Content Include="assets\js\jquery-2.1.1.js" />
     <Content Include="assets\js\jquery-ui-1.8.17.custom.js" />
+    <Content Include="assets\js\jquery-ui.js" />
     <Content Include="assets\js\jquery.ui.accordion.js" />
     <Content Include="assets\js\jquery.ui.autocomplete.js" />
     <Content Include="assets\js\jquery.ui.button.js" />
@@ -190,6 +193,7 @@
     <Content Include="img\plus.png" />
     <Content Include="img\rotate.png" />
     <Content Include="img\save.png" />
+    <Content Include="img\settings.png" />
     <Content Include="img\table.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

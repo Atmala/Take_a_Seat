@@ -72,6 +72,12 @@
                         <img src=@Url.Content("~/img/minus.png") />
                     </button>
                 </div>
+                <div class="md-overlay">
+                    <button title="Settings"
+                            type="button" class="btn-tool" ng-click="showSettings()">
+                        <img src=@Url.Content("~/img/settings.png") />
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -129,6 +135,9 @@
             </div>
         </div>
     </div>
+</div>
+<div id="settingsDialog" style="display:none">
+    <p>Диалоговое окошко с настройками</p>
 </div>
 <img id="maptable" class="visuallyhidden" src="@Url.Content("~/img/maptable.png")">
 <script type="text/javascript">
