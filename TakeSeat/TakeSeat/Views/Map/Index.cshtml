@@ -137,7 +137,9 @@
     </div>
 </div>
 <div id="settingsDialog" style="display:none">
-    <p>Диалоговое окошко с настройками</p>
+    <input type="radio" ng-model="wallMode" value="90">  90 degree <br />
+    <input type="radio" ng-model="wallMode" value="45"> 45 degree <br />
+    <input type="radio" ng-model="wallMode" value="free"> Free <br />
 </div>
 <img id="maptable" class="visuallyhidden" src="@Url.Content("~/img/maptable.png")">
 <script type="text/javascript">
