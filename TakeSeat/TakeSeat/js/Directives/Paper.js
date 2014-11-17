@@ -6,7 +6,7 @@ seatApp
                 link: function (scope, element, attrs) {
 
                     var path, mouseDownPoint;
-                    var isDrawing = false, isMoved = false;
+                    var isMoved = false;
                     var rectangleWidth = 70, rectangleHeight = 100;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
                     var selectedPath, selectedSegment, pathToMove, segmentToMove;
@@ -19,7 +19,6 @@ seatApp
                     scope.scale = 1.0;
 
                     function mouseDown(event) {
-                        isDrawing = true;
                         var x = event.offsetX;
                         var y = event.offsetY;
 
@@ -43,8 +42,6 @@ seatApp
                     }
 
                     function mouseUp(event) {
-                        isDrawing = false;
-                        
                         if (pathToMove) {
                             if (isMoved) {
                                 if (pathToMove.RoomObject.save)
@@ -69,14 +66,15 @@ seatApp
                         var x = event.offsetX;
                         var y = event.offsetY;
 
-                        if (scope.mode === 'line' && isDrawing) {
+                        if (scope.mode === 'line' && mouseDownPoint) {
                             if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
                                 mouseUp();
                                 return;
                             }
 
                             path.removeSegments();
-                            drawLine(mouseDownPoint, new paper.Point([x, y]));
+                            drawLine(mouseDownPoint, new getPointForWall(
+                                mouseDownPoint, new paper.Point([x, y]), scope.wallMode));
 
                         } else if (scope.mode === 'table' && isDrawing) {
                             path.position = new paper.Point([x, y]);
@@ -117,9 +115,18 @@ seatApp
                         }
                     }
 
+                    function getAnotherPoint(segment) {
+                        return segment.path.segments[0].point.x === segment.point.x &&
+                            segment.path.segments[0].point.y === segment.point.y ?
+                            segment.path.segments[1].point : segment.path.segments[0].point;
+                    }
+
                     function moveSegment(offsetX, offsetY) {
-                        segmentToMove.point.x += offsetX;
-                        segmentToMove.point.y += offsetY;
+                        var anotherPoint = getAnotherPoint(segmentToMove);
+                        var point = new paper.Point(segmentToMove.point.x + offsetX, segmentToMove.point.y + offsetY);
+                        var correctedPoint = getPointForWall(anotherPoint, point, scope.wallMode);
+                        segmentToMove.point.x = correctedPoint.x;
+                        segmentToMove.point.y = correctedPoint.y;
                     }
 
                     function moveAllItems(offsetX, offsetY) {
@@ -240,6 +247,28 @@ seatApp
                             }
                         }
                         return undefined;
+                    }
+
+                    function get90PointForWall(start, point) {
+                        if (Math.abs(point.x - start.x) > Math.abs(point.y - start.y))
+                            return new paper.Point([point.x, start.y]);
+                        else
+                            return new paper.Point([start.x, point.y]);
+                    }
+
+                    function get45PointForWall(start, point) {
+                        return point;
+                    }
+
+                    function getPointForWall(start, point, mode) {
+                        switch (mode) {
+                            case '90':
+                                return get90PointForWall(start, point);
+                            case '45':
+                                return get45PointForWall(start, point);
+                            default:
+                                return point;
+                        }
                     }
 
                     element.on('mousedown', mouseDown)
