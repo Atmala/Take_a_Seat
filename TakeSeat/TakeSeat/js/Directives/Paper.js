@@ -76,7 +76,7 @@ seatApp
                             drawLine(mouseDownPoint, new getPointForWall(
                                 mouseDownPoint, new paper.Point([x, y]), scope.wallMode));
 
-                        } else if (scope.mode === 'table' && isDrawing) {
+                        } else if (scope.mode === 'table' && mouseDownPoint) {
                             path.position = new paper.Point([x, y]);
                         } else if (scope.mode === 'view' && mouseDownPoint) {
                             if (Math.abs(x - mouseDownPoint.x) > 0 || Math.abs(y - mouseDownPoint.y) > 0) {
@@ -87,7 +87,6 @@ seatApp
                             selectItemByCoordinates(x, y);
                             if (!selectedPath || !(selectedPath.RoomObject.RoomObjectType === 'table')) {
                                 scope.tableDropDownMenuVisible = false;
-                                //$("#tableDropDownMenu").css({visibility: 'hidden'});
                             }
                         }
                         scope.$apply();
@@ -98,7 +97,7 @@ seatApp
                         var offsetY = y - mouseDownPoint.y;
                         if (Math.abs(offsetX) < 2 && Math.abs(offsetY) < 2) return;
 
-                        if (segmentToMove) moveSegment(offsetX, offsetY);
+                        if (segmentToMove) moveSegment(x, y);
                         else if (pathToMove) movePath(offsetX, offsetY);
                         else moveAllItems(offsetX, offsetY);
                         mouseDownPoint = new paper.Point(x, y);
@@ -121,9 +120,9 @@ seatApp
                             segment.path.segments[1].point : segment.path.segments[0].point;
                     }
 
-                    function moveSegment(offsetX, offsetY) {
+                    function moveSegment(x, y) {
                         var anotherPoint = getAnotherPoint(segmentToMove);
-                        var point = new paper.Point(segmentToMove.point.x + offsetX, segmentToMove.point.y + offsetY);
+                        var point = new paper.Point(x, y);
                         var correctedPoint = getPointForWall(anotherPoint, point, scope.wallMode);
                         segmentToMove.point.x = correctedPoint.x;
                         segmentToMove.point.y = correctedPoint.y;
