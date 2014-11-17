@@ -1,0 +1,18 @@
+﻿<div ng-show="roomMode == 'select'">
+    <select class="form-control" ng-model="selectedRoom"
+            ng-options="r.Caption for r in rooms"
+            ng-change="changeRoom(selectedRoom.Id)"></select>
+</div>
+<div ng-show="roomMode == 'edit'">
+    <div id="editRoomButtonsDiv">
+        <button title="Save" type="button" ng-click="saveRoom()">
+            <img src=@Url.Content("~/img/save.png") />
+        </button>
+        <button title="Cancel" type="button" ng-click="undoRoom()">
+            <img src=@Url.Content("~/img/undo.png") />
+        </button>
+    </div>
+    <div id="editRoomInputDiv">
+        <input class="form-control" ng-model="roomCaption" />
+    </div>
+</div>

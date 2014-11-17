@@ -8,139 +8,18 @@
 <script src="~/js/CanvasLogic/WallRoomObject.js"></script>
 <script src="~/js/CanvasLogic/TableRoomObject.js"></script>
 <div class="layout" ng-controller="Map" ng-init="Init()">
-    <div class="toolPanel doubleBorder noBorderRight">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Tools</h3>
-            </div>
-            <div class="panel-body doubleBorderTop">
-                <div class="md-overlay dropdown">
-                    <button title="Add Wall"
-                            type="button" class="btn-tool"
-                            data-toggle="dropdown"
-                            ng-class="{activeBtn : isSelected('line')}">
-                        <img src=@Url.Content("~/img/wall.png") />
-                    </button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownCountry">
-                        <li><a ng-click="changeMode('line', 1)">External</a></li>
-                        <li><a ng-click="changeMode('line', 2)">Internal</a></li>
-                    </ul>
-                </div>
-                <div class="md-overlay">
-                    <button title="Add Table"
-                            type="button" class="btn-tool" ng-click="changeMode('table')"
-                            ng-class="{activeBtn : isSelected('table')}">
-                        <img src=@Url.Content("~/img/table.png") />
-                    </button>
-                </div>
-                <div class="md-overlay">
-                    <button title="Show Room"
-                            type="button" class="btn-tool" ng-click="showRoom()">
-                        <img src=@Url.Content("~/img/newroom.png") />
-                    </button>
-                </div>
-                <div class="md-overlay">
-                    <button title="Add Window"
-                            type="button" class="btn-tool" ng-click="changeMode('window')"
-                            ng-class="{activeBtn : isSelected('window')}">
-                        <img src=@Url.Content("~/img/window.png") />
-                    </button>
-                </div>
-                <div class="md-overlay">
-                    <button title="Add Door"
-                            type="button" class="btn-tool" ng-click="changeMode('door')"
-                            ng-class="{activeBtn : isSelected('door')}">
-                        <img src=@Url.Content("~/img/door.png") />
-                    </button>
-                </div>
-                <div class="md-overlay">
-                    <button title="Delete"
-                            type="button" class="btn-tool" ng-click="changeMode('delete')"
-                            ng-class="{activeBtn : isSelected('delete')}">
-                        <img src=@Url.Content("~/img/delete.png") />
-                    </button>
-                </div>
-                <div class="md-overlay">
-                    <button title="Plus"
-                            type="button" class="btn-tool" ng-click="scalePlus()">
-                        <img src=@Url.Content("~/img/plus.png") />
-                    </button>
-                </div>
-                <div class="md-overlay">
-                    <button title="Minus"
-                            type="button" class="btn-tool" ng-click="scaleMinus()">
-                        <img src=@Url.Content("~/img/minus.png") />
-                    </button>
-                </div>
-                <div class="md-overlay">
-                    <button title="Settings"
-                            type="button" class="btn-tool" ng-click="showSettings()">
-                        <img src=@Url.Content("~/img/settings.png") />
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    <div class="canvasPanel doubleBorder noBorderBottom">
-        <div ng-show="roomMode == 'select'">
-            <select class="form-control" ng-model="selectedRoom"
-                    ng-options="r.Caption for r in rooms"
-                    ng-change="changeRoom(selectedRoom.Id)"></select>
-        </div>
-        <div ng-show="roomMode == 'edit'">
-            <div id="editRoomButtonsDiv">
-                <button title="Save" type="button" ng-click="saveRoom()">
-                    <img src=@Url.Content("~/img/save.png") />
-                </button>
-                <button title="Cancel" type="button" ng-click="undoRoom()">
-                    <img src=@Url.Content("~/img/undo.png") />
-                </button>
-            </div>
-            <div id="editRoomInputDiv">
-                <input class="form-control" ng-model="roomCaption" />
-            </div>
-        </div>
-    </div>
+    <div class="toolPanel doubleBorder noBorderRight">@Html.Partial("Tools")</div>
+    <div class="canvasPanel doubleBorder noBorderBottom">@Html.Partial("SelectRoom")</div>
     <div class="canvasPanel doubleBorder">
         <div class="canvas">@Html.Partial("Paper")</div>
         <div>{{X +' : '+ Y}}</div>
         <div>{{'HitResult: ' + HitResult}}</div>
     </div>
-    <div id="tableDropDownMenu" class="dropDownMenu" ng-show="tableDropDownMenuVisible"
-         style="left: {{tableDropDownMenuLeft}}; right: {{tableDropDownMenuRight}}">
-        <div id="tableDropDownMenuButtons" ng-show="tableDropDownMenuMode == 'buttons'">
-            <button class="dropDownButton" title="Assign Employee" type="button" ng-click="setTableDropDownMenuMode('employee')">
-                <img src=@Url.Content("~/img/assign.png") />
-            </button>
-            <button class="dropDownButton" title="Discard Employee" type="button" ng-click="discardEmployee()">
-                <img src=@Url.Content("~/img/discard.png") />
-            </button>
-            <button class="dropDownButton" title="Set Number" type="button" ng-click="setTableDropDownMenuMode('number')">
-                <img src=@Url.Content("~/img/number.png") />
-            </button>
-            <button class="dropDownButton" title="Rotate" type="button" ng-click="rotateTable()">
-                <img src=@Url.Content("~/img/rotate.png") />
-            </button>
-        </div>
-        <div id="tableDropDownMenuEmployee" >
-            <div id="tableInputDiv" class="dropDownInput" ng-show="tableDropDownMenuMode == 'employee'">
-                <input id="tableDropDownEmployeeInput" class="form-control" />
-            </div>
-        </div>
-        <div id="tableDropDownMenuNumber" class="dropDownInput" ng-show="tableDropDownMenuMode == 'number'">
-            <div>
-                <input id="tableDropDownNumberInput" type="text" class="form-control"
-                       ng-model="tableDropDownNumber" ng-keypress="tableNumberKeyPress($event)" />
-            </div>
-        </div>
+    <div id="tableDropDownMenu" class="dropDownMenu" ng-show="tableDropDownMenuVisible">
+        @Html.Partial("TableDropDownMenu")
     </div>
 </div>
-<div id="settingsDialog" style="display:none">
-    <input type="radio" ng-model="wallMode" value="90">  90 degree <br />
-    <input type="radio" ng-model="wallMode" value="45"> 45 degree <br />
-    <input type="radio" ng-model="wallMode" value="free"> Free <br />
-</div>
+<div id="settingsDialog" style="display:none">@Html.Partial("Settings")</div>
 <img id="maptable" class="visuallyhidden" src="@Url.Content("~/img/maptable.png")">
 <script type="text/javascript">
     window.getEmployeesWithoutSeatPath = '@Url.Action("GetEmployeesWithoutSeat", "Map")';
