@@ -188,7 +188,7 @@
         scope.tableDroppedDown = this.attachedPath;
         var canvas = $('#paperCanvas')[0];
         scope.setTableDropDownMenuMode('buttons');
-        scope.tableDropDownMenuVisible = 'true';
+        scope.tableDropDownMenuVisible = true;
         scope.$apply();
         
         var dropDownMenu = $("#tableDropDownMenu");
@@ -209,7 +209,7 @@
         });
         this.identNumber = identNumber;
         this.setCaptions();
-        scope.tableDropDownMenuVisible = 'false';
+        scope.tableDropDownMenuVisible = false;
     }
 
     this.rotate = function () {

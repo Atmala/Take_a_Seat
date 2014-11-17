@@ -55,10 +55,13 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     $scope.Init = function () {
         setDefaultMode();
+        $scope.wallMode = '90';
+        
         $scope.showSelectRoom();
         $scope.tableDropDownMenuMode = 'buttons';
         $scope.loadEmployees();
         $scope.loadRooms();
+        $scope.$apply();
     }
 
     $scope.isSelected = function (section) {
@@ -238,6 +241,10 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     $scope.showSettings = function () {
         var div = $("#settingsDialog");
         div.dialog();
+    }
+
+    $scope.changeWallMode = function(mode) {
+        $scope.wallMode = mode;
     }
 
 }]);

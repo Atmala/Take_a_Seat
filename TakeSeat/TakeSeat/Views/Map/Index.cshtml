@@ -19,7 +19,9 @@
         @Html.Partial("TableDropDownMenu")
     </div>
 </div>
-<div id="settingsDialog" style="display:none">@Html.Partial("Settings")</div>
+<div id="settingsDialog" style="display: none">
+    @Html.Partial("Settings")
+</div>
 <img id="maptable" class="visuallyhidden" src="@Url.Content("~/img/maptable.png")">
 <script type="text/javascript">
     window.getEmployeesWithoutSeatPath = '@Url.Action("GetEmployeesWithoutSeat", "Map")';

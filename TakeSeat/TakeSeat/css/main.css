@@ -169,3 +169,7 @@ body {
     border: 2px solid #000000;
     margin-left: -2px;
 }
+
+.fontBold {
+    font-weight: bold;
+}

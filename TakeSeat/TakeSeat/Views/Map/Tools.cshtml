@@ -61,11 +61,23 @@
                 <img src=@Url.Content("~/img/minus.png") />
             </button>
         </div>
-        <div class="md-overlay">
+        <div class="md-overlay dropdown">
             <button title="Settings"
-                    type="button" class="btn-tool" ng-click="showSettings()">
+                    type="button" class="btn-tool"
+                    data-toggle="dropdown">
                 <img src=@Url.Content("~/img/settings.png") />
             </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownCountry">
+                <li><a ng-click="changeWallMode('90')">
+                        <span ng-class="{fontBold: wallMode == '90'}">90 degree</span>
+                    </a></li>
+                <li><a ng-click="changeWallMode('45')">
+                        <span ng-class="{fontBold: wallMode == '45'}">45 degree</span>
+                    </a></li>
+                <li><a ng-click="changeWallMode('free')">
+                        <span ng-class="{fontBold: wallMode == 'free'}">Free</span>
+                    </a></li>
+            </ul>
         </div>
     </div>
 </div>

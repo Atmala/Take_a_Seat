@@ -88,7 +88,7 @@ seatApp
                         } else {
                             selectItemByCoordinates(x, y);
                             if (!selectedPath || !(selectedPath.RoomObject.RoomObjectType === 'table')) {
-                                scope.tableDropDownMenuVisible = 'false';
+                                scope.tableDropDownMenuVisible = false;
                                 //$("#tableDropDownMenu").css({visibility: 'hidden'});
                             }
                         }
