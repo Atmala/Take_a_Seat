@@ -17,10 +17,11 @@ seatApp
                     scope.foundColor = '#66FF33';
                     scope.globalOffset = new paper.Point();
                     scope.scale = 1.0;
+                    scope.gridStep = 10;
 
                     function mouseDown(event) {
-                        var x = event.offsetX;
-                        var y = event.offsetY;
+                        var x = toGrid(event.offsetX);
+                        var y = toGrid(event.offsetY);
 
                         if (scope.mode === 'line') {
                             path = getNewPath();
@@ -63,11 +64,12 @@ seatApp
                     function mouseMove(event) {
                         setCurrentCoords(event.offsetX, event.offsetY);
 
-                        var x = event.offsetX;
-                        var y = event.offsetY;
+                        var x = toGrid(event.offsetX);
+                        var y = toGrid(event.offsetY);
 
                         if (scope.mode === 'line' && mouseDownPoint) {
-                            if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
+                            if (event.offsetX <= 2 || event.offsetY <= 2 ||
+                                event.offsetX >= event.currentTarget.width - 2 || event.offsetY >= event.currentTarget.height - 2) {
                                 mouseUp();
                                 return;
                             }
@@ -84,7 +86,7 @@ seatApp
                                 moveMapObjects(x, y);
                             }
                         } else {
-                            selectItemByCoordinates(x, y);
+                            selectItemByCoordinates(event.offsetX, event.offsetY);
                             if (!selectedPath || !(selectedPath.RoomObject.RoomObjectType === 'table')) {
                                 scope.tableDropDownMenuVisible = false;
                             }
@@ -177,7 +179,13 @@ seatApp
                     function setCurrentCoords(x, y) {
                         scope.X = x;
                         scope.Y = y;
-                        //scope.$apply();
+                        if (!selectedPath || !selectedPath.segments || selectedPath.segments.length != 2)
+                            scope.LogMessage = undefined;
+                        else {
+                            var segments = selectedPath.segments;
+                            scope.LogMessage = '(' + segments[0].point.x + ' : ' + segments[0].point.y + ') - (' +
+                                segments[1].point.x + ' : ' + segments[1].point.y + ')';
+                        }
                     }
 
                     function drawLine(startPoint, endPoint) {
@@ -268,6 +276,11 @@ seatApp
                             default:
                                 return point;
                         }
+                    }
+
+                    function toGrid(coord) {
+                        if (scope.gridStep === 1) return coord;
+                        return Math.round(coord / scope.gridStep) * scope.gridStep;
                     }
 
                     element.on('mousedown', mouseDown)

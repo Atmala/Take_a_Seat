@@ -66,7 +66,7 @@
             point: [rect.left, rect.top],
             content: str,
             fillColor: style.fontColor,
-            fontFamily: 'Courier New',
+            fontFamily: 'Comic Sans MS',
             fontWeight: 'bold',
             fontSize: style.fontSize
         });

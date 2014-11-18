@@ -12,7 +12,7 @@
     <div class="canvasPanel doubleBorder noBorderBottom">@Html.Partial("SelectRoom")</div>
     <div class="canvasPanel doubleBorder">
         <div class="canvas">@Html.Partial("Paper")</div>
-        <div>{{X +' : '+ Y}}</div>
+        <div>{{X +' : '+ Y + '; ' + LogMessage}}</div>
         <div>{{'HitResult: ' + HitResult}}</div>
     </div>
     <div id="tableDropDownMenu" class="dropDownMenu" ng-show="tableDropDownMenuVisible">
