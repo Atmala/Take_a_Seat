@@ -186,6 +186,7 @@
     <Content Include="img\empty.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\logo.png" />
     <Content Include="img\maptable.png" />
     <Content Include="img\minus.png" />
     <Content Include="img\newroom.png" />
@@ -296,7 +297,6 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
