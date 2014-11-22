@@ -20,6 +20,7 @@ seatApp
                     scope.gridStep = 10;
 
                     function mouseDown(event) {
+                        fixEvent(event);
                         var x = toGrid(event.offsetX);
                         var y = toGrid(event.offsetY);
 
@@ -43,6 +44,7 @@ seatApp
                     }
 
                     function mouseUp(event) {
+                        fixEvent(event);
                         if (pathToMove) {
                             if (isMoved) {
                                 if (pathToMove.RoomObject.save)
@@ -62,6 +64,7 @@ seatApp
                     }
 
                     function mouseMove(event) {
+                        fixEvent(event);
                         setCurrentCoords(event.offsetX, event.offsetY);
 
                         var x = toGrid(event.offsetX);
@@ -92,6 +95,11 @@ seatApp
                             }
                         }
                         scope.$apply();
+                    }
+
+                    function fixEvent(event) {
+                        event.offsetX = (event.offsetX || event.clientX - $(event.target).offset().left);
+                        event.offsetY = (event.offsetY || event.clientY - $(event.target).offset().top);
                     }
 
                     function moveMapObjects(x, y) {
