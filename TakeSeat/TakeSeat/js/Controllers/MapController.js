@@ -186,6 +186,16 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         $scope.$apply();
     }
 
+    $scope.showEmployeeInput = function() {
+        $scope.setTableDropDownMenuMode('employee');
+        $("#tableDropDownEmployeeInput").focus();
+    }
+
+    $scope.showTableNumberInput = function () {
+        $scope.setTableDropDownMenuMode('number');
+        $("#tableDropDownNumberInput").focus();
+    }
+
     $scope.discardEmployee = function () {
         $scope.tableDroppedDown.RoomObject.discardEmployee();
     }
