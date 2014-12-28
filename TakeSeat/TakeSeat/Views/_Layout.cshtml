@@ -77,21 +77,13 @@
                     </div>
                 </div>
             </div>*@
-        <div class="container">
-            <div class="doubleBorder noBorderBottom" id="banner">
-                <div class="toolPanel">
-                    <img class="logo" src="~/img/logo.png"/>
+        <div class="backgroundDiv">
+            <div class="all">
+                <div class="logo">
                 </div>
-                <div class="titlePanel doubleBorder noBorderTop noBorderBottom noBorderRight">
-                    <h1 class="takeSeatHeader">Take a Seat!</h1>
-                    <input id="inputSearch" type="text"
-                           class="ui-autocomplete-input"
-                           role="textbox" aria-autocomplete="list" aria-haspopup="true"
-                           placeholder="Search">
+                <div class="main">
+                    @RenderBody()
                 </div>
-            </div>
-            <div class="bs-docs-section">
-                @RenderBody()
             </div>
         </div>
     </div>

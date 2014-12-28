@@ -7,17 +7,20 @@
 <script src="~/js/CanvasLogic/RoomObjectFactory.js"></script>
 <script src="~/js/CanvasLogic/WallRoomObject.js"></script>
 <script src="~/js/CanvasLogic/TableRoomObject.js"></script>
-<div class="layout" ng-controller="Map" ng-init="Init()">
-    <div class="toolPanel doubleBorder noBorderRight">@Html.Partial("Tools")</div>
-    <div class="canvasPanel doubleBorder noBorderBottom">@Html.Partial("SelectRoom")</div>
-    <div class="canvasPanel doubleBorder">
-        <div class="canvas">@Html.Partial("Paper")</div>
-        <div>{{X +' : '+ Y + '; ' + LogMessage}}</div>
-        <div>{{'HitResult: ' + HitResult}}</div>
-    </div>
-    <div id="tableDropDownMenu" class="dropDownMenu" ng-show="tableDropDownMenuVisible">
-        @Html.Partial("TableDropDownMenu")
-    </div>
+<div ng-controller="Map" ng-init="Init()">
+    <div class="tools">@Html.Partial("Tools")
+    </div><div class="land">
+              
+              <div class="canvasPanel doubleBorder noBorderBottom">@Html.Partial("SelectRoom")</div>
+              <div class="canvasPanel doubleBorder">
+                  <div class="canvas">@Html.Partial("Paper")</div>
+                  <div>{{X +' : '+ Y + '; ' + LogMessage}}</div>
+                  <div>{{'HitResult: ' + HitResult}}</div>
+              </div>
+              <div id="tableDropDownMenu" class="dropDownMenu" ng-show="tableDropDownMenuVisible">
+                  @Html.Partial("TableDropDownMenu")
+              </div>
+          </div>
 </div>
 <div id="settingsDialog" style="display: none">
     @Html.Partial("Settings")
