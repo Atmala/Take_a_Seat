@@ -1,8 +1,5 @@
-﻿<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3 class="panel-title">Tools</h3>
-    </div>
-    <div class="panel-body doubleBorderTop">
+﻿<div>
+    <div class="panel-body">
         <div class="md-overlay dropdown">
             <button title="Add Wall"
                     type="button" class="btn-tool"
@@ -23,12 +20,6 @@
             </button>
         </div>
         <div class="md-overlay">
-            <button title="Show Room"
-                    type="button" class="btn-tool" ng-click="showRoom()">
-                <img src=@Url.Content("~/img/newroom.png") />
-            </button>
-        </div>
-        <div class="md-overlay">
             <button title="Add Window"
                     type="button" class="btn-tool" ng-click="changeMode('window')"
                     ng-class="{activeBtn : isSelected('window')}">
@@ -40,25 +31,6 @@
                     type="button" class="btn-tool" ng-click="changeMode('door')"
                     ng-class="{activeBtn : isSelected('door')}">
                 <img src=@Url.Content("~/img/door.png") />
-            </button>
-        </div>
-        <div class="md-overlay">
-            <button title="Delete"
-                    type="button" class="btn-tool" ng-click="changeMode('delete')"
-                    ng-class="{activeBtn : isSelected('delete')}">
-                <img src=@Url.Content("~/img/delete.png") />
-            </button>
-        </div>
-        <div class="md-overlay">
-            <button title="Plus"
-                    type="button" class="btn-tool" ng-click="scalePlus()">
-                <img src=@Url.Content("~/img/plus.png") />
-            </button>
-        </div>
-        <div class="md-overlay">
-            <button title="Minus"
-                    type="button" class="btn-tool" ng-click="scaleMinus()">
-                <img src=@Url.Content("~/img/minus.png") />
             </button>
         </div>
         <div class="md-overlay dropdown">

@@ -11,11 +11,9 @@
     <div class="tools">@Html.Partial("Tools")
     </div><div class="land">
               
-              <div class="canvasPanel doubleBorder noBorderBottom">@Html.Partial("SelectRoom")</div>
-              <div class="canvasPanel doubleBorder">
+              <div class="canvasPanel">@Html.Partial("SelectRoom")</div>
+              <div class="canvasPanel">
                   <div class="canvas">@Html.Partial("Paper")</div>
-                  <div>{{X +' : '+ Y + '; ' + LogMessage}}</div>
-                  <div>{{'HitResult: ' + HitResult}}</div>
               </div>
               <div id="tableDropDownMenu" class="dropDownMenu" ng-show="tableDropDownMenuVisible">
                   @Html.Partial("TableDropDownMenu")

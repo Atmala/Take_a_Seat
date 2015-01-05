@@ -173,6 +173,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Global.asax" />
+    <Content Include="img\addroom.png" />
     <Content Include="img\assign.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -183,6 +184,7 @@
     <Content Include="img\door.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\editplan.png" />
     <Content Include="img\empty.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

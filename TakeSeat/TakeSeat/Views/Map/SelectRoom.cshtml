@@ -1,9 +1,9 @@
-﻿<div ng-show="roomMode == 'select'">
+﻿<div class="width30 inlineBlock" ng-show="roomMode == 'select'">
     <select class="form-control" ng-model="selectedRoom"
             ng-options="r.Caption for r in rooms"
             ng-change="changeRoom(selectedRoom.Id)"></select>
 </div>
-<div ng-show="roomMode == 'edit'">
+<div class="width30 inlineBlock" ng-show="roomMode == 'edit'">
     <div id="editRoomButtonsDiv">
         <button title="Save" type="button" ng-click="saveRoom()">
             <img src=@Url.Content("~/img/save.png") />
@@ -14,5 +14,32 @@
     </div>
     <div id="editRoomInputDiv">
         <input class="form-control" ng-model="roomCaption" />
+    </div>
+</div>
+<div class="width30 inlineBlock">
+    <button title="Add Table" class="inlineBlock newRoomButton"
+            type="button" ng-click="changeMode('table')"
+            ng-class="{activeBtn : isSelected('table')}">
+        <img src=@Url.Content("~/img/editplan.png") />
+        Edit Plan
+    </button>
+    <button title="Show Room" class="inlineBlock newRoomButton"
+            type="button" ng-click="showRoom()">
+        <img src=@Url.Content("~/img/addroom.png") />
+        Add Room
+    </button>
+</div>
+<div class="width30 inlineBlock">
+    <div class="md-overlay inlineBlock">
+        <button title="Add Table" class="inlineBlock newRoomButton"
+                type="button" ng-click="scalePlus()">
+            +
+        </button>
+    </div>
+    <div class="md-overlay inlineBlock">
+        <button title="Show Room" class="inlineBlock newRoomButton"
+                type="button" ng-click="scaleMinus()">
+            -
+        </button>
     </div>
 </div>
