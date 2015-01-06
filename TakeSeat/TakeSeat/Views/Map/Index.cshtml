@@ -10,11 +10,8 @@
 <div ng-controller="Map" ng-init="Init()">
     <div class="tools">@Html.Partial("Tools")
     </div><div class="land">
-              
-              <div class="canvasPanel">@Html.Partial("SelectRoom")</div>
-              <div class="canvasPanel">
-                  <div class="canvas">@Html.Partial("Paper")</div>
-              </div>
+              <div class="selectRoomPanel">@Html.Partial("SelectRoom")</div>
+              <div class="canvas">@Html.Partial("Paper")</div>
               <div id="tableDropDownMenu" class="dropDownMenu" ng-show="tableDropDownMenuVisible">
                   @Html.Partial("TableDropDownMenu")
               </div>

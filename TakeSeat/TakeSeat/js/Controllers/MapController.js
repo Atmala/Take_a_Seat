@@ -257,5 +257,9 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         $scope.wallMode = mode;
     }
 
+    $scope.onKeyDown = function(keyEvent) {
+        alert(keyEvent);
+    }
+
 }]);
 

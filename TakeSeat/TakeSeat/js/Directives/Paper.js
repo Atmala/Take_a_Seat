@@ -97,6 +97,10 @@ seatApp
                         scope.$apply();
                     }
 
+                    function keydown(event) {
+                        alert(event);
+                    }
+
                     function fixEvent(event) {
                         event.offsetX = (event.offsetX || event.clientX - $(event.target).offset().left);
                         event.offsetY = (event.offsetY || event.clientY - $(event.target).offset().top);
@@ -294,6 +298,10 @@ seatApp
                     element.on('mousedown', mouseDown)
                         .on('mouseup', mouseUp)
                         .on('mousemove', mouseMove);
+
+                    element.bind("keydown keypress", function (event) {
+                        alert(event.which);
+                    });
 
                     $(document).ready(function () { initPaper(); });
                 }

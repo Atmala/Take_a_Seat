@@ -1,5 +1,5 @@
 ﻿<div class="width30 inlineBlock" ng-show="roomMode == 'select'">
-    <select class="form-control" ng-model="selectedRoom"
+    <select class="selectRoom" ng-model="selectedRoom"
             ng-options="r.Caption for r in rooms"
             ng-change="changeRoom(selectedRoom.Id)"></select>
 </div>
@@ -31,13 +31,13 @@
 </div>
 <div class="width30 inlineBlock">
     <div class="md-overlay inlineBlock">
-        <button title="Add Table" class="inlineBlock newRoomButton"
+        <button title="Add Table" class="inlineBlock scaleButton"
                 type="button" ng-click="scalePlus()">
             +
         </button>
     </div>
     <div class="md-overlay inlineBlock">
-        <button title="Show Room" class="inlineBlock newRoomButton"
+        <button title="Show Room" class="inlineBlock scaleButton"
                 type="button" ng-click="scaleMinus()">
             -
         </button>
