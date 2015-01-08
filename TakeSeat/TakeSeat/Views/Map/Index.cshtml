@@ -8,8 +8,8 @@
 <script src="~/js/CanvasLogic/WallRoomObject.js"></script>
 <script src="~/js/CanvasLogic/TableRoomObject.js"></script>
 <div ng-controller="Map" ng-init="Init()">
-    <div class="tools">@Html.Partial("Tools")
-    </div><div class="land">
+    <div id="toolsPanel" class="tools" hidden>@Html.Partial("Tools")
+    </div><div id="mainPanel" class="land">
               <div class="selectRoomPanel">@Html.Partial("SelectRoom")</div>
               <div class="canvas">@Html.Partial("Paper")</div>
               <div id="tableDropDownMenu" class="dropDownMenu" ng-show="tableDropDownMenuVisible">

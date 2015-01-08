@@ -24,18 +24,20 @@ seatApp
                         var x = toGrid(event.offsetX);
                         var y = toGrid(event.offsetY);
 
-                        if (scope.mode === 'line') {
-                            path = getNewPath();
-                        } else if (scope.mode === 'table') {
-                            path = roomObjectFactory.createTable(x, y, rectangleWidth, rectangleHeight);
-                        } else if (scope.mode === 'delete') {
-                            if (selectedPath) {
-                                selectedPath.RoomObject.deleteRoomObject();
-                                selectedPath.remove();
+                        if (scope.editPlanMode) {
+                            if (scope.mode === 'line') {
+                                path = getNewPath();
+                            } else if (scope.mode === 'table') {
+                                path = roomObjectFactory.createTable(x, y, rectangleWidth, rectangleHeight);
+                            } else if (scope.mode === 'delete') {
+                                if (selectedPath) {
+                                    selectedPath.RoomObject.deleteRoomObject();
+                                    selectedPath.remove();
+                                }
+                            } else {
+                                pathToMove = selectedPath;
+                                segmentToMove = selectedSegment;
                             }
-                        } else {
-                            pathToMove = selectedPath;
-                            segmentToMove = selectedSegment;
                         }
 
                         if (scope.mode !== 'delete') {
@@ -45,16 +47,15 @@ seatApp
 
                     function mouseUp(event) {
                         fixEvent(event);
-                        if (pathToMove) {
-                            if (isMoved) {
-                                if (pathToMove.RoomObject.save)
-                                    pathToMove.RoomObject.save();
-                                pathToMove = undefined;
-                            } else {
-                                if (pathToMove.RoomObject.showDropDownMenu)
-                                    pathToMove.RoomObject.showDropDownMenu();
-                            }
+                        if (pathToMove && isMoved) {
+                            if (pathToMove.RoomObject.save)
+                                pathToMove.RoomObject.save();
+                            pathToMove = undefined;
+                        } else {
+                            if (selectedPath && selectedPath.RoomObject.showDropDownMenu)
+                                selectedPath.RoomObject.showDropDownMenu();
                         }
+
                         mouseDownPoint = undefined;
                         isMoved = false;
 
@@ -111,8 +112,8 @@ seatApp
                         var offsetY = y - mouseDownPoint.y;
                         if (Math.abs(offsetX) < 2 && Math.abs(offsetY) < 2) return;
 
-                        if (segmentToMove) moveSegment(x, y);
-                        else if (pathToMove) movePath(offsetX, offsetY);
+                        if (segmentToMove && scope.editPlanMode) moveSegment(x, y);
+                        else if (pathToMove && scope.editPlanMode) movePath(offsetX, offsetY);
                         else moveAllItems(offsetX, offsetY);
                         mouseDownPoint = new paper.Point(x, y);
                     }
@@ -183,7 +184,7 @@ seatApp
                             selectedPath = hitResult.item;
                             selectedSegment = hitResult.segment;
                         }
-                        
+
                         if (selectedPath) selectedPath.selected = true;
                         if (selectedSegment) selectedSegment.selected = true;
                     }
@@ -205,7 +206,7 @@ seatApp
                         path.lineTo(endPoint);
                     }
 
-                    scope.setWallAppearance = function(wallPath, subtype) {
+                    scope.setWallAppearance = function (wallPath, subtype) {
                         if (subtype === 1) {
                             wallPath.strokeWidth = 4;
                             wallPath.strokeColor = scope.wallColor;
@@ -242,15 +243,15 @@ seatApp
                         scope.$apply();
                     }
 
-                    scope.view2ProjectX = function(viewX) {
+                    scope.view2ProjectX = function (viewX) {
                         return Math.round(viewX / scope.scale - scope.globalOffset.x);
                     }
 
-                    scope.view2ProjectY = function(viewY) {
+                    scope.view2ProjectY = function (viewY) {
                         return Math.round(viewY / scope.scale - scope.globalOffset.y);
                     }
 
-                    scope.project2ViewX = function(projectX) {
+                    scope.project2ViewX = function (projectX) {
                         return Math.round(projectX * scope.scale + scope.globalOffset.x);
                     }
 

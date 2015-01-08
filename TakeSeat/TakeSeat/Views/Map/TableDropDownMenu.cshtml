@@ -1,4 +1,4 @@
-﻿<div id="tableDropDownMenuButtons" ng-show="tableDropDownMenuMode == 'buttons'">
+﻿<div id="tableDropDownMenuButtons" ng-show="tableDropDownMenuMode === 'buttons'">
     <button class="dropDownButton" title="Assign Employee" type="button" ng-click="showEmployeeInput()">
         <img src=@Url.Content("~/img/assign.png") />
     </button>
@@ -8,7 +8,7 @@
     <button class="dropDownButton" title="Set Number" type="button" ng-click="showTableNumberInput()">
         <img src=@Url.Content("~/img/number.png") />
     </button>
-    <button class="dropDownButton" title="Rotate" type="button" ng-click="rotateTable()">
+    <button class="dropDownButton" title="Rotate" ng-show="editPlanMode" type="button" ng-click="rotateTable()">
         <img src=@Url.Content("~/img/rotate.png") />
     </button>
 </div>

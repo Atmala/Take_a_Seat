@@ -261,5 +261,17 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         alert(keyEvent);
     }
 
+    $scope.switchEditPlanMode = function () {
+        if (!$scope.editPlanMode) {
+            $('#mainPanel').css('margin-left', '102px');
+            $('#toolsPanel').show();
+            $scope.editPlanMode = true;
+        } else {
+            $('#mainPanel').css('margin-left', '0px');
+            $('#toolsPanel').hide();
+            $scope.editPlanMode = undefined;
+            setDefaultMode();
+        }
+    }
 }]);
 
