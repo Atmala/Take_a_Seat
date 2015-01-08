@@ -5,7 +5,8 @@
                     type="button" class="btn-tool"
                     data-toggle="dropdown"
                     ng-class="{activeBtn : isSelected('line')}">
-                <img src=@Url.Content("~/img/wall.png") />
+                <img ng-show="! isSelected('line')" src=@Url.Content("~/img/wall.png") />
+                <img ng-show="isSelected('line')" src=@Url.Content("~/img/wall_active.png") />
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownCountry">
                 <li><a ng-click="changeMode('line', 1)">External</a></li>
@@ -16,28 +17,32 @@
             <button title="Add Table"
                     type="button" class="btn-tool" ng-click="changeMode('table')"
                     ng-class="{activeBtn : isSelected('table')}">
-                <img src=@Url.Content("~/img/table.png") />
+                <img ng-show="! isSelected('table')" src=@Url.Content("~/img/table.png") />
+                <img ng-show="isSelected('table')" src=@Url.Content("~/img/table_active.png") />
             </button>
         </div>
         <div class="md-overlay">
             <button title="Add Window"
                     type="button" class="btn-tool" ng-click="changeMode('window')"
                     ng-class="{activeBtn : isSelected('window')}">
-                <img src=@Url.Content("~/img/window.png") />
+                <img ng-show="! isSelected('window')" src=@Url.Content("~/img/window.png") />
+                <img ng-show="isSelected('window')" src=@Url.Content("~/img/window_active.png") />
             </button>
         </div>
         <div class="md-overlay">
             <button title="Add Door"
                     type="button" class="btn-tool" ng-click="changeMode('door')"
                     ng-class="{activeBtn : isSelected('door')}">
-                <img src=@Url.Content("~/img/door.png") />
+                <img ng-show="! isSelected('door')" src=@Url.Content("~/img/door.png") />
+                <img ng-show="isSelected('door')" src=@Url.Content("~/img/door_active.png") />
             </button>
         </div>
         <div class="md-overlay">
             <button title="Delete"
                     type="button" class="btn-tool" ng-click="changeMode('delete')"
                     ng-class="{activeBtn : isSelected('delete')}">
-                <img src=@Url.Content("~/img/delete.png") />
+                <img ng-show="! isSelected('delete')" src=@Url.Content("~/img/delete.png") />
+                <img ng-show="isSelected('delete')" src=@Url.Content("~/img/delete_active.png") />
             </button>
         </div>
         <div class="md-overlay dropdown">

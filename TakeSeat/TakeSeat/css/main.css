@@ -46,10 +46,10 @@ s .show-grid [class*="span"]:hover {
 }
 
 .activeBtn {
-    font-weight: bold;
+    /*font-weight: bold;
     border: 1px;
     border-color: white;
-    border-style: solid;
+    border-style: solid;*/
 }
 
 .employeeList {
@@ -169,8 +169,8 @@ body {
 }
 
 .activeBtn {
-    border: 2px solid #000000;
-    margin-left: -2px;
+    /*border: 2px solid #000000;
+    margin-left: -2px;*/
 }
 
 .fontBold {

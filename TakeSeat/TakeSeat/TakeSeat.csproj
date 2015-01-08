@@ -177,13 +177,17 @@
     <Content Include="img\assign.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\assign_active.png" />
     <Content Include="img\delete.png" />
+    <Content Include="img\delete_active.png" />
     <Content Include="img\discard.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\discard_active.png" />
     <Content Include="img\door.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\door_active.png" />
     <Content Include="img\editplan.png" />
     <Content Include="img\empty.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -193,20 +197,25 @@
     <Content Include="img\minus.png" />
     <Content Include="img\newroom.png" />
     <Content Include="img\number.png" />
+    <Content Include="img\number_active.png" />
     <Content Include="img\plus.png" />
     <Content Include="img\rotate.png" />
+    <Content Include="img\rotate_active.png" />
     <Content Include="img\save.png" />
     <Content Include="img\settings.png" />
     <Content Include="img\table.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\table_active.png" />
     <Content Include="img\undo.png" />
     <Content Include="img\wall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\wall_active.png" />
     <Content Include="img\window.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="img\window_active.png" />
     <Content Include="js\CanvasLogic\TableRoomObject.js" />
     <Content Include="js\CanvasLogic\WallRoomObject.js" />
     <Content Include="js\Controllers\MapController.js" />
