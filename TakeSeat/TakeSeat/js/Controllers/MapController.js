@@ -238,13 +238,22 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         //}
     }
 
-    $scope.scaleMinus = function() {
-        $scope.scale -= 0.1;
-        $scope.changeRoom($scope.room.Id);
+    $scope.scaleMinus = function () {
+        if ($scope.zoomValue > 10) {
+            $scope.zoomValue -= 10;
+            setScale();
+        }
     }
 
     $scope.scalePlus = function () {
-        $scope.scale += 0.1;
+        if ($scope.zoomValue < 200) {
+            $scope.zoomValue += 10;
+            setScale();
+        }
+    }
+
+    function setScale() {
+        $scope.scale = $scope.zoomValue / 100.0;
         $scope.changeRoom($scope.room.Id);
     }
 

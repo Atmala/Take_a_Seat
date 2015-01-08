@@ -236,7 +236,7 @@ body {
 }
 .scaleButton {
     background: white;
-    color: #36b5d9;
+    color: black;
     font-family: Times New Roman;
     font-size: 20px;
     font-weight: 900;
@@ -263,4 +263,14 @@ body {
 .selectRoomPanel {
     margin-top: 10px;
 
+}
+.zoomValueDiv {
+    width: 48px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid;
+    border-color: #e5e5e5;
+}
+.zoomDiv {
+    font-weight: 900;
 }

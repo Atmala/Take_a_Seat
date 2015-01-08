@@ -28,17 +28,19 @@
         Add Room
     </button>
 </div>
-<div class="width30 inlineBlock">
+<div class="width30 inlineBlock zoomDiv">
+    Zoom: 
     <div class="md-overlay inlineBlock">
         <button title="Add Table" class="inlineBlock scaleButton"
                 type="button" ng-click="scalePlus()">
             +
         </button>
-    </div>
-    <div class="md-overlay inlineBlock">
-        <button title="Show Room" class="inlineBlock scaleButton"
-                type="button" ng-click="scaleMinus()">
-            -
-        </button>
-    </div>
+    </div><div class="md-overlay inlineBlock zoomValueDiv">
+              {{zoomValue + '%'}}
+          </div><div class="md-overlay inlineBlock">
+                    <button title="Show Room" class="inlineBlock scaleButton"
+                            type="button" ng-click="scaleMinus()">
+                        -
+                    </button>
+                </div>
 </div>

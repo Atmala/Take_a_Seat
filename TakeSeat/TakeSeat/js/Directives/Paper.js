@@ -16,6 +16,7 @@ seatApp
                     scope.wallColor = '#888888';
                     scope.foundColor = '#66FF33';
                     scope.globalOffset = new paper.Point();
+                    scope.zoomValue = 100;
                     scope.scale = 1.0;
                     scope.gridStep = 10;
 
