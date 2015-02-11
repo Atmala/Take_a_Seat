@@ -34,18 +34,24 @@
     </button>
 </div>
 <div class="width30 inlineBlock zoomDiv">
-    Zoom: 
+    Zoom:
     <div class="md-overlay inlineBlock">
         <button title="Add Table" class="inlineBlock scaleButton"
                 type="button" ng-click="scalePlus()">
             +
         </button>
     </div><div class="md-overlay inlineBlock zoomValueDiv">
-              {{zoomValue + '%'}}
-          </div><div class="md-overlay inlineBlock">
-                    <button title="Show Room" class="inlineBlock scaleButton"
-                            type="button" ng-click="scaleMinus()">
-                        -
-                    </button>
-                </div>
+        {{zoomValue + '%'}}
+    </div><div class="md-overlay inlineBlock">
+        <button title="Show Room" class="inlineBlock scaleButton"
+                type="button" ng-click="scaleMinus()">
+            -
+        </button>
+    </div><div class="md-overlay inlineBlock">
+        <button title="Fit Room" class="inlineBlock scaleButton"
+                type="button" ng-click="scaleFit()">
+            *
+        </button>
+    </div>
+
 </div>

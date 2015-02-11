@@ -19,6 +19,8 @@
     }
 
     this.getPath = function () {
+        if (Math.abs(this.x1 - this.x2) < scope.gridStep && Math.abs(this.y1 - this.y2) < scope.gridStep)
+            return null;
         var path = new paper.Path();
         scope.setWallAppearance(path, this.subType);
         path.add(new paper.Point(scope.project2ViewX(this.x1), scope.project2ViewY(this.y1)));
@@ -131,6 +133,22 @@
             if (this.checkDiagonalProximity(point, tolerance))
                 return { type: 'stroke', item: this.attachedPath };
         }
-        return undefined;
+        return undefined;   
+    }
+
+    this.left = function () {
+        return Math.min(this.x1, this.x2);
+    }
+
+    this.top = function () {
+        return Math.min(this.y1, this.y2);
+    }
+
+    this.right = function () {
+        return Math.max(this.x1, this.x2);
+    }
+
+    this.bottom = function () {
+        return Math.max(this.y1, this.y2);
     }
 }

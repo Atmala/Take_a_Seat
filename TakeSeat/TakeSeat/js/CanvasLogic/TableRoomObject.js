@@ -271,4 +271,26 @@
         this.employeeFio = undefined;
         this.setCaptions();
     }
+
+    this.left = function() {
+        return this.leftTopX;
+    }
+
+    this.top = function() {
+        return this.leftTopY;
+    }
+
+    this.right = function () {
+        if (this.angle === 90 || this.angle === 270) 
+            return this.leftTopX + this.height;
+        else
+            return this.leftTopX + this.width;
+    }
+
+    this.bottom = function () {
+        if (this.angle === 90 || this.angle === 270)
+            return this.leftTopY + this.width;
+        else
+            return this.leftTopY + this.height;
+    }
 }
