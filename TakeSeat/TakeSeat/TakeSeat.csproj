@@ -179,6 +179,7 @@
     </Content>
     <Content Include="img\assign_active.png" />
     <Content Include="img\delete.png" />
+    <Content Include="img\deleteroom.png" />
     <Content Include="img\delete_active.png" />
     <Content Include="img\discard.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

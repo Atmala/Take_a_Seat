@@ -17,12 +17,17 @@
     </div>
 </div>
 <div class="width30 inlineBlock">
-    <button title="Add Table" class="inlineBlock newRoomButton"
+    <button title="Delete Room" class="inlineBlock newRoomButton"
+            type="button" ng-click="">
+        <img src=@Url.Content("~/img/deleteroom.png") />
+        Delete
+    </button>
+    <button title="Edit Plan" class="inlineBlock newRoomButton"
             type="button" ng-click="switchEditPlanMode()">
         <img src=@Url.Content("~/img/editplan.png") />
         Edit Plan
     </button>
-    <button title="Show Room" class="inlineBlock newRoomButton"
+    <button title="Add Room" class="inlineBlock newRoomButton"
             type="button" ng-click="showRoom()">
         <img src=@Url.Content("~/img/addroom.png") />
         Add Room

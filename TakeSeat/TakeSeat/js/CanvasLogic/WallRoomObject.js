@@ -65,4 +65,72 @@
             data: { id: this.roomObjectId }
         });
     }
+
+    this.checkTwoPointsProximity = function(point1, point2, tolerance) {
+        return Math.abs(point1.x - point2.x) <= tolerance && Math.abs(point1.y - point2.y) <= tolerance;
+    }
+
+    this.findSegment = function (point, tolerance) {
+        for (var i = 0; i < this.attachedPath.segments.length; i++) {
+            if (this.checkTwoPointsProximity(this.attachedPath.segments[i].point, point, tolerance)) {
+                return {
+                    type: 'segment',
+                    item: this.attachedPath,
+                    segment: this.attachedPath.segments[i]
+                }
+            }
+        }
+        return undefined;
+    }
+
+    this.isVerticalLine = function() {
+        return this.attachedPath.segments[0].point.x == this.attachedPath.segments[1].point.x;
+    }
+
+    this.isHorizontalLine = function () {
+        return this.attachedPath.segments[0].point.y == this.attachedPath.segments[1].point.y;
+    }
+
+    function isBetween(a, b, c) {
+        return a >= b && a <= c || a >= c && a <= b;
+    }
+
+    this.checkVerticalProximity = function(point, tolerance) {
+        return isBetween(point.y, this.attachedPath.segments[0].point.y, this.attachedPath.segments[1].point.y)
+            && Math.abs(point.x - this.attachedPath.segments[0].point.x) <= tolerance;
+    }
+
+    this.checkHorizontalProximity = function (point, tolerance) {
+        return isBetween(point.x, this.attachedPath.segments[0].point.x, this.attachedPath.segments[1].point.x)
+            && Math.abs(point.y - this.attachedPath.segments[0].point.y) <= tolerance;
+    }
+
+    this.checkDiagonalProximity = function(point, tolerance) {
+        var x1 = this.attachedPath.segments[0].point.x;
+        var y1 = this.attachedPath.segments[0].point.y;
+        var x2 = this.attachedPath.segments[1].point.x;
+        var y2 = this.attachedPath.segments[1].point.y;
+        if (!isBetween(point.x, x1, x2) || !isBetween(point.y, y1, y2))
+            return false;
+        var a = 1;
+        var b = (x1 - x2) / (y2 - y1);
+        var c = y1 * (x1 - x2) / (y1 - y2) - x1;
+        var distance = Math.abs(a * point.x + b * point.y + c) / Math.sqrt(a * a + b * b);
+        return distance <= tolerance;
+    }
+
+    this.findLine = function (point, tolerance) {
+        if (this.isVerticalLine()) {
+            if (this.checkVerticalProximity(point, tolerance))
+                return { type: 'stroke', item: this.attachedPath };
+        }
+        else if (this.isHorizontalLine()) {
+            if (this.checkHorizontalProximity(point, tolerance))
+                return { type: 'stroke', item: this.attachedPath };
+        } else {
+            if (this.checkDiagonalProximity(point, tolerance))
+                return { type: 'stroke', item: this.attachedPath };
+        }
+        return undefined;
+    }
 }

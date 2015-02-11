@@ -67,10 +67,12 @@ seatApp
 
                     function mouseMove(event) {
                         fixEvent(event);
-                        setCurrentCoords(event.offsetX, event.offsetY);
+                        //setCurrentCoords(event.offsetX, event.offsetY);
 
                         var x = toGrid(event.offsetX);
                         var y = toGrid(event.offsetY);
+                        //var x = event.offsetX;
+                        //var y = event.offsetY;
 
                         if (scope.mode === 'line' && mouseDownPoint) {
                             if (event.offsetX <= 2 || event.offsetY <= 2 ||
@@ -96,6 +98,7 @@ seatApp
                                 scope.tableDropDownMenuVisible = false;
                             }
                         }
+                        setCurrentCoords(x, y);
                         scope.$apply();
                     }
 
@@ -170,13 +173,13 @@ seatApp
                             segments: true,
                             stroke: true,
                             fill: false,
-                            tolerance: 5
+                            tolerance: 1
                         };
 
-                        var hitResult = project.hitTest(point, hitOptions);
+                        //var hitResult = project.hitTest(point, hitOptions);
+                        var hitResult = customHitTest(point, 5);
                         scope.HitResult = hitResult;
-                        //scope.$apply();
-
+                        
                         if (!hitResult) return;
                         if (hitResult.type === 'stroke') {
                             selectedPath = hitResult.item;
@@ -188,6 +191,37 @@ seatApp
 
                         if (selectedPath) selectedPath.selected = true;
                         if (selectedSegment) selectedSegment.selected = true;
+                        scope.LogMessage1 = 'Point: ' + point;
+
+                    }
+
+                    function findSegment(point, tolerance) {
+                        for (var i = 0; i < project.activeLayer.children.length; i++) {
+                            var item = project.activeLayer.children[i];
+                            if (item.RoomObject && item.RoomObject.findSegment) {
+                                var hitResult = item.RoomObject.findSegment(point, tolerance);
+                                if (hitResult) return hitResult;
+                            }
+                        }
+                        return undefined;
+                    }
+
+                    function findLine(point, tolerance) {
+                        for (var i = 0; i < project.activeLayer.children.length; i++) {
+                            var item = project.activeLayer.children[i];
+                            if (item.RoomObject && item.RoomObject.findLine) {
+                                var hitResult = item.RoomObject.findLine(point, tolerance);
+                                if (hitResult) return hitResult;
+                            }
+                        }
+                        return undefined;
+                    }
+
+                    function customHitTest(point, tolerance) {
+                        var segment = findSegment(point, tolerance);
+                        if (segment) return segment;
+                        var line = findLine(point, tolerance);
+                        return line;
                     }
 
                     function setCurrentCoords(x, y) {
