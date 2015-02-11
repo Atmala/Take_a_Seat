@@ -1,5 +1,13 @@
 ﻿<div>
     <div class="panel-body">
+        <div class="md-overlay">
+            <button title="Pointer"
+                    type="button" class="btn-tool" ng-click="changeMode('view')"
+                    ng-class="{activeBtn : isSelected('view')}">
+                <img ng-show="! isSelected('view')" src=@Url.Content("~/img/pointer.png") />
+                <img ng-show="isSelected('view')" src=@Url.Content("~/img/pointer_active.png") />
+            </button>
+        </div>
         <div class="md-overlay dropdown">
             <button title="Add Wall"
                     type="button" class="btn-tool"
