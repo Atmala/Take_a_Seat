@@ -140,5 +140,13 @@ namespace TakeSeatServiceProxy
                 return dbRepository.GetElementsForSearch();
             }
         }
+
+        public static void MakeRoomInactive(int roomId)
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                dbRepository.MakeRoomInactive(roomId);
+            }
+        }
     }
 }

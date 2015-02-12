@@ -115,6 +115,12 @@ namespace TakeSeat.Controllers
             return result;
         }
 
+        [HttpPost]
+        public void MakeRoomInactive(int roomId)
+        {
+            ServiceProxy.MakeRoomInactive(roomId);
+        }
+
         [HttpGet]
         public JsonResult CreateNewRoom(string caption)
         {

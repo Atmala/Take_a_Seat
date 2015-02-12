@@ -18,7 +18,7 @@
 </div>
 <div class="width30 inlineBlock">
     <button title="Delete Room" class="inlineBlock newRoomButton"
-            type="button" ng-click="">
+            type="button" ng-click="deleteRoomClick()">
         <img src=@Url.Content("~/img/deleteroom.png") />
         Delete
     </button>
@@ -48,9 +48,9 @@
             -
         </button>
     </div><div class="md-overlay inlineBlock">
-        <button title="Fit Room" class="inlineBlock scaleButton"
+        <button title="Fit Room" class="inlineBlock"
                 type="button" ng-click="scaleFit()">
-            *
+            Fit
         </button>
     </div>
 

@@ -87,6 +87,14 @@
     <Compile Include="Migrations\201411172245288_ExternalId.Designer.cs">
       <DependentUpon>201411172245288_ExternalId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502121653222_RoomIsActive.cs" />
+    <Compile Include="Migrations\201502121653222_RoomIsActive.Designer.cs">
+      <DependentUpon>201502121653222_RoomIsActive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502121702171_FillIsActive.cs" />
+    <Compile Include="Migrations\201502121702171_FillIsActive.Designer.cs">
+      <DependentUpon>201502121702171_FillIsActive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\TakeSeatDbContextInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -126,6 +134,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201411172245288_ExternalId.resx">
       <DependentUpon>201411172245288_ExternalId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502121653222_RoomIsActive.resx">
+      <DependentUpon>201502121653222_RoomIsActive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502121702171_FillIsActive.resx">
+      <DependentUpon>201502121702171_FillIsActive.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -163,6 +163,23 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         });
     }
 
+    $scope.makeRoomInactive = function (roomId) {
+        $.ajax({
+            url: window.makeRoomInactivePath,
+            type: 'POST',
+            data: { roomId: roomId },
+            success: function (response) {
+                $scope.loadRooms();
+            }
+        });
+    }
+
+    $scope.deleteRoomClick = function() {
+        if (confirm('Are you sure you want to delete this room?')) {
+            $scope.makeRoomInactive($scope.selectedRoom.Id);
+        }
+    }
+
     $scope.undoRoom = function () {
         $scope.showSelectRoom();
     }

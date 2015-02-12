@@ -14,6 +14,8 @@ namespace CommonClasses.Database
         [Required]
         public int Order { get; set; }
 
+        public bool IsActive { get; set; }
+
         public List<RoomObject> RoomObjects { get; set; } 
     }
 }

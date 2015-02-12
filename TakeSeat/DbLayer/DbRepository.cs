@@ -330,7 +330,7 @@ namespace DbLayer
 
         public RoomInfo CreateNewRoom(string caption)
         {
-            var room = new Room { Caption = caption, Order = 0 };
+            var room = new Room { Caption = caption, Order = 0, IsActive = true };
             Save(room);
             return new RoomInfo
                    {
@@ -434,6 +434,7 @@ namespace DbLayer
         public List<RoomInfo> GetRooms()
         {
             return (from r in _db.Rooms
+                    where r.IsActive
                     select new RoomInfo
                     {
                         Id = r.Id,
@@ -476,6 +477,23 @@ namespace DbLayer
             var roomObject = _db.RoomObjects.FirstOrDefault(ro => ro.Id == roomObjectId);
             if (roomObject != null) _db.RoomObjects.Remove(roomObject);
             _db.SaveChanges();
+        }
+
+        public void MakeRoomInactive(int roomId)
+        {
+            var room = _db.Rooms.FirstOrDefault(r => r.Id == roomId);
+            if (room == null) return;
+            room.IsActive = false;
+            _db.SaveChanges();
+        }
+
+        public void MakeAllRoomsActive()
+        {
+            foreach (var room in _db.Rooms)
+            {
+                room.IsActive = true;
+                Save(room);
+            }
         }
 
         #endregion
