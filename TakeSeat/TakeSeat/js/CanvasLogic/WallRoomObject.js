@@ -19,6 +19,7 @@
     }
 
     this.getPath = function () {
+        if (this.attachedPath) this.attachedPath.remove();
         if (Math.abs(this.x1 - this.x2) < scope.gridStep && Math.abs(this.y1 - this.y2) < scope.gridStep)
             return null;
         var path = new paper.Path();

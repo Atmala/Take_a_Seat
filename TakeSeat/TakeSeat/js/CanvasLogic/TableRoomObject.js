@@ -143,6 +143,7 @@
     }
 
     this.getPath = function () {
+        if (this.attachedPath) this.attachedPath.remove();
         var raster = new paper.Raster("maptable");
         raster.position = new paper.Point(scope.project2ViewX(this.leftTopX + this.width / 2),
             scope.project2ViewY(this.leftTopY + this.height / 2));

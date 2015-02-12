@@ -289,6 +289,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     function setScale() {
         $scope.scale = $scope.zoomValue / 100.0;
+        //$scope.redrawAllFigures();
         $scope.changeRoom($scope.room.Id);
     }
 

@@ -265,6 +265,14 @@ seatApp
                         paper.view.draw();
                     }
 
+                    scope.redrawAllFigures = function() {
+                        for (var i = 0; i < project.activeLayer.children.length; i++) {
+                            var item = project.activeLayer.children[i];
+                            if (item.RoomObject)
+                                item.RoomObject.getPath();
+                        }
+                    }
+
                     scope.initAllFigures = function () {
                         scope.RoomCaption = scope.room.Caption;
                         //scope.globalOffset = new paper.Point(0, 0);
