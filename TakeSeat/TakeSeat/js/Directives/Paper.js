@@ -18,7 +18,7 @@ seatApp
                     scope.globalOffset = new paper.Point();
                     scope.zoomValue = 100;
                     scope.scale = 1.0;
-                    scope.gridStep = 10;
+                    scope.gridStep = 1;
 
                     function mouseDown(event) {
                         fixEvent(event);
@@ -123,12 +123,12 @@ seatApp
                     }
 
                     function movePath(offsetX, offsetY) {
-                        pathToMove.position.x += offsetX;
-                        pathToMove.position.y += offsetY;
+                        pathToMove.position.x = toGrid(pathToMove.position.x + offsetX);
+                        pathToMove.position.y = toGrid(pathToMove.position.y + offsetY);
                         if (pathToMove.captions) {
                             for (var i = 0; i < pathToMove.captions.length; i++) {
-                                pathToMove.captions[i].point.x += offsetX;
-                                pathToMove.captions[i].point.y += offsetY;
+                                pathToMove.captions[i].point.x = pathToMove.captions[i].point.x + offsetX;
+                                pathToMove.captions[i].point.y = pathToMove.captions[i].point.y + offsetY;
                             }
                         }
                     }
@@ -143,8 +143,8 @@ seatApp
                         var anotherPoint = getAnotherPoint(segmentToMove);
                         var point = new paper.Point(x, y);
                         var correctedPoint = getPointForWall(anotherPoint, point, scope.wallMode);
-                        segmentToMove.point.x = correctedPoint.x;
-                        segmentToMove.point.y = correctedPoint.y;
+                        segmentToMove.point.x = toGrid(correctedPoint.x);
+                        segmentToMove.point.y = toGrid(correctedPoint.y);
                     }
 
                     function moveAllItems(offsetX, offsetY) {
@@ -166,6 +166,7 @@ seatApp
                         var table = getTableByPoint(point);
                         if (table) {
                             selectedPath = table;
+                            scope.HitResult = table.RoomObject.leftTopX + ':' + table.RoomObject.leftTopY;
                             return;
                         }
 
@@ -227,6 +228,8 @@ seatApp
                     function setCurrentCoords(x, y) {
                         scope.X = x;
                         scope.Y = y;
+                        scope.XProject = scope.view2ProjectX(x);
+                        scope.YProject = scope.view2ProjectY(y);
                         if (!selectedPath || !selectedPath.segments || selectedPath.segments.length != 2)
                             scope.LogMessage = undefined;
                         else {
@@ -275,7 +278,7 @@ seatApp
 
                     scope.initAllFigures = function () {
                         scope.RoomCaption = scope.room.Caption;
-                        //scope.globalOffset = new paper.Point(0, 0);
+
                         if (project.activeLayer) project.activeLayer.remove();
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
@@ -287,11 +290,11 @@ seatApp
                     }
 
                     scope.view2ProjectX = function (viewX) {
-                        return Math.round(viewX / scope.scale - scope.globalOffset.x);
+                        return toGrid(Math.round(viewX / scope.scale - scope.globalOffset.x));
                     }
 
                     scope.view2ProjectY = function (viewY) {
-                        return Math.round(viewY / scope.scale - scope.globalOffset.y);
+                        return toGrid(Math.round(viewY / scope.scale - scope.globalOffset.y));
                     }
 
                     scope.project2ViewX = function (projectX) {

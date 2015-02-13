@@ -159,6 +159,8 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             success: function (response) {
                 $scope.room = response;
                 $scope.initAllFigures();
+                setRightScale();
+                $scope.initAllFigures();
             }
         });
     }
@@ -270,6 +272,11 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.scaleFit = function() {
+        setRightScale();
+        setScale();
+    }
+
+    function setRightScale() {
         var borders = getBorders();
         var canvas = $('#paperCanvas')[0];
         var zoomVert = canvas.clientHeight / borders.height;
@@ -279,9 +286,9 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         if ($scope.zoomValue > 100) $scope.zoomValue = 100;
         $scope.zoomValue = Math.round($scope.zoomValue / 5) * 5;
         zoom = $scope.zoomValue / 100;
+        $scope.scale = zoom;
         $scope.globalOffset.x = -borders.left * zoom + $scope.gridStep;
         $scope.globalOffset.y = -borders.top * zoom + $scope.gridStep;
-        setScale();
     }
 
     function getBorders() {

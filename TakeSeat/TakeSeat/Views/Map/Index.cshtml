@@ -12,9 +12,9 @@
     </div><div id="mainPanel" class="land">
               <div class="selectRoomPanel">@Html.Partial("SelectRoom")</div>
               <div class="canvas">@Html.Partial("Paper")</div>
-              @*<div>{{X +' : '+ Y + '; ' + LogMessage}}</div>
+              <div>{{X +' : '+ Y + ';' + XProject + ' : ' + YProject + LogMessage}}</div>
               <div>{{'HitResult: ' + HitResult}}</div>
-              <div>{{'Log: ' + LogMessage1}}</div>*@
+              <div>{{'Log: ' + LogMessage1}}</div>
               <div id="tableDropDownMenu" class="dropDownMenu" ng-show="tableDropDownMenuVisible">
                   @Html.Partial("TableDropDownMenu")
               </div>
