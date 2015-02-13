@@ -236,7 +236,7 @@ body {
 }
 .scaleButton {
     background: white;
-    color: black;
+    color: #36b5d9;
     font-family: Times New Roman;
     font-size: 20px;
     font-weight: 900;
@@ -273,4 +273,9 @@ body {
 }
 .zoomDiv {
     font-weight: 900;
+    color: #36b5d9;
+}
+.idleBorder {
+    border: 2px solid;
+    border-color: #dddddd;
 }
