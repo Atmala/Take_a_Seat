@@ -1,7 +1,7 @@
 ﻿<div class="width30 inlineBlock" ng-show="roomMode == 'select'">
     <select class="selectRoom" ng-model="selectedRoom"
             ng-options="r.Caption for r in rooms"
-            ng-change="changeRoom(selectedRoom.Id)"></select>
+            ng-change="changeRoom(selectedRoom.Id, true)"></select>
 </div>
 <div class="width30 inlineBlock" ng-show="roomMode == 'edit'">
     <div id="editRoomButtonsDiv">
@@ -47,11 +47,14 @@
                 type="button" ng-click="scaleMinus()">
             -
         </button>
-    </div><div class="md-overlay inlineBlock">
-        <button title="Fit Room" class="inlineBlock"
-                type="button" ng-click="scaleFit()">
-            Fit
-        </button>
-    </div>
+          </div><div class="md-overlay inlineBlock">
+                    <button title="Fit Room" class="inlineBlock"
+                            type="button" ng-click="scaleFit()">
+                        Fit
+                    </button>
+                </div><div class="md-overlay inlineBlock">
+                          {{globalOffset.x + ', ' + globalOffset.y}}
 
-</div>
+
+                      </div>
+    </div>

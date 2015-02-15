@@ -18,12 +18,12 @@ seatApp
                     scope.globalOffset = new paper.Point();
                     scope.zoomValue = 100;
                     scope.scale = 1.0;
-                    scope.gridStep = 1;
+                    scope.gridStep = 10;
 
                     function mouseDown(event) {
                         fixEvent(event);
-                        var x = toGrid(event.offsetX);
-                        var y = toGrid(event.offsetY);
+                        var x = scope.toScaledGridX(event.offsetX);
+                        var y = scope.toScaledGridY(event.offsetY);
 
                         if (scope.editPlanMode) {
                             if (scope.mode === 'line') {
@@ -67,12 +67,9 @@ seatApp
 
                     function mouseMove(event) {
                         fixEvent(event);
-                        //setCurrentCoords(event.offsetX, event.offsetY);
 
-                        var x = toGrid(event.offsetX);
-                        var y = toGrid(event.offsetY);
-                        //var x = event.offsetX;
-                        //var y = event.offsetY;
+                        var x = scope.toScaledGridX(event.offsetX);
+                        var y = scope.toScaledGridY(event.offsetY);
 
                         if (scope.mode === 'line' && mouseDownPoint) {
                             if (event.offsetX <= 2 || event.offsetY <= 2 ||
@@ -102,10 +99,6 @@ seatApp
                         scope.$apply();
                     }
 
-                    function keydown(event) {
-                        alert(event);
-                    }
-
                     function fixEvent(event) {
                         event.offsetX = (event.offsetX || event.clientX - $(event.target).offset().left);
                         event.offsetY = (event.offsetY || event.clientY - $(event.target).offset().top);
@@ -114,7 +107,8 @@ seatApp
                     function moveMapObjects(x, y) {
                         var offsetX = x - mouseDownPoint.x;
                         var offsetY = y - mouseDownPoint.y;
-                        if (Math.abs(offsetX) < 2 && Math.abs(offsetY) < 2) return;
+                        var scaledGridStep = scope.gridStep * scope.scale;
+                        if (Math.abs(offsetX) < scaledGridStep && Math.abs(offsetY) < scaledGridStep) return;
 
                         if (segmentToMove && scope.editPlanMode) moveSegment(x, y);
                         else if (pathToMove && scope.editPlanMode) movePath(offsetX, offsetY);
@@ -123,14 +117,7 @@ seatApp
                     }
 
                     function movePath(offsetX, offsetY) {
-                        pathToMove.position.x = toGrid(pathToMove.position.x + offsetX);
-                        pathToMove.position.y = toGrid(pathToMove.position.y + offsetY);
-                        if (pathToMove.captions) {
-                            for (var i = 0; i < pathToMove.captions.length; i++) {
-                                pathToMove.captions[i].point.x = pathToMove.captions[i].point.x + offsetX;
-                                pathToMove.captions[i].point.y = pathToMove.captions[i].point.y + offsetY;
-                            }
-                        }
+                        pathToMove.RoomObject.move(offsetX, offsetY);
                     }
 
                     function getAnotherPoint(segment) {
@@ -143,16 +130,17 @@ seatApp
                         var anotherPoint = getAnotherPoint(segmentToMove);
                         var point = new paper.Point(x, y);
                         var correctedPoint = getPointForWall(anotherPoint, point, scope.wallMode);
-                        segmentToMove.point.x = toGrid(correctedPoint.x);
-                        segmentToMove.point.y = toGrid(correctedPoint.y);
+                        segmentToMove.point.x = scope.toScaledGridX(correctedPoint.x);
+                        segmentToMove.point.y = scope.toScaledGridY(correctedPoint.y);
                     }
 
                     function moveAllItems(offsetX, offsetY) {
-                        scope.globalOffset.x += offsetX;
-                        scope.globalOffset.y += offsetY;
+                        scope.globalOffset.x = scope.toGrid(scope.globalOffset.x + offsetX);
+                        scope.globalOffset.y = scope.toGrid(scope.globalOffset.y + offsetY);
                         project.activeLayer.children.forEach(function (item) {
-                            if (item.position) {
-                                item.position = new paper.Point(item.position.x + offsetX, item.position.y + offsetY);
+                            if (item.RoomObject && item.RoomObject.move) {
+                                item.RoomObject.move(offsetX, offsetY);
+                                //item.position = new paper.Point(item.position.x + offsetX, item.position.y + offsetY);
                             }
                         });
                     }
@@ -166,33 +154,29 @@ seatApp
                         var table = getTableByPoint(point);
                         if (table) {
                             selectedPath = table;
-                            scope.HitResult = table.RoomObject.leftTopX + ':' + table.RoomObject.leftTopY;
+                            scope.HitResult = '(' + table.position.x + ' : ' + table.position.y + ') - (' + 
+                                (scope.view2ProjectX(table.position.x) - table.RoomObject.width / 2) + ' : ' +
+                                (scope.view2ProjectY(table.position.y) - table.RoomObject.height / 2) + ')';
                             return;
                         }
 
-                        var hitOptions = {
-                            segments: true,
-                            stroke: true,
-                            fill: false,
-                            tolerance: 1
-                        };
-
-                        //var hitResult = project.hitTest(point, hitOptions);
                         var hitResult = customHitTest(point, 5);
-                        scope.HitResult = hitResult;
                         
                         if (!hitResult) return;
                         if (hitResult.type === 'stroke') {
                             selectedPath = hitResult.item;
+                            scope.HitResult = 'Line: (' + selectedPath.segments[0].point.x + ',' + selectedPath.segments[0].point.y + ') - (' +
+                                selectedPath.segments[1].point.x + ',' + selectedPath.segments[1].point.y + ')';
                         }
                         else if (hitResult.type === 'segment') {
                             selectedPath = hitResult.item;
                             selectedSegment = hitResult.segment;
+                            scope.HitResult = 'Segment: (' + selectedSegment.point.x + ',' + selectedSegment.point.y + ')';
                         }
 
                         if (selectedPath) selectedPath.selected = true;
                         if (selectedSegment) selectedSegment.selected = true;
-                        scope.LogMessage1 = 'Point: ' + point;
+                        //scope.LogMessage1 = 'Point: ' + point;
 
                     }
 
@@ -290,11 +274,11 @@ seatApp
                     }
 
                     scope.view2ProjectX = function (viewX) {
-                        return toGrid(Math.round(viewX / scope.scale - scope.globalOffset.x));
+                        return scope.toGrid(Math.round((viewX - scope.globalOffset.x) / scope.scale));
                     }
 
                     scope.view2ProjectY = function (viewY) {
-                        return toGrid(Math.round(viewY / scope.scale - scope.globalOffset.y));
+                        return scope.toGrid(Math.round((viewY - scope.globalOffset.y) / scope.scale));
                     }
 
                     scope.project2ViewX = function (projectX) {
@@ -337,9 +321,23 @@ seatApp
                         }
                     }
 
-                    function toGrid(coord) {
+                    scope.toGrid = function (coord) {
                         if (scope.gridStep === 1) return coord;
                         return Math.round(coord / scope.gridStep) * scope.gridStep;
+                    }
+
+                    scope.toScaledGridX = function (x) {
+                        if (scope.gridStep === 1) return x;
+                        if (scope.scale === 1) return scope.toGrid(x);
+                        var projectX = scope.view2ProjectX(x);
+                        return scope.project2ViewX(projectX);
+                    }
+
+                    scope.toScaledGridY = function (y) {
+                        if (scope.gridStep === 1) return y;
+                        if (scope.scale === 1) return scope.toGrid(y);
+                        var projectY = scope.view2ProjectY(y);
+                        return scope.project2ViewY(projectY);
                     }
 
                     element.on('mousedown', mouseDown)

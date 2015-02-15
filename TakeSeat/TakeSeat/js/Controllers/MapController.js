@@ -139,8 +139,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 success: function (response) {
                     $scope.rooms = response;
                     $scope.selectedRoom = response[0];
-                    //$scope.$apply();
-                    $scope.changeRoom($scope.selectedRoom.Id);
+                    $scope.changeRoom($scope.selectedRoom.Id, true);
                 },
                 error: function (req, status, error) {
                     alert("Error: " + error);
@@ -152,15 +151,17 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         }
     }
 
-    $scope.changeRoom = function (roomId) {
+    $scope.changeRoom = function (roomId, autoFit) {
         $.ajax({
             url: window.changeRoomPath,
             data: { roomId: roomId },
             success: function (response) {
                 $scope.room = response;
                 $scope.initAllFigures();
-                setRightScale();
-                $scope.initAllFigures();
+                if (autoFit) {
+                    setRightScale();
+                    $scope.initAllFigures();
+                }
             }
         });
     }
@@ -195,7 +196,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 $scope.rooms.push(roomInfo);
                 $scope.selectedRoom = roomInfo;
                 $scope.$apply();
-                $scope.changeRoom(roomInfo.Id);
+                $scope.changeRoom(roomInfo.Id, true);
             }
         });
     }
@@ -241,7 +242,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     $scope.doSearch = function(searchElement) {
         $scope.foundRoomObjectId = searchElement.RoomObjectId;
         $scope.foundRoomObjectId = searchElement.RoomObjectId;
-        $scope.changeRoom(searchElement.RoomId);
+        $scope.changeRoom(searchElement.RoomId, false);
         var room = getRoomById(searchElement.RoomId);
         if (room) $scope.selectedRoom = room;
 
@@ -287,8 +288,8 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         $scope.zoomValue = Math.round($scope.zoomValue / 5) * 5;
         zoom = $scope.zoomValue / 100;
         $scope.scale = zoom;
-        $scope.globalOffset.x = -borders.left * zoom + $scope.gridStep;
-        $scope.globalOffset.y = -borders.top * zoom + $scope.gridStep;
+        $scope.globalOffset.x = Math.round(-borders.left * zoom + $scope.gridStep);
+        $scope.globalOffset.y = Math.round(-borders.top * zoom + $scope.gridStep);
     }
 
     function getBorders() {
@@ -314,7 +315,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     function setScale() {
         $scope.scale = $scope.zoomValue / 100.0;
         //$scope.redrawAllFigures();
-        $scope.changeRoom($scope.room.Id);
+        $scope.changeRoom($scope.room.Id, false);
     }
 
     $scope.showSettings = function () {

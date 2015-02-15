@@ -38,8 +38,8 @@
     }
 
     this.createNew = function (x, y, width, height) {
-        this.leftTopX = scope.view2ProjectX(x) - width / 2;
-        this.leftTopY = scope.view2ProjectY(y) - height / 2;
+        this.leftTopX = scope.toGrid(scope.view2ProjectX(x) - width / 2);
+        this.leftTopY = scope.toGrid(scope.view2ProjectY(y) - height / 2);
         this.width = width;
         this.height = height;
         var thisObject = this;
@@ -133,7 +133,9 @@
             width: this.textRectangle.width,
             height: this.textRectangle.height
         }
-        this.attachedPath.captions = getMultiLineText(rect, style, this.employeeFio);
+        this.attachedPath.captions = getMultiLineText(rect, style,
+            this.roomObjectId + ' (' + this.leftTopX + ', ' + this.leftTopY + '');
+        //this.attachedPath.captions = getMultiLineText(rect, style, this.employeeFio);
         if (this.identNumber) {
             this.attachedPath.captions.push(getPointText(
                 { left: rect.left, top: rect.top + rect.height - style.fontSize, width: rect.width, height: rect.height },
@@ -173,7 +175,7 @@
     this.save = function () {
         var rectangleInfo = {
             RoomObjectId: this.roomObjectId,
-            LeftTopX: scope.view2ProjectX(this.attachedPath.position.x) - this.width / 2,
+            LeftTopX: scope.view2ProjectX(this.attachedPath.position.x) - this.width / 2 - 5,
             LeftTopY: scope.view2ProjectY(this.attachedPath.position.y) - this.height / 2,
             Width: this.width,
             Height: this.height
@@ -293,5 +295,20 @@
             return this.leftTopY + this.width;
         else
             return this.leftTopY + this.height;
+    }
+
+    this.move = function(offsetX, offsetY) {
+        var newX = scope.toScaledGridX(this.attachedPath.position.x + offsetX);
+        var realOffsetX = newX - this.attachedPath.position.x;
+        this.attachedPath.position.x = newX;
+        var newY = scope.toScaledGridY(this.attachedPath.position.y + offsetY);
+        var realOffsetY = newY - this.attachedPath.position.y;
+        this.attachedPath.position.y = newY;
+        if (this.attachedPath.captions) {
+            for (var i = 0; i < this.attachedPath.captions.length; i++) {
+                this.attachedPath.captions[i].point.x = this.attachedPath.captions[i].point.x + realOffsetX;
+                this.attachedPath.captions[i].point.y = this.attachedPath.captions[i].point.y + realOffsetY;
+            }
+        }
     }
 }

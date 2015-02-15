@@ -152,4 +152,14 @@
     this.bottom = function () {
         return Math.max(this.y1, this.y2);
     }
+
+    this.moveSegment = function(segment, offsetX, offsetY) {
+        segment.point.x = scope.toScaledGridX(segment.point.x + offsetX);
+        segment.point.y = scope.toScaledGridY(segment.point.y + offsetY);
+    }
+
+    this.move = function (offsetX, offsetY) {
+        this.moveSegment(this.attachedPath.segments[0], offsetX, offsetY);
+        this.moveSegment(this.attachedPath.segments[1], offsetX, offsetY);
+    }
 }
