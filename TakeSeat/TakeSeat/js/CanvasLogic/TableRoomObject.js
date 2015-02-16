@@ -133,9 +133,9 @@
             width: this.textRectangle.width,
             height: this.textRectangle.height
         }
-        this.attachedPath.captions = getMultiLineText(rect, style,
-            this.roomObjectId + ' (' + this.leftTopX + ', ' + this.leftTopY + '');
-        //this.attachedPath.captions = getMultiLineText(rect, style, this.employeeFio);
+        //this.attachedPath.captions = getMultiLineText(rect, style,
+        //    this.roomObjectId + ' (' + this.leftTopX + ', ' + this.leftTopY + '');
+        this.attachedPath.captions = getMultiLineText(rect, style, this.employeeFio);
         if (this.identNumber) {
             this.attachedPath.captions.push(getPointText(
                 { left: rect.left, top: rect.top + rect.height - style.fontSize, width: rect.width, height: rect.height },
