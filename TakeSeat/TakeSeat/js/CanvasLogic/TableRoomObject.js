@@ -147,8 +147,12 @@
     this.getPath = function () {
         if (this.attachedPath) this.attachedPath.remove();
         var raster = new paper.Raster("maptable");
-        raster.position = new paper.Point(scope.project2ViewX(this.leftTopX + this.width / 2),
-            scope.project2ViewY(this.leftTopY + this.height / 2));
+        raster.position = new paper.Point(this.getPositionX(this.leftTopX), this.getPositionY(this.leftTopY));
+        var x1 = this.toScaledGridPositionX(raster.position.x);
+        var y1 = this.toScaledGridPositionY(raster.position.y);
+        if (raster.position.x != x1 || raster.position.y != y1) {
+            alert('aaa');
+        }
         raster.RoomObject = this;
         raster.scale(scope.scale);
         this.attachedPath = raster;
@@ -172,11 +176,37 @@
         });
     }
 
+    this.getPositionX = function(leftTopX) {
+        return scope.project2ViewX(leftTopX + this.width / 2);
+    }
+
+    this.getPositionY = function (leftTopY) {
+        return scope.project2ViewY(leftTopY + this.height / 2);
+    }
+
+    this.getLeftTopX = function(positionX) {
+        return scope.toGrid((positionX - scope.globalOffset.x) / scope.scale - this.width / 2);
+    }
+
+    this.getLeftTopY = function (positionY) {
+        return scope.toGrid((positionY - scope.globalOffset.y) / scope.scale - this.height / 2);
+    }
+
+    this.toScaledGridPositionX = function(positionX) {
+        var leftTopX = this.getLeftTopX(positionX);
+        return this.getPositionX(leftTopX);
+    }
+
+    this.toScaledGridPositionY = function (positionY) {
+        var leftTopY = this.getLeftTopY(positionY);
+        return this.getPositionY(leftTopY);
+    }
+
     this.save = function () {
         var rectangleInfo = {
             RoomObjectId: this.roomObjectId,
-            LeftTopX: scope.view2ProjectX(this.attachedPath.position.x) - this.width / 2 - 5,
-            LeftTopY: scope.view2ProjectY(this.attachedPath.position.y) - this.height / 2,
+            LeftTopX: this.getLeftTopX(this.attachedPath.position.x),
+            LeftTopY: this.getLeftTopY(this.attachedPath.position.y),
             Width: this.width,
             Height: this.height
         };
@@ -298,11 +328,14 @@
     }
 
     this.move = function(offsetX, offsetY) {
-        var newX = scope.toScaledGridX(this.attachedPath.position.x + offsetX);
+        var newX = this.toScaledGridPositionX(this.attachedPath.position.x + offsetX);
         var realOffsetX = newX - this.attachedPath.position.x;
         this.attachedPath.position.x = newX;
-        var newY = scope.toScaledGridY(this.attachedPath.position.y + offsetY);
+        var newY = this.toScaledGridPositionY(this.attachedPath.position.y + offsetY);
         var realOffsetY = newY - this.attachedPath.position.y;
+        if (realOffsetX > offsetX || realOffsetY > offsetY) {
+            var xxx = 1;
+        }
         this.attachedPath.position.y = newY;
         if (this.attachedPath.captions) {
             for (var i = 0; i < this.attachedPath.captions.length; i++) {
