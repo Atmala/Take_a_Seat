@@ -13,6 +13,7 @@ using CommonClasses.Helpers;
 using CommonClasses.InfoClasses;
 using CommonClasses.Models;
 using CommonClasses.Params;
+using CommonClasses.Results;
 using DbLayer.Migrations;
 
 namespace DbLayer
@@ -273,11 +274,20 @@ namespace DbLayer
             return roomObjectId;
         }
 
-        public int SaveTable(int roomId, int roomObjectId, int leftTopX, int leftTopY, int width, int height)
+        public SaveTableResult SaveTable(int roomId, int roomObjectId, int leftTopX, int leftTopY, int width, int height)
         {
-            return roomObjectId == 0
+            var savedRoomObjectId = roomObjectId == 0
                 ? SaveNewTable(roomId, leftTopX, leftTopY, width, height)
                 : UpdateTable(roomObjectId, leftTopX, leftTopY, width, height);
+            try
+            {
+                var rectangle = _db.Rectangles.Single(r => r.RoomObjectId == savedRoomObjectId);
+                return new SaveTableResult(savedRoomObjectId, rectangle.LeftTopX, rectangle.LeftTopY);
+            }
+            catch
+            {
+                return new SaveTableResult(0, 0, 0);
+            }
         }
 
         private void DeleteOtherEmployeeTableLinks(int employeeId, int roomObjectId)

@@ -281,6 +281,14 @@ seatApp
                         return scope.toGrid(Math.round((viewY - scope.globalOffset.y) / scope.scale));
                     }
 
+                    scope.view2ProjectXNoGrid = function(viewX) {
+                        return Math.round((viewX - scope.globalOffset.x) / scope.scale);
+                    }
+
+                    scope.view2ProjectYNoGrid = function (viewY) {
+                        return Math.round((viewY - scope.globalOffset.y) / scope.scale);
+                    }
+
                     scope.project2ViewX = function (projectX) {
                         return Math.round(projectX * scope.scale + scope.globalOffset.x);
                     }

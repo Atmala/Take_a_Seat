@@ -38,27 +38,13 @@
     }
 
     this.createNew = function (x, y, width, height) {
+        this.roomObjectId = 0;
         this.leftTopX = scope.toGrid(scope.view2ProjectX(x) - width / 2);
         this.leftTopY = scope.toGrid(scope.view2ProjectY(y) - height / 2);
         this.width = width;
         this.height = height;
-        var thisObject = this;
 
-        var rectangleInfo = {
-            RoomObjectId: 0,
-            LeftTopX: this.leftTopX,
-            LeftTopY: this.leftTopY,
-            Width: width,
-            Height: height
-        };
-        $.ajax({
-            url: window.saveTablePath,
-            type: 'POST',
-            data: rectangleInfo,
-            success: function (response) {
-                thisObject.roomObjectId = response.Id;
-            }
-        });
+        this.save();
     }
 
     function getPointText(rect, style, str) {
@@ -144,11 +130,15 @@
         fitCaptionsToCenter(this.attachedPath.captions, rect.width);
     }
 
+    this.getCurrentPosition = function () {
+        return new paper.Point(scope.project2ViewX(this.leftTopX + this.width / 2),
+            scope.project2ViewY(this.leftTopY + this.height / 2));
+    }
+
     this.getPath = function () {
         if (this.attachedPath) this.attachedPath.remove();
         var raster = new paper.Raster("maptable");
-        raster.position = new paper.Point(scope.project2ViewX(this.leftTopX + this.width / 2),
-            scope.project2ViewY(this.leftTopY + this.height / 2));
+        raster.position = this.getCurrentPosition();
         raster.RoomObject = this;
         raster.scale(scope.scale);
         this.attachedPath = raster;
@@ -173,17 +163,29 @@
     }
 
     this.save = function () {
+        var thisObject = this;
         var rectangleInfo = {
             RoomObjectId: this.roomObjectId,
-            LeftTopX: scope.view2ProjectX(this.attachedPath.position.x) - this.width / 2 - 5,
-            LeftTopY: scope.view2ProjectY(this.attachedPath.position.y) - this.height / 2,
+            LeftTopX: this.leftTopX,
+            LeftTopY: this.leftTopY,
             Width: this.width,
             Height: this.height
         };
+
         $.ajax({
             url: window.saveTablePath,
             type: 'POST',
-            data: rectangleInfo
+            data: rectangleInfo,
+            success: function (response) {
+                if (response.RoomObjectId == 0) {
+                    thisObject.attachedPath.remove();
+                } else {
+                    thisObject.roomObjectId = response.RoomObjectId;
+                    thisObject.leftTopX = response.LeftTopX;
+                    thisObject.leftTopY = response.LeftTopY;
+                    thisObject.attachedPath.position = thisObject.getCurrentPosition();
+                }
+            }
         });
     }
 
@@ -193,7 +195,7 @@
         scope.setTableDropDownMenuMode('buttons');
         scope.tableDropDownMenuVisible = true;
         scope.$apply();
-        
+
         var dropDownMenu = $("#tableDropDownMenu");
         dropDownMenu.css({
             left: this.attachedPath.bounds.left + canvas.offsetLeft - 56,
@@ -275,16 +277,16 @@
         this.setCaptions();
     }
 
-    this.left = function() {
+    this.left = function () {
         return this.leftTopX;
     }
 
-    this.top = function() {
+    this.top = function () {
         return this.leftTopY;
     }
 
     this.right = function () {
-        if (this.angle === 90 || this.angle === 270) 
+        if (this.angle === 90 || this.angle === 270)
             return this.leftTopX + this.height;
         else
             return this.leftTopX + this.width;
@@ -297,11 +299,14 @@
             return this.leftTopY + this.height;
     }
 
-    this.move = function(offsetX, offsetY) {
-        var newX = scope.toScaledGridX(this.attachedPath.position.x + offsetX);
+    this.move = function (offsetX, offsetY) {
+        this.leftTopX = scope.toGrid(scope.view2ProjectXNoGrid(this.attachedPath.position.x + offsetX) - this.width / 2);
+        this.leftTopY = scope.toGrid(scope.view2ProjectYNoGrid(this.attachedPath.position.y + offsetY) - this.height / 2);
+
+        var newX = scope.project2ViewX(this.leftTopX + this.width / 2);
         var realOffsetX = newX - this.attachedPath.position.x;
         this.attachedPath.position.x = newX;
-        var newY = scope.toScaledGridY(this.attachedPath.position.y + offsetY);
+        var newY = scope.project2ViewY(this.leftTopY + this.height / 2);
         var realOffsetY = newY - this.attachedPath.position.y;
         this.attachedPath.position.y = newY;
         if (this.attachedPath.captions) {

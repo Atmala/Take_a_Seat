@@ -4,6 +4,7 @@ using CommonClasses.Database;
 using CommonClasses.InfoClasses;
 using CommonClasses.Models;
 using CommonClasses.Params;
+using CommonClasses.Results;
 using DbLayer;
 using NLog;
 
@@ -69,7 +70,7 @@ namespace TakeSeatServiceProxy
             }
         }
 
-        public static int SaveTable(int roomId, int roomObjectId, int leftTopX, int leftTopY, int width, int height)
+        public static SaveTableResult SaveTable(int roomId, int roomObjectId, int leftTopX, int leftTopY, int width, int height)
         {
             using (var dbRepository = new DbRepository())
             {
