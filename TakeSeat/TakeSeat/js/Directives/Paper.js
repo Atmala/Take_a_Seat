@@ -118,6 +118,7 @@ seatApp
 
                     function movePath(offsetX, offsetY) {
                         pathToMove.RoomObject.move(offsetX, offsetY);
+                        
                     }
 
                     function getAnotherPoint(segment) {
@@ -135,12 +136,11 @@ seatApp
                     }
 
                     function moveAllItems(offsetX, offsetY) {
-                        scope.globalOffset.x = scope.toGrid(scope.globalOffset.x + offsetX);
-                        scope.globalOffset.y = scope.toGrid(scope.globalOffset.y + offsetY);
+                        scope.globalOffset.x = scope.globalOffset.x + offsetX;
+                        scope.globalOffset.y = scope.globalOffset.y + offsetY;
                         project.activeLayer.children.forEach(function (item) {
-                            if (item.RoomObject && item.RoomObject.move) {
-                                item.RoomObject.move(offsetX, offsetY);
-                                //item.position = new paper.Point(item.position.x + offsetX, item.position.y + offsetY);
+                            if (item.RoomObject && item.RoomObject.updatePosition) {
+                                item.RoomObject.updatePosition();
                             }
                         });
                     }
@@ -165,8 +165,9 @@ seatApp
                         if (!hitResult) return;
                         if (hitResult.type === 'stroke') {
                             selectedPath = hitResult.item;
-                            scope.HitResult = 'Line: (' + selectedPath.segments[0].point.x + ',' + selectedPath.segments[0].point.y + ') - (' +
-                                selectedPath.segments[1].point.x + ',' + selectedPath.segments[1].point.y + ')';
+                            //scope.HitResult = 'Line: (' + selectedPath.segments[0].point.x + ',' + selectedPath.segments[0].point.y + ') - (' +
+                            //    selectedPath.segments[1].point.x + ',' + selectedPath.segments[1].point.y + ')';
+                            scope.HitResult = selectedPath.RoomObject.dbCoordinatesString();
                         }
                         else if (hitResult.type === 'segment') {
                             selectedPath = hitResult.item;

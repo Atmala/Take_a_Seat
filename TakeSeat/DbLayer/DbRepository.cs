@@ -216,11 +216,14 @@ namespace DbLayer
             return Save(rectangle);
         }
 
-        public int SaveWall(int roomId, LineInfo lineInfo)
+        public SaveWallResult SaveWall(int roomId, LineInfo lineInfo)
         {
-            return lineInfo.RoomObjectId == 0
+            var savedRoomObjectId = lineInfo.RoomObjectId == 0
                 ? SaveNewWall(roomId, lineInfo)
                 : UpdateWall(lineInfo);
+            var points = _db.Points.Where(r => r.RoomObjectId == savedRoomObjectId).ToList();
+            if (points.Count != 2) return new SaveWallResult();
+            return new SaveWallResult(savedRoomObjectId, points[0].X, points[0].Y, points[1].X, points[1].Y);
         }
 
         private int SaveNewWall(int roomId, LineInfo lineInfo)

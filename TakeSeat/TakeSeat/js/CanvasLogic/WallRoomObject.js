@@ -18,33 +18,46 @@
         this.save();
     }
 
+    this.getFirstPoint = function() {
+        return new paper.Point(scope.project2ViewX(this.x1), scope.project2ViewY(this.y1));
+    }
+
+    this.getSecondPoint = function() {
+        return new paper.Point(scope.project2ViewX(this.x2), scope.project2ViewY(this.y2));
+    }
+
     this.getPath = function () {
         if (this.attachedPath) this.attachedPath.remove();
         if (Math.abs(this.x1 - this.x2) < scope.gridStep && Math.abs(this.y1 - this.y2) < scope.gridStep)
             return null;
         var path = new paper.Path();
         scope.setWallAppearance(path, this.subType);
-        path.add(new paper.Point(scope.project2ViewX(this.x1), scope.project2ViewY(this.y1)));
-        path.add(new paper.Point(scope.project2ViewX(this.x2), scope.project2ViewY(this.y2)));
+        path.add(this.getFirstPoint());
+        path.add(this.getSecondPoint());
         path.RoomObject = this;
         this.attachedPath = path;
         return path;
     }
 
     this.save = function () {
-        this.x1 = this.attachedPath.segments[0].point.x;
-        this.y1 = this.attachedPath.segments[0].point.y;
-        this.x2 = this.attachedPath.segments[1].point.x;
-        this.y2 = this.attachedPath.segments[1].point.y;
         var thisObject = this;
+
+        //var lineInfo = {
+        //    RoomObjectId: this.roomObjectId,
+        //    SubType: this.subType,
+        //    X1: scope.view2ProjectX(this.attachedPath.segments[0].point.x),
+        //    Y1: scope.view2ProjectY(this.attachedPath.segments[0].point.y),
+        //    X2: scope.view2ProjectX(this.attachedPath.segments[1].point.x),
+        //    Y2: scope.view2ProjectY(this.attachedPath.segments[1].point.y)
+        //};
 
         var lineInfo = {
             RoomObjectId: this.roomObjectId,
             SubType: this.subType,
-            X1: scope.view2ProjectX(this.x1),
-            Y1: scope.view2ProjectY(this.y1),
-            X2: scope.view2ProjectX(this.x2),
-            Y2: scope.view2ProjectY(this.y2)
+            X1: this.x1,
+            Y1: this.y1,
+            X2: this.x2,
+            Y2: this.y2
         };
 
         $.ajax({
@@ -52,7 +65,13 @@
             type: 'POST',
             data: lineInfo,
             success: function (response) {
-                thisObject.roomObjectId = response.Id;
+                thisObject.roomObjectId = response.RoomObjectId;
+                thisObject.x1 = response.X1;
+                thisObject.y1 = response.Y1;
+                thisObject.x2 = response.X2;
+                thisObject.y2 = response.Y2;
+                thisObject.attachedPath.segments[0].point = thisObject.getFirstPoint();
+                thisObject.attachedPath.segments[1].point = thisObject.getSecondPoint();
             }
         });
     }
@@ -153,13 +172,26 @@
         return Math.max(this.y1, this.y2);
     }
 
-    this.moveSegment = function(segment, offsetX, offsetY) {
+    this.moveSegment = function (segment, offsetX, offsetY) {
         segment.point.x = scope.toScaledGridX(segment.point.x + offsetX);
         segment.point.y = scope.toScaledGridY(segment.point.y + offsetY);
     }
 
     this.move = function (offsetX, offsetY) {
-        this.moveSegment(this.attachedPath.segments[0], offsetX, offsetY);
-        this.moveSegment(this.attachedPath.segments[1], offsetX, offsetY);
+        this.x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x + offsetX);
+        this.y1 = scope.view2ProjectY(this.attachedPath.segments[0].point.y + offsetY);
+        this.x2 = scope.view2ProjectX(this.attachedPath.segments[1].point.x + offsetX);
+        this.y2 = scope.view2ProjectY(this.attachedPath.segments[1].point.y + offsetY);
+        this.updatePosition();
+        scope.HitResult = this.dbCoordinatesString();
+    }
+
+    this.updatePosition = function() {
+        this.attachedPath.segments[0].point = this.getFirstPoint();
+        this.attachedPath.segments[1].point = this.getSecondPoint();
+    }
+
+    this.dbCoordinatesString = function() {
+        return 'Line: (' + this.x1 + ',' + this.y1 + ') - (' + this.x2 + ',' + this.y2 + ')';
     }
 }

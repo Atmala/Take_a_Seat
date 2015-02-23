@@ -148,6 +148,12 @@
         return raster;
     }
 
+    this.updatePosition = function() {
+        this.attachedPath.position = this.getCurrentPosition();
+        this.setTextRectangle();
+        this.setCaptions();
+    }
+
     this.deleteRoomObject = function () {
         this.removeCaptions();
         $.ajax({

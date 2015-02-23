@@ -62,7 +62,7 @@ namespace TakeSeatServiceProxy
             }
         }
 
-        public static int SaveWall(int roomId, LineInfo lineInfo)
+        public static SaveWallResult SaveWall(int roomId, LineInfo lineInfo)
         {
             using (var dbRepository = new DbRepository())
             {
