@@ -9,7 +9,7 @@ seatApp
                     var isMoved = false;
                     var rectangleWidth = 70, rectangleHeight = 100;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
-                    var selectedPath, selectedSegment, pathToMove, segmentToMove;
+                    var selectedPath, selectedSegment, numberOfPointUnderMove, pathToMove, segmentToMove;
 
                     scope.color = '#000000';
                     scope.fontColor = '#000000';
@@ -110,14 +110,15 @@ seatApp
                         var scaledGridStep = scope.gridStep * scope.scale;
                         if (Math.abs(offsetX) < scaledGridStep && Math.abs(offsetY) < scaledGridStep) return;
 
-                        if (segmentToMove && scope.editPlanMode) moveSegment(x, y);
-                        else if (pathToMove && scope.editPlanMode) movePath(offsetX, offsetY);
+                        //if (segmentToMove && scope.editPlanMode) moveSegment(x, y);
+                        //else
+                        if (pathToMove && scope.editPlanMode) movePath(offsetX, offsetY);
                         else moveAllItems(offsetX, offsetY);
                         mouseDownPoint = new paper.Point(x, y);
                     }
 
                     function movePath(offsetX, offsetY) {
-                        pathToMove.RoomObject.move(offsetX, offsetY);
+                        pathToMove.RoomObject.move(offsetX, offsetY, numberOfPointUnderMove);
                         
                     }
 
@@ -149,6 +150,7 @@ seatApp
                         project.deselectAll();
                         selectedPath = null;
                         selectedSegment = null;
+                        numberOfPointUnderMove = null;
 
                         var point = new paper.Point(x, y);
                         var table = getTableByPoint(point);
@@ -172,6 +174,7 @@ seatApp
                         else if (hitResult.type === 'segment') {
                             selectedPath = hitResult.item;
                             selectedSegment = hitResult.segment;
+                            numberOfPointUnderMove = hitResult.numberOfPointUnderMouse;
                             scope.HitResult = 'Segment: (' + selectedSegment.point.x + ',' + selectedSegment.point.y + ')';
                         }
 

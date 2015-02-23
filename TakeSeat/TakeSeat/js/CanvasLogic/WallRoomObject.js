@@ -98,10 +98,12 @@
                 return {
                     type: 'segment',
                     item: this.attachedPath,
-                    segment: this.attachedPath.segments[i]
+                    segment: this.attachedPath.segments[i],
+                    numberOfPointUnderMouse: i + 1
                 }
             }
         }
+        this.numberOfPointUnderMouse = undefined;
         return undefined;
     }
 
@@ -172,16 +174,15 @@
         return Math.max(this.y1, this.y2);
     }
 
-    this.moveSegment = function (segment, offsetX, offsetY) {
-        segment.point.x = scope.toScaledGridX(segment.point.x + offsetX);
-        segment.point.y = scope.toScaledGridY(segment.point.y + offsetY);
-    }
-
-    this.move = function (offsetX, offsetY) {
-        this.x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x + offsetX);
-        this.y1 = scope.view2ProjectY(this.attachedPath.segments[0].point.y + offsetY);
-        this.x2 = scope.view2ProjectX(this.attachedPath.segments[1].point.x + offsetX);
-        this.y2 = scope.view2ProjectY(this.attachedPath.segments[1].point.y + offsetY);
+    this.move = function (offsetX, offsetY, numberOfPointUnderMouse) {
+        if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 1) {
+            this.x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x + offsetX);
+            this.y1 = scope.view2ProjectY(this.attachedPath.segments[0].point.y + offsetY);
+        }
+        if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 2) {
+            this.x2 = scope.view2ProjectX(this.attachedPath.segments[1].point.x + offsetX);
+            this.y2 = scope.view2ProjectY(this.attachedPath.segments[1].point.y + offsetY);
+        }
         this.updatePosition();
         scope.HitResult = this.dbCoordinatesString();
     }
