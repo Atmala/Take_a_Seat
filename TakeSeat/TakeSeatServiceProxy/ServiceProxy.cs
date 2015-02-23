@@ -149,5 +149,21 @@ namespace TakeSeatServiceProxy
                 dbRepository.MakeRoomInactive(roomId);
             }
         }
+
+        public static string GetImportStatistics(List<ImportEmployeeInfo> importedEmployees)
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                return dbRepository.GetImportStatistics(importedEmployees);
+            }
+        }
+
+        public static void ImportEmployees(List<ImportEmployeeInfo> importedEmployees)
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                dbRepository.ImportEmployees(importedEmployees);
+            }
+        }
     }
 }

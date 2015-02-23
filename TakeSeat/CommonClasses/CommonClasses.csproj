@@ -48,6 +48,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.SqlServer.Compact.4.0.8876.1\lib\net40\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -63,10 +64,14 @@
     <Compile Include="Database\Room.cs" />
     <Compile Include="Database\RoomObject.cs" />
     <Compile Include="Database\RoomObjectType.cs" />
+    <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
+    <Compile Include="InfoClasses\BaseResult.cs" />
     <Compile Include="InfoClasses\EmployeeInfo.cs" />
     <Compile Include="InfoClasses\EmployeeTableLinkInfo.cs" />
+    <Compile Include="InfoClasses\ImportEmployeeInfo.cs" />
     <Compile Include="InfoClasses\LineInfo.cs" />
+    <Compile Include="InfoClasses\MethodResult.cs" />
     <Compile Include="InfoClasses\RectangleInfo.cs" />
     <Compile Include="InfoClasses\RoomInfo.cs" />
     <Compile Include="InfoClasses\SearchElementInfo.cs" />

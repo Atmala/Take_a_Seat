@@ -343,5 +343,43 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             setDefaultMode();
         }
     }
+
+    $scope.importEmployees = function() {
+        try {
+            $.ajax({
+                url: window.importEmployeesPath,
+                data: {},
+                success: function (response) {
+                    alert(response.isError ? response.message : "Import is successful");
+                },
+                error: function (req, status, error) {
+                    alert("Error: " + error);
+                }
+            });
+        }
+        catch (e) {
+            alert(e.description);
+        }
+    }
+
+    $scope.importEmployeesWithConfirm = function () {
+        try {
+            $.ajax({
+                url: window.getImportStatisticsPath,
+                data: {},
+                success: function (response) {
+                    if (confirm(response.message)) {
+                        $scope.importEmployees();
+                    }
+                },
+                error: function (req, status, error) {
+                    alert("Error: " + error);
+                }
+            });
+        }
+        catch (e) {
+            alert(e.description);
+        }
+    }
 }]);
 

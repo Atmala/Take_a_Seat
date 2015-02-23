@@ -60,15 +60,24 @@
                 <img src=@Url.Content("~/img/settings.png") />
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownCountry">
-                <li><a ng-click="changeWallMode('90')">
+                <li>
+                    <a ng-click="changeWallMode('90')">
                         <span ng-class="{fontBold: wallMode == '90'}">90 degree</span>
-                    </a></li>
+                    </a>
+                </li>
                 @*<li><a ng-click="changeWallMode('45')">
                         <span ng-class="{fontBold: wallMode == '45'}">45 degree</span>
                     </a></li>*@
-                <li><a ng-click="changeWallMode('free')">
+                <li>
+                    <a ng-click="changeWallMode('free')">
                         <span ng-class="{fontBold: wallMode == 'free'}">Free</span>
-                    </a></li>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="importEmployeesWithConfirm()">
+                        <span>Export</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

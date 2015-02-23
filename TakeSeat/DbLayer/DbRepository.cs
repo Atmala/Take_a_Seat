@@ -338,6 +338,15 @@ namespace DbLayer
             }
         }
 
+        private void RemoveEmployeeTableLinks(int employeeId)
+        {
+            foreach (var link in _db.EmployeeTableLinks.Where(etl => etl.EmployeeId == employeeId).ToList())
+            {
+                _db.EmployeeTableLinks.Remove(link);
+                _db.SaveChanges();
+            }
+        }
+
         public RoomInfo CreateNewRoom(string caption)
         {
             var room = new Room { Caption = caption, Order = 0, IsActive = true };
@@ -503,6 +512,47 @@ namespace DbLayer
             {
                 room.IsActive = true;
                 Save(room);
+            }
+        }
+
+        #endregion
+
+        #region Import Methods
+        
+        public string GetImportStatistics(List<ImportEmployeeInfo> importedEmployees)
+        {
+            var employeeExternalIds = _db.Employees.Select(e => e.ExternalId).ToList();
+            var result = new StringBuilder();
+            result.AppendLine("Will be added: " + importedEmployees.Count(ie => employeeExternalIds.All(id => id != ie.EmployeeId)));
+            result.AppendLine("Will be deleted: " + employeeExternalIds.Count(id => importedEmployees.All(ie => id != ie.EmployeeId)));
+
+            return result.ToString();
+        }
+
+
+
+        public void ImportEmployees(List<ImportEmployeeInfo> importedEmployees)
+        {
+            var employeeExternalIds = _db.Employees.Select(e => e.ExternalId).ToList();
+            foreach (var importedEmployee in
+                importedEmployees.Where(ie => employeeExternalIds.All(id => id != ie.EmployeeId)))
+            {
+                var employee = new Employee
+                {
+                    ExternalId = importedEmployee.EmployeeId,
+                    FirstName = importedEmployee.FirstName,
+                    Surname = importedEmployee.Surname
+                };
+                Save(employee);
+            }
+
+            foreach (var externalId in employeeExternalIds.Where(id => importedEmployees.All(ie => id != ie.EmployeeId)))
+            {
+                var employee = _db.Employees.FirstOrDefault(e => e.ExternalId == externalId);
+                if (employee == null) continue;
+                RemoveEmployeeTableLinks(employee.Id);
+                _db.Employees.Remove(employee);
+                _db.SaveChanges();
             }
         }
 

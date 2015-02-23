@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Web.Mvc;
+using System.Web.Services.Description;
+using CommonClasses.Helpers;
 using CommonClasses.InfoClasses;
 using CommonClasses.Models;
 using CommonClasses.Params;
@@ -22,7 +27,7 @@ namespace TakeSeat.Controllers
                     if (room == null) room = ServiceProxy.SaveRoom(new RoomModel());
                     Session["Room"] = room;
                 }
-                return (RoomModel) Session["Room"];
+                return (RoomModel)Session["Room"];
             }
             set { Session["Room"] = value; }
         }
@@ -61,7 +66,7 @@ namespace TakeSeat.Controllers
         public JsonResult SaveWall(LineInfo lineInfo)
         {
             var id = ServiceProxy.SaveWall(Room.Id, lineInfo);
-            var response = new {Id = id};
+            var response = new { Id = id };
             return Json(response);
         }
 
@@ -143,6 +148,39 @@ namespace TakeSeat.Controllers
         public JsonResult GetElementsForSearch()
         {
             return Json(ServiceProxy.GetElementsForSearch(), JsonRequestBehavior.AllowGet);
+        }
+
+        private MethodResult<List<ImportEmployeeInfo>> GetEmployeeImport()
+        {
+            var employeesUrl = "http://aas/aas-prod-service/AasRest.svc/allEmployeesForTakeSeat";
+            var webClient = new WebClient();
+            webClient.Encoding = Encoding.UTF8;
+            var json = webClient.DownloadString(employeesUrl);
+            return JsonHelper.JsonDeserialize<MethodResult<List<ImportEmployeeInfo>>>(json);
+        }
+
+        [HttpGet]
+        public JsonResult GetImportStatistics()
+        {
+            var webMethodResult = GetEmployeeImport();
+            if (webMethodResult.IsError())
+            {
+                return Json(new { isError = true, message = webMethodResult.ErrorMessage }, JsonRequestBehavior.AllowGet);
+            }
+            var result = ServiceProxy.GetImportStatistics(webMethodResult.AttachedObject);
+            return Json(new { isError = false, message = result }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult ImportEmployees()
+        {
+            var webMethodResult = GetEmployeeImport();
+            if (webMethodResult.IsError())
+            {
+                return Json(new { isError = true, message = webMethodResult.ErrorMessage }, JsonRequestBehavior.AllowGet);
+            }
+            ServiceProxy.ImportEmployees(webMethodResult.AttachedObject);
+            return Json(new { isError = true, message = "" }, JsonRequestBehavior.AllowGet);
         }
     }
 }
