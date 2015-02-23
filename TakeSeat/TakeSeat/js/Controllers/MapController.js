@@ -232,30 +232,9 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         }
     }
 
-    function getRoomById(roomId) {
-        for (var i = 0; i < $scope.rooms.length; i++) {
-            if ($scope.rooms[i].Id === roomId) return $scope.rooms[i];
-        }
-        return null;
-    }
-
     $scope.doSearch = function(searchElement) {
         $scope.foundRoomObjectId = searchElement.RoomObjectId;
-        $scope.foundRoomObjectId = searchElement.RoomObjectId;
-        $scope.changeRoom(searchElement.RoomId, false);
-        var room = getRoomById(searchElement.RoomId);
-        if (room) $scope.selectedRoom = room;
-
-        //for (var i = 0; i < project.activeLayer.children.length; i++) {
-        //    var item = project.activeLayer.children[i];
-        //    if (item.RoomObject && item.RoomObject.setCaptions) {
-        //        var isFound = item.RoomObject.roomObjectId === searchElement.RoomObjectId;
-        //        if (item.RoomObject.isFoundItem != isFound) {
-        //            item.RoomObject.isFoundItem = isFound;
-        //            item.RoomObject.setCaptions();
-        //        }
-        //    }
-        //}
+        $scope.changeRoom(searchElement.RoomId, true);
     }
 
     $scope.scaleMinus = function () {
@@ -285,6 +264,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         var zoom = Math.min(zoomVert, zoomHor);
         $scope.zoomValue = Math.round(zoom * 100);
         if ($scope.zoomValue > 100) $scope.zoomValue = 100;
+        if ($scope.zoomValue < 50) $scope.zoomValue = 50;
         $scope.zoomValue = Math.round($scope.zoomValue / 5) * 5;
         zoom = $scope.zoomValue / 100;
         $scope.scale = zoom;
