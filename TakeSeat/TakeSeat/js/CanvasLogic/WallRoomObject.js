@@ -174,14 +174,41 @@
         return Math.max(this.y1, this.y2);
     }
 
+    this.get90PointForWall = function(start, point) {
+        if (Math.abs(point.x - start.x) > Math.abs(point.y - start.y))
+            return { x: point.x, y: start.y };
+        else
+            return { x: start.x, y: point.y };
+    }
+
+    this.getCorrectedPoint = function(start, point) {
+        switch (scope.wallMode) {
+            case '90':
+                return this.get90PointForWall(start, point);
+            default:
+                return point;
+        }
+    }
+
     this.move = function (offsetX, offsetY, numberOfPointUnderMouse) {
+        var correctedPoint;
         if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 1) {
             this.x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x + offsetX);
             this.y1 = scope.view2ProjectY(this.attachedPath.segments[0].point.y + offsetY);
+            if (numberOfPointUnderMouse) {
+                correctedPoint = this.getCorrectedPoint({ x: this.x2, y: this.y2 }, { x: this.x1, y: this.y1 });
+                this.x1 = correctedPoint.x;
+                this.y1 = correctedPoint.y;
+            }
         }
         if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 2) {
             this.x2 = scope.view2ProjectX(this.attachedPath.segments[1].point.x + offsetX);
             this.y2 = scope.view2ProjectY(this.attachedPath.segments[1].point.y + offsetY);
+            if (numberOfPointUnderMouse) {
+                correctedPoint = this.getCorrectedPoint({ x: this.x1, y: this.y1 }, { x: this.x2, y: this.y2 });
+                this.x2 = correctedPoint.x;
+                this.y2 = correctedPoint.y;
+            }
         }
         this.updatePosition();
         scope.HitResult = this.dbCoordinatesString();

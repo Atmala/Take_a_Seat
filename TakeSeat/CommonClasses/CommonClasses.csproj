@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\AdminUser.cs" />
     <Compile Include="Database\Employee.cs" />
     <Compile Include="Database\EmployeeTableLink.cs" />
     <Compile Include="Database\IMapping.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Database\RoomObjectType.cs" />
     <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
+    <Compile Include="InfoClasses\AccessInfo.cs" />
     <Compile Include="InfoClasses\BaseResult.cs" />
     <Compile Include="InfoClasses\EmployeeInfo.cs" />
     <Compile Include="InfoClasses\EmployeeTableLinkInfo.cs" />

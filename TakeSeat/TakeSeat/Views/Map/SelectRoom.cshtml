@@ -18,17 +18,20 @@
 </div>
 <div class="width30 inlineBlock">
     <button title="Delete Room" class="inlineBlock newRoomButton"
-            type="button" ng-click="deleteRoomClick()">
+            type="button" ng-click="deleteRoomClick()"
+            ng-show="userAccess.EditPlan">
         <img src=@Url.Content("~/img/deleteroom.png") />
         Delete
     </button>
     <button title="Edit Plan" class="inlineBlock newRoomButton"
-            type="button" ng-click="switchEditPlanMode()">
+            type="button" ng-click="switchEditPlanMode()"
+            ng-show="userAccess.EditPlan">
         <img src=@Url.Content("~/img/editplan.png") />
         Edit Plan
     </button>
     <button title="Add Room" class="inlineBlock newRoomButton"
-            type="button" ng-click="showRoom()">
+            type="button" ng-click="showRoom()"
+            ng-show="userAccess.EditPlan">
         <img src=@Url.Content("~/img/addroom.png") />
         Add Room
     </button>
@@ -47,12 +50,12 @@
                 type="button" ng-click="scaleMinus()">
             -
         </button>
-          </div><div class="md-overlay inlineBlock">
+          </div>@*<div class="md-overlay inlineBlock">
                     <button title="Fit Room" class="inlineBlock"
                             type="button" ng-click="scaleFit()">
                         Fit
                     </button>
-                </div>@*<div class="md-overlay inlineBlock">
+                </div>*@@*<div class="md-overlay inlineBlock">
                           {{globalOffset.x + ', ' + globalOffset.y}}
 
 

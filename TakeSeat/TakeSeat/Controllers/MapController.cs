@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
 using System.Text;
 using System.Web.Mvc;
 using System.Web.Services.Description;
@@ -14,6 +15,7 @@ using TakeSeatServiceProxy;
 
 namespace TakeSeat.Controllers
 {
+    [Authorize]
     public class MapController : Controller
     {
         private static Logger _logger = LogManager.GetLogger("MapController.cs");
@@ -37,6 +39,14 @@ namespace TakeSeat.Controllers
         {
             _logger.Info("Index()");
             return View();
+        }
+
+        [HttpGet]
+        public JsonResult GetUserAccess()
+        {
+            var user = System.Web.HttpContext.Current.User.Identity;
+            var response = ServiceProxy.GetUserAccess(user.Name);
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

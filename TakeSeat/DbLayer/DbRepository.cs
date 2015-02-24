@@ -532,8 +532,6 @@ namespace DbLayer
             return result.ToString();
         }
 
-
-
         public void ImportEmployees(List<ImportEmployeeInfo> importedEmployees)
         {
             var employeeExternalIds = _db.Employees.Select(e => e.ExternalId).ToList();
@@ -557,6 +555,19 @@ namespace DbLayer
                 _db.Employees.Remove(employee);
                 _db.SaveChanges();
             }
+        }
+
+        private static string RemoveDomain(string userName)
+        {
+            var n = userName.IndexOf(@"\");
+            return n == -1 ? userName : userName.Substring(n + 1);
+        }
+
+        public AccessInfo GetUserAccess(string userNameWithDomain)
+        {
+            var userName = RemoveDomain(userNameWithDomain);
+            bool isAdminUser = _db.AdminUsers.Any(u => u.UserName == userName);
+            return new AccessInfo(isAdminUser, isAdminUser, true);
         }
 
         #endregion

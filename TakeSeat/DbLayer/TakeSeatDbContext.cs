@@ -18,6 +18,8 @@ namespace DbLayer
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeTableLink> EmployeeTableLinks { get; set; }
 
+        public DbSet<AdminUser> AdminUsers { get; set; }
+
         #region Auxilliary Properties and Methods
 
         private Dictionary<Type, object> _dbSetDict;

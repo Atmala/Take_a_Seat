@@ -61,7 +61,18 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         $scope.tableDropDownMenuMode = 'buttons';
         $scope.loadEmployees();
         $scope.loadRooms();
+        $scope.getUserAccess();
         $scope.$apply();
+    }
+
+    $scope.getUserAccess = function() {
+        $.ajax({
+            url: window.getUserAccessPath,
+            data: {},
+            success: function (response) {
+                $scope.userAccess = response;
+            }
+        });
     }
 
     $scope.isSelected = function (section) {
