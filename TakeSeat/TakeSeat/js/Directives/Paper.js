@@ -128,22 +128,10 @@ seatApp
                             segment.path.segments[1].point : segment.path.segments[0].point;
                     }
 
-                    function moveSegment(x, y) {
-                        var anotherPoint = getAnotherPoint(segmentToMove);
-                        var point = new paper.Point(x, y);
-                        var correctedPoint = getPointForWall(anotherPoint, point, scope.wallMode);
-                        segmentToMove.point.x = scope.toScaledGridX(correctedPoint.x);
-                        segmentToMove.point.y = scope.toScaledGridY(correctedPoint.y);
-                    }
-
                     function moveAllItems(offsetX, offsetY) {
-                        scope.globalOffset.x = scope.globalOffset.x + offsetX;
-                        scope.globalOffset.y = scope.globalOffset.y + offsetY;
-                        project.activeLayer.children.forEach(function (item) {
-                            if (item.RoomObject && item.RoomObject.updatePosition) {
-                                item.RoomObject.updatePosition();
-                            }
-                        });
+                        scope.globalOffset.x += offsetX;
+                        scope.globalOffset.y += offsetY;
+                        scope.roomObjectCollection.updateAllPositions();
                     }
 
                     function selectItemByCoordinates(x, y) {
@@ -153,7 +141,7 @@ seatApp
                         numberOfPointUnderMove = null;
 
                         var point = new paper.Point(x, y);
-                        var table = getTableByPoint(point);
+                        var table = scope.roomObjectCollection.getTableByPoint(point);
                         if (table) {
                             selectedPath = table;
                             scope.HitResult = '(' + table.position.x + ' : ' + table.position.y + ') - (' + 
@@ -162,7 +150,7 @@ seatApp
                             return;
                         }
 
-                        var hitResult = customHitTest(point, 5);
+                        var hitResult = scope.roomObjectCollection.customHitTest(point, 5);
                         
                         if (!hitResult) return;
                         if (hitResult.type === 'stroke') {
@@ -182,35 +170,6 @@ seatApp
                         if (selectedSegment) selectedSegment.selected = true;
                         //scope.LogMessage1 = 'Point: ' + point;
 
-                    }
-
-                    function findSegment(point, tolerance) {
-                        for (var i = 0; i < project.activeLayer.children.length; i++) {
-                            var item = project.activeLayer.children[i];
-                            if (item.RoomObject && item.RoomObject.findSegment) {
-                                var hitResult = item.RoomObject.findSegment(point, tolerance);
-                                if (hitResult) return hitResult;
-                            }
-                        }
-                        return undefined;
-                    }
-
-                    function findLine(point, tolerance) {
-                        for (var i = 0; i < project.activeLayer.children.length; i++) {
-                            var item = project.activeLayer.children[i];
-                            if (item.RoomObject && item.RoomObject.findLine) {
-                                var hitResult = item.RoomObject.findLine(point, tolerance);
-                                if (hitResult) return hitResult;
-                            }
-                        }
-                        return undefined;
-                    }
-
-                    function customHitTest(point, tolerance) {
-                        var segment = findSegment(point, tolerance);
-                        if (segment) return segment;
-                        var line = findLine(point, tolerance);
-                        return line;
                     }
 
                     function setCurrentCoords(x, y) {
@@ -256,18 +215,11 @@ seatApp
                         paper.view.draw();
                     }
 
-                    scope.redrawAllFigures = function() {
-                        for (var i = 0; i < project.activeLayer.children.length; i++) {
-                            var item = project.activeLayer.children[i];
-                            if (item.RoomObject)
-                                item.RoomObject.getPath();
-                        }
-                    }
-
                     scope.initAllFigures = function () {
                         scope.RoomCaption = scope.room.Caption;
 
                         if (project.activeLayer) project.activeLayer.remove();
+                        scope.roomObjectCollection.clear();
                         scope.$watch('scope.room.RoomObjects', function () {
                             _.each(scope.room.RoomObjects, function (roomObject) {
                                 roomObjectFactory.getPathByDbRoomObject(roomObject);
@@ -301,16 +253,7 @@ seatApp
                         return Math.round(projectY * scope.scale + scope.globalOffset.y);
                     }
 
-                    function getTableByPoint(point) {
-                        for (var i = 0; i < project.activeLayer.children.length; i++) {
-                            var item = project.activeLayer.children[i];
-                            if (item.contains(point)) {
-                                return item;
-                            }
-                        }
-                        return undefined;
-                    }
-
+                    
                     function get90PointForWall(start, point) {
                         if (Math.abs(point.x - start.x) > Math.abs(point.y - start.y))
                             return new paper.Point([point.x, start.y]);

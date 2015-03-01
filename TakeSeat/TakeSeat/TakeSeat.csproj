@@ -219,6 +219,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="img\window_active.png" />
+    <Content Include="js\CanvasLogic\RoomObjectCollection.js" />
     <Content Include="js\CanvasLogic\TableRoomObject.js" />
     <Content Include="js\CanvasLogic\WallRoomObject.js" />
     <Content Include="js\Controllers\MapController.js" />

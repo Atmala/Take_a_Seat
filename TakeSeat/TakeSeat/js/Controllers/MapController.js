@@ -56,7 +56,8 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     $scope.Init = function () {
         setDefaultMode();
         $scope.wallMode = '90';
-        
+
+        $scope.roomObjectCollection = new RoomObjectCollection();
         $scope.showSelectRoom();
         $scope.tableDropDownMenuMode = 'buttons';
         $scope.loadEmployees();
@@ -172,6 +173,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 if (autoFit) {
                     setRightScale();
                     $scope.initAllFigures();
+                    //$scope.roomObjectCollection.updateAllPositions();
                 }
             }
         });
@@ -268,7 +270,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     function setRightScale() {
-        var borders = getBorders();
+        var borders = $scope.roomObjectCollection.getBorders();
         var canvas = $('#paperCanvas')[0];
         var zoomVert = canvas.clientHeight / borders.height;
         var zoomHor = canvas.clientWidth / borders.width;
@@ -281,26 +283,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         $scope.scale = zoom;
         $scope.globalOffset.x = Math.round(-borders.left * zoom + $scope.gridStep);
         $scope.globalOffset.y = Math.round(-borders.top * zoom + $scope.gridStep);
-    }
-
-    function getBorders() {
-        var borders;
-        for (var i = 0; i < project.activeLayer.children.length; i++) {
-            var roomObject = project.activeLayer.children[i].RoomObject;
-            if (!roomObject) continue;
-
-            if (!borders)
-                borders = { left: roomObject.left(), top: roomObject.top(), right: roomObject.right(), bottom: roomObject.bottom() };
-            else {
-                if (roomObject.left() < borders.left) borders.left = roomObject.left();
-                if (roomObject.top() < borders.top) borders.top = roomObject.top();
-                if (roomObject.right() > borders.right) borders.right = roomObject.right();
-                if (roomObject.bottom() > borders.bottom) borders.bottom = roomObject.bottom();
-            }
-        };
-        borders.width = borders.right - borders.left + 4 * $scope.gridStep;
-        borders.height = borders.bottom - borders.top + 4 * $scope.gridStep;
-        return borders;
     }
 
     function setScale() {

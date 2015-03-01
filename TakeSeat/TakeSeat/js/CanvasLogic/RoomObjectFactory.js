@@ -11,6 +11,7 @@
         if (roomObject) {
             roomObject.loadFromDb(dbRoomObject);
             var path = roomObject.getPath();
+            if (path) scope.roomObjectCollection.add(roomObject);
             return path;
         }
         return null;
@@ -20,11 +21,13 @@
         var roomObject = new TableRoomObject(scope, mapProvider);
         roomObject.createNew(x, y, width, height);
         var path = roomObject.getPath();
+        scope.roomObjectCollection.add(roomObject);
         return path;
     }
 
     this.createWall = function(path) {
         var roomObject = new WallRoomObject(scope, mapProvider);
         roomObject.createNew(path);
+        scope.roomObjectCollection.add(roomObject);
     }
 }
