@@ -15,6 +15,10 @@
         this.attachedPath = path;
         this.roomObjectId = 0;
         this.subType = scope.roomObjectSubType;
+        this.x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x);
+        this.y1 = scope.view2ProjectY(this.attachedPath.segments[0].point.y);
+        this.x2 = scope.view2ProjectX(this.attachedPath.segments[1].point.x);
+        this.y2 = scope.view2ProjectY(this.attachedPath.segments[1].point.y);
         this.save();
     }
 
@@ -41,15 +45,6 @@
 
     this.save = function () {
         var thisObject = this;
-
-        //var lineInfo = {
-        //    RoomObjectId: this.roomObjectId,
-        //    SubType: this.subType,
-        //    X1: scope.view2ProjectX(this.attachedPath.segments[0].point.x),
-        //    Y1: scope.view2ProjectY(this.attachedPath.segments[0].point.y),
-        //    X2: scope.view2ProjectX(this.attachedPath.segments[1].point.x),
-        //    Y2: scope.view2ProjectY(this.attachedPath.segments[1].point.y)
-        //};
 
         var lineInfo = {
             RoomObjectId: this.roomObjectId,
