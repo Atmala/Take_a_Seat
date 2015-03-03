@@ -10,11 +10,12 @@
         }
         if (roomObject) {
             roomObject.loadFromDb(dbRoomObject);
-            var path = roomObject.getPath();
-            if (path) scope.roomObjectCollection.add(roomObject);
-            return path;
+            //var path = roomObject.getPath();
+            //if (path) 
+            scope.roomObjectCollection.add(roomObject);
+            //return path;
         }
-        return null;
+        //return null;
     }
 
     this.createTable = function (x, y, width, height) {

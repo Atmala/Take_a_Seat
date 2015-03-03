@@ -82,4 +82,10 @@
         return undefined;
     }
 
+    this.getAllPaths = function() {
+        this.collection.forEach(function(roomObject) {
+            roomObject.getPath();
+        });
+    }
+
 }

@@ -179,10 +179,13 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 $scope.room = response;
                 $scope.initAllFigures();
                 if (autoFit) {
-                    setRightScale();
-                    $scope.initAllFigures();
+                    $scope.scaleFit();
+
+                    //setRightScale();
+                    //$scope.initAllFigures();
                     //$scope.roomObjectCollection.updateAllPositions();
                 }
+                $scope.roomObjectCollection.getAllPaths();
             }
         });
     }
@@ -314,7 +317,8 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     function setScale() {
         $scope.scale = $scope.zoomValue / 100.0;
         //$scope.redrawAllFigures();
-        $scope.changeRoom($scope.room.Id, false);
+        //$scope.changeRoom($scope.room.Id, false);
+        $scope.roomObjectCollection.updateAllPositions();
     }
 
     $scope.showSettings = function () {
