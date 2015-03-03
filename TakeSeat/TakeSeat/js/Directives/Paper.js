@@ -149,7 +149,7 @@ seatApp
                                 (scope.view2ProjectY(table.position.y) - table.RoomObject.height / 2) + ')';
                             return;
                         }
-
+                         
                         var hitResult = scope.roomObjectCollection.customHitTest(point, 5);
                         
                         if (!hitResult) return;
