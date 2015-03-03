@@ -1,7 +1,7 @@
 ﻿<div class="width30 inlineBlock" ng-show="roomMode == 'select'">
     <select class="selectRoom" ng-model="selectedRoom"
             ng-options="r.Caption for r in rooms"
-            ng-change="changeRoom(selectedRoom.Id, true)"></select>
+            ng-change="manualChangeRoom(selectedRoom.Id, true)"></select>
 </div>
 <div class="width30 inlineBlock" ng-show="roomMode == 'edit'">
     <div id="editRoomButtonsDiv">

@@ -73,4 +73,13 @@
         return borders;
     }
 
+    this.getRoomObjectById = function(roomObjectId) {
+        for (var i = 0; i < this.collection.length; i++) {
+            if (this.collection[i].roomObjectId === roomObjectId) {
+                return this.collection[i];
+            }
+        };
+        return undefined;
+    }
+
 }

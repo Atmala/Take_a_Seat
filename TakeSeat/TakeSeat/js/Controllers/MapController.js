@@ -163,6 +163,14 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         }
     }
 
+    $scope.getRoomById = function(roomId) {
+        for (var i = 0; i < $scope.rooms.length; i++) {
+            if ($scope.rooms[i].Id === roomId)
+                return $scope.rooms[i];
+        }
+        return undefined;
+    }
+
     $scope.changeRoom = function (roomId, autoFit) {
         $.ajax({
             url: window.changeRoomPath,
@@ -177,6 +185,11 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 }
             }
         });
+    }
+
+    $scope.manualChangeRoom = function(roomId, autoFit) {
+        $scope.foundRoomObjectId = undefined;
+        $scope.changeRoom(roomId, autoFit);
     }
 
     $scope.makeRoomInactive = function (roomId) {
@@ -247,6 +260,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     $scope.doSearch = function(searchElement) {
         $scope.foundRoomObjectId = searchElement.RoomObjectId;
+        $scope.selectedRoom = $scope.getRoomById(searchElement.RoomId);
         $scope.changeRoom(searchElement.RoomId, true);
     }
 
@@ -266,7 +280,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     $scope.scaleFit = function() {
         setRightScale();
-        setScale();
+        //setScale();
     }
 
     function setRightScale() {
@@ -283,6 +297,18 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         $scope.scale = zoom;
         $scope.globalOffset.x = Math.round(-borders.left * zoom + $scope.gridStep);
         $scope.globalOffset.y = Math.round(-borders.top * zoom + $scope.gridStep);
+
+        if ($scope.foundRoomObjectId) {
+            var table = $scope.roomObjectCollection.getRoomObjectById($scope.foundRoomObjectId);
+            var viewRight = $scope.project2ViewX(table.right());
+            if (viewRight > canvas.clientWidth) {
+                $scope.globalOffset.x -= (viewRight - canvas.clientWidth + table.width);
+            }
+            var viewBottom = $scope.project2ViewY(table.bottom());
+            if (viewBottom > canvas.clientHeight) {
+                $scope.globalOffset.y -= (viewBottom - canvas.clientHeight + table.height);
+            }
+        }
     }
 
     function setScale() {

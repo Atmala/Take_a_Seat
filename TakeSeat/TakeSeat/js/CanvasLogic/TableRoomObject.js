@@ -109,6 +109,7 @@
         var style = {
             fitToCenter: true,
             fontSize: Math.min(11 * scope.scale, 14),
+            fontweight: this.isFoundItem ? 900 : 300,
             fontColor: this.isFoundItem ? scope.foundColor : scope.fontColor
         };
 
