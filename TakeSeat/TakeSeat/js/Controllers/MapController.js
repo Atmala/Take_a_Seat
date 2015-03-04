@@ -291,6 +291,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         var zoom = Math.min(zoomVert, zoomHor);
         $scope.zoomValue = Math.round(zoom * 100);
         if ($scope.zoomValue > 100) $scope.zoomValue = 100;
+        if ($scope.zoomValue < 75 && $scope.foundRoomObjectId) $scope.zoomValue = 75;
         if ($scope.zoomValue < 50) $scope.zoomValue = 50;
         $scope.zoomValue = Math.round($scope.zoomValue / 5) * 5;
         zoom = $scope.zoomValue / 100;
