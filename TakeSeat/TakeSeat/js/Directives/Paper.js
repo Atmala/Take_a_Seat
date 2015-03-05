@@ -32,6 +32,7 @@ seatApp
                                 path = roomObjectFactory.createTable(x, y, rectangleWidth, rectangleHeight);
                             } else if (scope.mode === 'delete') {
                                 if (selectedPath) {
+                                    scope.roomObjectCollection.deleteRoomObjectById(selectedPath.RoomObject.Id);
                                     selectedPath.RoomObject.deleteRoomObject();
                                     selectedPath.remove();
                                 }

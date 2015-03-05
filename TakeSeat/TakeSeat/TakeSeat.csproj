@@ -210,6 +210,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="img\table_active.png" />
+    <Content Include="img\text.png" />
+    <Content Include="img\text_active.png" />
     <Content Include="img\undo.png" />
     <Content Include="img\wall.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

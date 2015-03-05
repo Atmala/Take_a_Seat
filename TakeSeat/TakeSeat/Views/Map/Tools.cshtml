@@ -30,6 +30,14 @@
             </button>
         </div>
         <div class="md-overlay">
+            <button title="Add Text"
+                    type="button" class="btn-tool" ng-click="changeMode('text')"
+                    ng-class="{activeBtn : isSelected('text')}">
+                <img ng-show="! isSelected('text')" src=@Url.Content("~/img/text.png") />
+                <img ng-show="isSelected('text')" src=@Url.Content("~/img/text_active.png") />
+            </button>
+        </div>
+        <div class="md-overlay">
             <button title="Add Window"
                     type="button" class="btn-tool" ng-click="changeMode('window')"
                     ng-class="{activeBtn : isSelected('window')}">

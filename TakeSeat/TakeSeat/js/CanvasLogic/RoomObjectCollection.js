@@ -73,13 +73,22 @@
         return borders;
     }
 
-    this.getRoomObjectById = function(roomObjectId) {
+    this.getRoomObjectById = function (roomObjectId) {
+        var index = getIndexById(roomObjectId);
+        return index ? collection[index] : undefined;
+    }
+
+    this.getIndexById = function (roomObjectId) {
         for (var i = 0; i < this.collection.length; i++) {
             if (this.collection[i].roomObjectId === roomObjectId) {
-                return this.collection[i];
+                return i;
             }
         };
         return undefined;
     }
 
+    this.deleteRoomObjectById = function(roomObjectId) {
+        var index = getIndexById(roomObjectId);
+        if (index) this.collection.splice(index);
+    }
 }
