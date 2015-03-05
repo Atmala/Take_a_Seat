@@ -38,7 +38,19 @@
         return undefined;
     }
 
-    this.customHitTest = function(point, tolerance) {
+    this.findScreenText = function(point, tolerance) {
+        for (var i = 0; i < this.collection.length; i++) {
+            if (this.collection[i].findScreenText) {
+                var hitResult = this.collection[i].findScreenText(point, tolerance);
+                if (hitResult)
+                    return hitResult;
+            }
+        }
+    }
+
+    this.customHitTest = function (point, tolerance) {
+        var screenText = this.findScreenText(point, tolerance);
+        if (screenText) return screenText;
         var segment = this.findSegment(point, tolerance);
         if (segment) return segment;
         var line = this.findLine(point, tolerance);
@@ -74,8 +86,8 @@
     }
 
     this.getRoomObjectById = function (roomObjectId) {
-        var index = getIndexById(roomObjectId);
-        return index ? collection[index] : undefined;
+        var index = this.getIndexById(roomObjectId);
+        return index ? this.collection[index] : undefined;
     }
 
     this.getIndexById = function (roomObjectId) {

@@ -71,8 +71,10 @@ seatApp
                     function mouseMove(event) {
                         fixEvent(event);
 
-                        var x = scope.toScaledGridX(event.offsetX);
-                        var y = scope.toScaledGridY(event.offsetY);
+                        //var x = scope.toScaledGridX(event.offsetX);
+                        //var y = scope.toScaledGridY(event.offsetY);
+                        var x = event.offsetX;
+                        var y = event.offsetY;
 
                         if (scope.mode === 'line' && mouseDownPoint) {
                             if (event.offsetX <= 2 || event.offsetY <= 2 ||
@@ -156,7 +158,7 @@ seatApp
                         var hitResult = scope.roomObjectCollection.customHitTest(point, 5);
                         
                         if (!hitResult) return;
-                        if (hitResult.type === 'stroke') {
+                        if (hitResult.type === 'stroke' || hitResult.type === 'screentext') {
                             selectedPath = hitResult.item;
                             //scope.HitResult = 'Line: (' + selectedPath.segments[0].point.x + ',' + selectedPath.segments[0].point.y + ') - (' +
                             //    selectedPath.segments[1].point.x + ',' + selectedPath.segments[1].point.y + ')';

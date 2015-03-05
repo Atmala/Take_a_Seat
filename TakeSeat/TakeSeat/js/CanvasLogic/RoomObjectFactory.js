@@ -8,6 +8,9 @@
         if (dbRoomObject.Rectangles && dbRoomObject.Rectangles.length > 0) {
             roomObject = new TableRoomObject(scope, mapProvider);
         }
+        if (dbRoomObject.ScreenTexts && dbRoomObject.ScreenTexts.length > 0) {
+            roomObject = new ScreenTextObject(scope, mapProvider);
+        }
         if (roomObject) {
             roomObject.loadFromDb(dbRoomObject);
             var path = roomObject.getPath();
