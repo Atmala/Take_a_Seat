@@ -77,6 +77,14 @@ namespace TakeSeatServiceProxy
                 return dbRepository.SaveTable(roomId, roomObjectId, leftTopX, leftTopY, width, height);
             }
         }
+        
+        public static SaveScreenTextResult SaveScreenText(ScreenTextInfo screenTextInfo)
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                return dbRepository.SaveScreenText(screenTextInfo);
+            }
+        }
 
         public static int SaveEmployeeTableLink(EmployeeTableLinkInfo employeeTableLinkInfo)
         {

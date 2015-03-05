@@ -88,6 +88,13 @@ namespace TakeSeat.Controllers
         }
 
         [HttpPost]
+        public JsonResult SaveScreenText(ScreenTextInfo screenTextInfo)
+        {
+            var response = ServiceProxy.SaveScreenText(screenTextInfo);
+            return Json(response);
+        }
+
+        [HttpPost]
         public void SaveEmployeeTableLink(EmployeeTableLinkInfo employeeTableLinkInfo)
         {
             ServiceProxy.SaveEmployeeTableLink(employeeTableLinkInfo);

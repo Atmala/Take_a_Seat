@@ -103,6 +103,10 @@
     <Compile Include="Migrations\201503050821540_ScreenText.Designer.cs">
       <DependentUpon>201503050821540_ScreenText.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503051617100_ScreenTextType.cs" />
+    <Compile Include="Migrations\201503051617100_ScreenTextType.Designer.cs">
+      <DependentUpon>201503051617100_ScreenTextType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Migrations\TakeSeatDbContextInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -154,6 +158,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201503050821540_ScreenText.resx">
       <DependentUpon>201503050821540_ScreenText.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503051617100_ScreenTextType.resx">
+      <DependentUpon>201503051617100_ScreenTextType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -88,7 +88,7 @@
     }
 
     this.deleteRoomObjectById = function(roomObjectId) {
-        var index = getIndexById(roomObjectId);
+        var index = this.getIndexById(roomObjectId);
         if (index) this.collection.splice(index);
     }
 }

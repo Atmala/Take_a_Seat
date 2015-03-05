@@ -7,13 +7,13 @@ namespace DbLayer.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.1-30610")]
-    public sealed partial class CreateScreenText : IMigrationMetadata
+    public sealed partial class ScreenTextType : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(CreateScreenText));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ScreenTextType));
         
         string IMigrationMetadata.Id
         {
-            get { return "201503050821540_ScreenText"; }
+            get { return "201503051617100_ScreenTextType"; }
         }
         
         string IMigrationMetadata.Source

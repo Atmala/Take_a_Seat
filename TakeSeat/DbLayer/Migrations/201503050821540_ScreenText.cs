@@ -3,7 +3,7 @@ namespace DbLayer.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class ScreenText : DbMigration
+    public partial class CreateScreenText : DbMigration
     {
         public override void Up()
         {

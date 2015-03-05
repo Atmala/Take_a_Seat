@@ -309,6 +309,60 @@ namespace DbLayer
             }
         }
 
+        private void SaveScreenTextBase(int roomObjectId, ScreenTextInfo screenTextInfo)
+        {
+            var screenText = new ScreenText
+            {
+                Id = 0, 
+                LeftTopX = screenTextInfo.LeftTopX,
+                LeftTopY = screenTextInfo.LeftTopY,
+                Width = screenTextInfo.Width,
+                Text = screenTextInfo.Text,
+                RoomObjectId = roomObjectId, 
+            };
+            Save(screenText);
+        }
+
+        private int SaveNewScreenText(ScreenTextInfo screenTextInfo)
+        {
+            var roomObject = new RoomObject()
+            {
+                RoomId = screenTextInfo.RoomId,
+                RoomObjectTypeId = GetRoomObjectTypeId("screentext")
+            };
+            var roomObjectId = Save(roomObject);
+            SaveScreenTextBase(roomObjectId, screenTextInfo);
+            return roomObjectId;
+        }
+
+        private int UpdateScreenText(ScreenTextInfo screenTextInfo)
+        {
+            var screenText = _db.ScreenTexts.Single(r => r.RoomObjectId == screenTextInfo.RoomObjectId);
+            screenText.LeftTopX = screenTextInfo.LeftTopX;
+            screenText.LeftTopY = screenTextInfo.LeftTopY;
+            screenText.Width = screenTextInfo.Width;
+            screenText.Text = screenTextInfo.Text;
+            Save(screenText);
+            return screenTextInfo.RoomObjectId;
+        }
+
+        public SaveScreenTextResult SaveScreenText(ScreenTextInfo screenTextInfo)
+        {
+            var savedRoomObjectId = screenTextInfo.RoomObjectId == 0
+                ? SaveNewScreenText(screenTextInfo)
+                : UpdateScreenText(screenTextInfo);
+            try
+            {
+                var screenText = _db.ScreenTexts.Single(r => r.RoomObjectId == savedRoomObjectId);
+                return new SaveScreenTextResult(savedRoomObjectId, screenText.LeftTopX, screenText.LeftTopY,
+                    screenText.Width, screenText.Text);
+            }
+            catch
+            {
+                return new SaveScreenTextResult();
+            }
+        }
+
         private void DeleteOtherEmployeeTableLinks(int employeeId, int roomObjectId)
         {
             var links = (from etl in _db.EmployeeTableLinks

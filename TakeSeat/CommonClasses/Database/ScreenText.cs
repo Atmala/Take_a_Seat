@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CommonClasses.Database
 {
-    public class ScreenText
+    public class ScreenText: IMapping
     {
         [Key]
         public int Id { get; set; }

@@ -35,6 +35,7 @@
         var roomObject = new ScreenTextObject(scope, mapProvider);
         roomObject.createNew(x, y, text);
         roomObject.getPath();
+        roomObject.save();
         scope.roomObjectCollection.add(roomObject);
     }
 }
