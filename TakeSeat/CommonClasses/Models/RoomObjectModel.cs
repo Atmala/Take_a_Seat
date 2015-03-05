@@ -12,6 +12,7 @@ namespace CommonClasses.Models
         public int? SubType { get; set; }
         public List<PointModel> Points { get; set; }
         public List<RectangleModel> Rectangles { get; set; }
+        public List<ScreenTextModel> ScreenTexts { get; set; } 
         public int EmployeeId { get; set; }
         public string EmployeeFio { get; set; }
         public RoomObjectModel()

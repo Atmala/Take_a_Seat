@@ -134,6 +134,7 @@ namespace DbLayer
                 SubType = roomObjectTypeStr.ToLower() == "wall" ? roomObject.SubType ?? 1 : roomObject.SubType,
                 Points = GetPointModels(roomObject.Id),
                 Rectangles = GetRectangleModels(roomObject.Id),
+                ScreenTexts = GetScreenTextModels(roomObject.Id),
                 EmployeeId = employee == null ? 0 : employee.Id,
                 EmployeeFio = employee == null ? string.Empty : employee.Surname + " " + employee.FirstName
             };
@@ -185,6 +186,21 @@ namespace DbLayer
                         LeftTopY = p.LeftTopY,
                         Width = p.Width,
                         Height = p.Height
+                    }).ToList();
+        }
+
+        private List<ScreenTextModel> GetScreenTextModels(int roomObjectId)
+        {
+            return (from p in _db.ScreenTexts
+                    where p.RoomObjectId == roomObjectId
+                    select new ScreenTextModel
+                    {
+                        Id = p.Id,
+                        RoomObjectId = roomObjectId,
+                        LeftTopX = p.LeftTopX,
+                        LeftTopY = p.LeftTopY,
+                        Width = p.Width,
+                        Text = p.Text
                     }).ToList();
         }
 

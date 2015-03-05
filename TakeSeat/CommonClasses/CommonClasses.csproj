@@ -65,6 +65,7 @@
     <Compile Include="Database\Room.cs" />
     <Compile Include="Database\RoomObject.cs" />
     <Compile Include="Database\RoomObjectType.cs" />
+    <Compile Include="Database\ScreenText.cs" />
     <Compile Include="Helpers\JsonHelper.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="InfoClasses\AccessInfo.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Models\RectangleModel.cs" />
     <Compile Include="Models\RoomModel.cs" />
     <Compile Include="Models\RoomObjectModel.cs" />
+    <Compile Include="Models\ScreenTextModel.cs" />
     <Compile Include="Params\SaveAngleParam.cs" />
     <Compile Include="Params\SaveIdentNumberParam.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

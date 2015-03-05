@@ -17,6 +17,7 @@ namespace DbLayer
         public DbSet<Rectangle> Rectangles { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeTableLink> EmployeeTableLinks { get; set; }
+        public DbSet<ScreenText> ScreenTexts { get; set; }
 
         public DbSet<AdminUser> AdminUsers { get; set; }
 
