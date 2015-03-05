@@ -10,7 +10,7 @@
         if (this.attachedPath) this.attachedPath.remove();
         var style = {
             fitToCenter: true,
-            fontSize: 14,
+            fontSize: Math.min(16 * scope.scale, 16),
             fontweight: this.isFoundItem ? 900 : 300,
             fontColor: this.isFoundItem ? scope.foundColor : scope.fontColor
         };
@@ -95,5 +95,25 @@
 
     this.dbCoordinatesString = function() {
         return 'ScreenText ' + this.roomObjectId;
+    }
+
+    this.move = function (offsetX, offsetY) {
+        var viewX = scope.project2ViewX(this.leftTopX) + offsetX;
+        var viewY = scope.project2ViewY(this.leftTopY) + offsetY;
+        this.leftTopX = scope.view2ProjectX(viewX);
+        this.leftTopY = scope.view2ProjectY(viewY);
+        this.attachedPath.point.x = scope.project2ViewX(this.leftTopX);
+        this.attachedPath.point.y = scope.project2ViewY(this.leftTopY);
+    }
+
+    this.deleteRoomObject = function () {
+        $.ajax({
+            url: window.deleteRoomObjectPath,
+            type: 'POST',
+            data: { id: this.roomObjectId },
+            success: function (response) {
+                this.attachedPath.remove();
+            }
+        });
     }
 }

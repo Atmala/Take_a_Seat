@@ -561,11 +561,19 @@ namespace DbLayer
                 _db.Points.Remove(point);
             }
         }
+        private void DeleteAllScreenTexts(int roomObjectId)
+        {
+            foreach (var screenText in _db.ScreenTexts.Where(r => r.RoomObjectId == roomObjectId))
+            {
+                _db.ScreenTexts.Remove(screenText);
+            }
+        }
         public void DeleteRoomObject(int roomObjectId)
         {
             DeleteAllEmployeeTableLinks(roomObjectId);
             DeleteAllRectangles(roomObjectId);
             DeleteAllPoints(roomObjectId);
+            DeleteAllScreenTexts(roomObjectId);
             var roomObject = _db.RoomObjects.FirstOrDefault(ro => ro.Id == roomObjectId);
             if (roomObject != null) _db.RoomObjects.Remove(roomObject);
             _db.SaveChanges();
