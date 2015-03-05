@@ -30,6 +30,8 @@ seatApp
                                 path = getNewPath();
                             } else if (scope.mode === 'table') {
                                 path = roomObjectFactory.createTable(x, y, rectangleWidth, rectangleHeight);
+                            } else if (scope.mode === 'text') {
+                                path = roomObjectFactory.createScreenText(x, y, 'Some Interesting Text');
                             } else if (scope.mode === 'delete') {
                                 if (selectedPath) {
                                     scope.roomObjectCollection.deleteRoomObjectById(selectedPath.RoomObject.Id);

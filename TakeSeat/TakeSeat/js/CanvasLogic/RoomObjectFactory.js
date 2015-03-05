@@ -30,4 +30,11 @@
         roomObject.createNew(path);
         scope.roomObjectCollection.add(roomObject);
     }
+
+    this.createScreenText = function(x, y, text) {
+        var roomObject = new ScreenTextObject(scope, mapProvider);
+        roomObject.createNew(x, y, text);
+        roomObject.getPath();
+        scope.roomObjectCollection.add(roomObject);
+    }
 }

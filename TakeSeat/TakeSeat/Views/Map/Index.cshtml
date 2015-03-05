@@ -2,11 +2,13 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/_Layout.cshtml";
 }
+<script src="~/js/CanvasLogic/TextHelper.js"></script>
 <script src="~/js/Services/DataResources.js"></script>
 <script src="~/js/Controllers/MapController.js"></script>
 <script src="~/js/CanvasLogic/RoomObjectFactory.js"></script>
 <script src="~/js/CanvasLogic/WallRoomObject.js"></script>
 <script src="~/js/CanvasLogic/TableRoomObject.js"></script>
+<script src="~/js/CanvasLogic/ScreenTextObject.js"></script>
 <script src="~/js/CanvasLogic/RoomObjectCollection.js"></script>
 <div ng-controller="Map" ng-init="Init()">
     <div id="toolsPanel" class="tools" hidden>@Html.Partial("Tools")

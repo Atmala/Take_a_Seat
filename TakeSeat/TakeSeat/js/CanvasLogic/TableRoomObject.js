@@ -47,56 +47,6 @@
         this.save();
     }
 
-    function getPointText(rect, style, str) {
-        return new PointText({
-            point: [rect.left, rect.top],
-            content: str,
-            fillColor: style.fontColor,
-            fontFamily: 'Comic Sans MS',
-            fontWeight: 'bold',
-            fontSize: style.fontSize
-        });
-    }
-
-    function fitToWidth(pointText, width) {
-        if (pointText.bounds.width <= width) return;
-        var index = pointText.content.indexOf(' ');
-        if (index == -1) index = pointText.content.length - 1;
-        while (pointText.bounds.width > width && pointText.content.length > 0) {
-            pointText.content = pointText.content.substring(0, index);
-            index--;
-        }
-    }
-
-    function fitCaptionsToCenter(captions, width) {
-        for (var i = 0; i < captions.length; i++) {
-            var pointText = captions[i];
-            var offset = (width - pointText.bounds.width) / 2;
-            pointText.point.x += offset;
-        }
-    }
-
-    function getMultiLineText(rect, style, str) {
-        var result = [];
-        if (!str) return result;
-        var pointText = getPointText(rect, style, str);
-        result.push(pointText);
-
-        if (pointText.bounds.width > rect.width) {
-            fitToWidth(pointText, rect.width);
-
-            var newStr = str.substring(pointText.content.length, str.length).trim();
-            var restCaptions = getMultiLineText(
-                { left: rect.left, top: rect.top + style.fontSize + 2, width: rect.width, height: rect.height },
-                style, newStr);
-            for (var i = 0; i < restCaptions.length; i++) {
-                result.push(restCaptions[i]);
-            }
-        }
-
-        return result;
-    }
-
     this.removeCaptions = function () {
         if (!this.attachedPath.captions) return;
         for (var i = 0; i < this.attachedPath.captions.length; i++) {
@@ -124,8 +74,7 @@
         //    this.roomObjectId + ' (' + this.leftTopX + ', ' + this.leftTopY + '');
         this.attachedPath.captions = getMultiLineText(rect, style, this.employeeFio);
         if (this.identNumber) {
-            this.attachedPath.captions.push(getPointText(
-                { left: rect.left, top: rect.top + rect.height - style.fontSize, width: rect.width, height: rect.height },
+            this.attachedPath.captions.push(getPointText(rect.left, rect.top + rect.height - style.fontSize,
                 style, this.identNumber));
         }
         fitCaptionsToCenter(this.attachedPath.captions, rect.width);
