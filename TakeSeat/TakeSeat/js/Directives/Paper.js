@@ -31,7 +31,10 @@ seatApp
                             } else if (scope.mode === 'table') {
                                 path = roomObjectFactory.createTable(x, y, rectangleWidth, rectangleHeight);
                             } else if (scope.mode === 'text') {
-                                path = roomObjectFactory.createScreenText(x, y, 'Some Interesting Text');
+                                scope.screenTextDroppedDown = undefined;
+                                scope.screenTextDropDownX = x;
+                                scope.screenTextDropDownY = y;
+                                scope.showScreenTextDropDownMenu(x - 50, y - 10, '');
                             } else if (scope.mode === 'delete') {
                                 if (selectedPath) {
                                     scope.roomObjectCollection.deleteRoomObjectById(selectedPath.RoomObject.Id);
@@ -44,7 +47,7 @@ seatApp
                             }
                         }
 
-                        if (scope.mode !== 'delete') {
+                        if (scope.mode !== 'delete' && scope.mode != 'text') {
                             mouseDownPoint = new paper.Point([x, y]);
                         }
                     }
@@ -98,6 +101,9 @@ seatApp
                             selectItemByCoordinates(event.offsetX, event.offsetY);
                             if (!selectedPath || !(selectedPath.RoomObject.RoomObjectType === 'table')) {
                                 scope.tableDropDownMenuVisible = false;
+                            }
+                            if (!selectedPath || !(selectedPath.RoomObject.RoomObjectType === 'screentext')) {
+                                scope.screenTextDropDownMenuVisible = false;
                             }
                         }
                         setCurrentCoords(x, y);
@@ -278,6 +284,33 @@ seatApp
                                 return get45PointForWall(start, point);
                             default:
                                 return point;
+                        }
+                    }
+
+                    scope.showScreenTextDropDownMenu = function (x, y, text) {
+                        var canvas = $('#paperCanvas')[0];
+                        scope.screenTextDropDownMenuVisible = true;
+                        scope.$apply();
+
+                        var dropDownMenu = $("#screenTextDropDownMenu");
+                        dropDownMenu.css({
+                            left: x + canvas.offsetLeft,
+                            top: y + canvas.offsetTop,
+                        });
+                        scope.screenTextDropDownText = text;
+                        $("#screenTextDropDownNumberInput").focus();
+                    }
+
+                    scope.screenTextDropDownKeyPress = function (event) {
+                        if (event.which === 13) {
+                            if (scope.screenTextDroppedDown) {
+                                scope.screenTextDroppedDown.RoomObject.saveText(scope.screenTextDropDownText);
+                            } else {
+                                roomObjectFactory.createScreenText(scope.screenTextDropDownX, scope.screenTextDropDownY,
+                                    scope.screenTextDropDownText);
+                            }
+                            scope.screenTextDropDownText = "";
+                            scope.screenTextDropDownMenuVisible = false;
                         }
                     }
 

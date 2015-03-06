@@ -1,4 +1,5 @@
 ﻿function ScreenTextObject(scope, mapProvider) {
+    this.RoomObjectType = 'screentext';
 
     this.createNew = function (x, y, text) {
         this.leftTopX = scope.view2ProjectX(x);
@@ -115,5 +116,16 @@
                 this.attachedPath.remove();
             }
         });
+    }
+
+    this.showDropDownMenu = function () {
+        scope.screenTextDroppedDown = this.attachedPath;
+        scope.showScreenTextDropDownMenu(scope.project2ViewX(this.left()), scope.project2ViewY(this.bottom()), this.text);
+    }
+
+    this.saveText = function(text) {
+        this.text = text;
+        this.save();
+        this.getPath();
     }
 }
