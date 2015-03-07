@@ -57,12 +57,13 @@
         return line;
     }
 
-    this.updateAllPositions = function() {
-        this.collection.forEach(function (roomObject) {
+    this.updateAllPositions = function () {
+        for (var i = 0; i < this.collection.length; i++) {
+            var roomObject = this.collection[i];
             if (roomObject.updatePosition) {
                 roomObject.updatePosition();
             }
-        });
+        };
     }
 
     this.getBorders = function () {

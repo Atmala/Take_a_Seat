@@ -180,7 +180,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 $scope.initAllFigures();
                 if (autoFit) {
                     setRightScale();
-                    $scope.initAllFigures();
+                    $scope.roomObjectCollection.updateAllPositions();
                     //$scope.roomObjectCollection.updateAllPositions();
                 }
             }
@@ -314,8 +314,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     function setScale() {
         $scope.scale = $scope.zoomValue / 100.0;
-        //$scope.redrawAllFigures();
-        $scope.changeRoom($scope.room.Id, false);
+        $scope.roomObjectCollection.updateAllPositions();
     }
 
     $scope.showSettings = function () {

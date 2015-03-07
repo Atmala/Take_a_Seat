@@ -9,9 +9,10 @@
 
     this.getPath = function () {
         if (this.attachedPath) this.attachedPath.remove();
+        this.currentScale = scope.scale;
         var style = {
             fitToCenter: true,
-            fontSize: Math.min(16 * scope.scale, 16),
+            fontSize: 16 * this.currentScale,
             fontweight: this.isFoundItem ? 900 : 300,
             fontColor: this.isFoundItem ? scope.foundColor : scope.fontColor
         };
@@ -59,9 +60,13 @@
         });
     }
 
-    this.updatePosition = function() {
-        this.attachedPath.point.x = scope.project2ViewX(this.leftTopX);
-        this.attachedPath.point.y = scope.project2ViewY(this.leftTopY);
+    this.updatePosition = function () {
+        if (scope.scale !== this.currentScale) {
+            this.getPath();
+        } else {
+            this.attachedPath.point.x = scope.project2ViewX(this.leftTopX);
+            this.attachedPath.point.y = scope.project2ViewY(this.leftTopY);
+        }
     }
 
     this.left = function () {

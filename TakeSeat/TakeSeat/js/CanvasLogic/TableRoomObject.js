@@ -86,11 +86,15 @@
     }
 
     this.getPath = function () {
-        if (this.attachedPath) this.attachedPath.remove();
+        if (this.attachedPath) {
+            this.removeCaptions();
+            this.attachedPath.remove();
+        }
         var raster = new paper.Raster("maptable");
         raster.position = this.getCurrentPosition();
         raster.RoomObject = this;
-        raster.scale(scope.scale);
+        this.currentScale = scope.scale;
+        raster.scale(this.currentScale);
         this.attachedPath = raster;
         raster.rotate(this.angle);
         this.setTextRectangle();
@@ -98,10 +102,14 @@
         return raster;
     }
 
-    this.updatePosition = function() {
-        this.attachedPath.position = this.getCurrentPosition();
-        this.setTextRectangle();
-        this.setCaptions();
+    this.updatePosition = function () {
+        if (scope.scale !== this.currentScale) {
+            this.getPath();
+        } else {
+            this.attachedPath.position = this.getCurrentPosition();
+            this.setTextRectangle();
+            this.setCaptions();
+        }
     }
 
     this.deleteRoomObject = function () {
