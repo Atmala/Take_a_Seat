@@ -181,7 +181,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 if (autoFit) {
                     setRightScale();
                     $scope.roomObjectCollection.updateAllPositions();
-                    //$scope.roomObjectCollection.updateAllPositions();
                 }
             }
         });

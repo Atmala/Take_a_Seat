@@ -9,7 +9,7 @@ seatApp
                     var isMoved = false;
                     var rectangleWidth = 70, rectangleHeight = 100;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
-                    var selectedPath, selectedSegment, numberOfPointUnderMove, pathToMove, segmentToMove;
+                    var selectedPath, selectedSegment, selectedTable, numberOfPointUnderMove, pathToMove, segmentToMove;
 
                     scope.color = '#000000';
                     scope.fontColor = '#000000';
@@ -153,11 +153,20 @@ seatApp
 
                         var point = new paper.Point(x, y);
                         var table = scope.roomObjectCollection.getTableByPoint(point);
+                        scope.selectedTableId = table ? table.RoomObject.roomObjectId : undefined;
+                        if (selectedTable && (!table || table.RoomObject.roomObjectId !== selectedTable.RoomObject.roomObjectId)) {
+                            selectedTable.RoomObject.getPath();
+                            selectedTable = null;
+                        }
                         if (table) {
-                            selectedPath = table;
-                            scope.HitResult = '(' + table.position.x + ' : ' + table.position.y + ') - (' + 
-                                (scope.view2ProjectX(table.position.x) - table.RoomObject.width / 2) + ' : ' +
-                                (scope.view2ProjectY(table.position.y) - table.RoomObject.height / 2) + ')';
+                            if (!selectedPath || selectedPath.RoomObject.roomObjectId != scope.selectedTableId) {
+                                table.RoomObject.getPath();
+                                selectedTable = table;
+                            }
+                            
+                            //scope.HitResult = '(' + table.position.x + ' : ' + table.position.y + ') - (' + 
+                            //    (scope.view2ProjectX(table.position.x) - table.RoomObject.width / 2) + ' : ' +
+                            //    (scope.view2ProjectY(table.position.y) - table.RoomObject.height / 2) + ')';
                             return;
                         }
                          

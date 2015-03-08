@@ -90,7 +90,8 @@
             this.removeCaptions();
             this.attachedPath.remove();
         }
-        var raster = new paper.Raster("maptable");
+        var imagename = this.roomObjectId === scope.selectedTableId ? "maptable_active" : "maptable";
+        var raster = new paper.Raster(imagename);
         raster.position = this.getCurrentPosition();
         raster.RoomObject = this;
         this.currentScale = scope.scale;
