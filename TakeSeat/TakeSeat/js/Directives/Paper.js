@@ -74,8 +74,6 @@ seatApp
                     function mouseMove(event) {
                         fixEvent(event);
 
-                        //var x = scope.toScaledGridX(event.offsetX);
-                        //var y = scope.toScaledGridY(event.offsetY);
                         var x = event.offsetX;
                         var y = event.offsetY;
 
@@ -162,6 +160,7 @@ seatApp
                             if (!selectedPath || selectedPath.RoomObject.roomObjectId != scope.selectedTableId) {
                                 table.RoomObject.getPath();
                                 selectedTable = table;
+                                selectedPath = table;
                             }
                             
                             //scope.HitResult = '(' + table.position.x + ' : ' + table.position.y + ') - (' + 
@@ -354,4 +353,3 @@ seatApp
                 }
             };
         }]);
-

@@ -14,10 +14,10 @@
                 this.textRectangle = { x: 4, y: 30, width: 90, height: 44 };
                 break;
         }
-        this.textRectangle.x *= scope.scale;
-        this.textRectangle.y *= scope.scale;
-        this.textRectangle.width *= scope.scale;
-        this.textRectangle.height *= scope.scale;
+        this.textRectangle.x *= this.realScale;
+        this.textRectangle.y *= this.realScale;
+        this.textRectangle.width *= this.realScale;
+        this.textRectangle.height *= this.realScale;
     }
 
     this.RoomObjectType = 'table';
@@ -58,7 +58,7 @@
     this.setCaptions = function () {
         var style = {
             fitToCenter: true,
-            fontSize: Math.min(11 * scope.scale, 14),
+            fontSize: Math.min(11 * this.realScale, 14),
             fontweight: this.isFoundItem ? 900 : 300,
             fontColor: this.isFoundItem ? scope.foundColor : scope.fontColor
         };
@@ -95,7 +95,8 @@
         raster.position = this.getCurrentPosition();
         raster.RoomObject = this;
         this.currentScale = scope.scale;
-        raster.scale(this.currentScale);
+        this.realScale = this.roomObjectId === scope.selectedTableId && this.currentScale < 1 ? 1 : this.currentScale;
+        raster.scale(this.realScale);
         this.attachedPath = raster;
         raster.rotate(this.angle);
         this.setTextRectangle();
