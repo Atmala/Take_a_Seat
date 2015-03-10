@@ -34,7 +34,14 @@
         this.employeeId = dbRoomObject.EmployeeId;
         this.identNumber = dbRoomObject.IdentNumber;
         this.angle = dbRoomObject.Angle;
-        this.isFoundItem = this.roomObjectId === scope.foundRoomObjectId;
+    }
+
+    this.isFoundItem = function() {
+        return this.roomObjectId === scope.foundRoomObjectId;
+    }
+
+    this.isSelectedItem = function() {
+        return this.roomObjectId === scope.selectedTableId;
     }
 
     this.createNew = function (x, y, width, height) {
@@ -59,8 +66,8 @@
         var style = {
             fitToCenter: true,
             fontSize: Math.min(11 * this.realScale, 14),
-            fontweight: this.isFoundItem ? 900 : 300,
-            fontColor: this.isFoundItem ? scope.foundColor : scope.fontColor
+            fontweight: this.isFoundItem() ? 900 : 300,
+            fontColor: this.isFoundItem() ? scope.foundColor : scope.fontColor
         };
 
         this.removeCaptions();
@@ -90,12 +97,12 @@
             this.removeCaptions();
             this.attachedPath.remove();
         }
-        var imagename = this.roomObjectId === scope.selectedTableId ? "maptable_active" : "maptable";
+        var imagename = this.isFoundItem() ? "maptable_found" : (this.isSelectedItem() ? "maptable_active" : "maptable");
         var raster = new paper.Raster(imagename);
         raster.position = this.getCurrentPosition();
         raster.RoomObject = this;
         this.currentScale = scope.scale;
-        this.realScale = this.roomObjectId === scope.selectedTableId && this.currentScale < 1 ? 1 : this.currentScale;
+        this.realScale = (this.isSelectedItem() || this.isFoundItem()) && this.currentScale < 1 ? 1 : this.currentScale;
         raster.scale(this.realScale);
         this.attachedPath = raster;
         raster.rotate(this.angle);

@@ -182,6 +182,10 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                     setRightScale();
                     $scope.roomObjectCollection.updateAllPositions();
                 }
+                if ($scope.foundRoomObjectId) {
+                    var roomObject = $scope.roomObjectCollection.getRoomObjectById($scope.foundRoomObjectId);
+                    if (roomObject) roomObject.getPath();
+                }
             }
         });
     }

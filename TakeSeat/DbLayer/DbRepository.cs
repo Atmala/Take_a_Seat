@@ -527,6 +527,7 @@ namespace DbLayer
         {
             return (from r in _db.Rooms
                     where r.IsActive
+                    orderby r.Caption
                     select new RoomInfo
                     {
                         Id = r.Id,

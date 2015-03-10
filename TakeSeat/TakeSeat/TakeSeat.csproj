@@ -175,6 +175,7 @@
     <Content Include="Global.asax" />
     <Content Include="img\addroom.png" />
     <Content Include="img\maptable_active.png" />
+    <Content Include="img\maptable_found.png" />
     <Content Include="img\pointer.png" />
     <Content Include="img\assign.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

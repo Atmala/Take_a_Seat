@@ -15,9 +15,9 @@
     </div><div id="mainPanel" class="land">
               <div class="selectRoomPanel">@Html.Partial("SelectRoom")</div>
               <div class="canvas">@Html.Partial("Paper")</div>
-              <div>{{X +' : '+ Y + ';' + XProject + ' : ' + YProject + ' ; ' + LogMessage}}</div>
+              @*<div>{{X +' : '+ Y + ';' + XProject + ' : ' + YProject + ' ; ' + LogMessage}}</div>
               <div>{{'HitResult: ' + HitResult}}</div>
-              <div>{{'LogMessage: ' + selectedTableId}}</div>
+              <div>{{'LogMessage: ' + selectedTableId}}</div>*@
               <div id="tableDropDownMenu" class="dropDownMenu" ng-show="tableDropDownMenuVisible">
                   @Html.Partial("TableDropDownMenu")
               </div>
@@ -31,6 +31,7 @@
 </div>
 <img id="maptable" class="visuallyhidden" src="@Url.Content("~/img/maptable.png")">
 <img id="maptable_active" class="visuallyhidden" src="@Url.Content("~/img/maptable_active.png")">
+<img id="maptable_found" class="visuallyhidden" src="@Url.Content("~/img/maptable_found.png")">
 <script type="text/javascript">
     window.getEmployeesWithoutSeatPath = '@Url.Action("GetEmployeesWithoutSeat", "Map")';
     window.saveRoomPath = '@Url.Action("SaveRoom", "Map")';
