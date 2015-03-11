@@ -176,6 +176,8 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             url: window.changeRoomPath,
             data: { roomId: roomId },
             success: function (response) {
+                $scope.loadingRoom = true;
+                $scope.clearSelectedElements();
                 $scope.room = response;
                 $scope.initAllFigures();
                 if (autoFit) {
@@ -186,6 +188,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                     var roomObject = $scope.roomObjectCollection.getRoomObjectById($scope.foundRoomObjectId);
                     if (roomObject) roomObject.getPath();
                 }
+                $scope.loadingRoom = false;
             }
         });
     }
@@ -289,13 +292,13 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     function setRightScale() {
         var borders = $scope.roomObjectCollection.getBorders();
         var canvas = $('#paperCanvas')[0];
-        var zoomVert = canvas.clientHeight / borders.height;
-        var zoomHor = canvas.clientWidth / borders.width;
+        var zoomVert = (canvas.clientHeight - 200) / borders.height;
+        var zoomHor = (canvas.clientWidth) / borders.width;
         var zoom = Math.min(zoomVert, zoomHor);
         $scope.zoomValue = Math.round(zoom * 100);
         if ($scope.zoomValue > 100) $scope.zoomValue = 100;
-        if ($scope.zoomValue < 75 && $scope.foundRoomObjectId) $scope.zoomValue = 75;
-        if ($scope.zoomValue < 50) $scope.zoomValue = 50;
+        //if ($scope.zoomValue < 75 && $scope.foundRoomObjectId) $scope.zoomValue = 75;
+        //if ($scope.zoomValue < 50) $scope.zoomValue = 50;
         $scope.zoomValue = Math.round($scope.zoomValue / 5) * 5;
         zoom = $scope.zoomValue / 100;
         $scope.scale = zoom;

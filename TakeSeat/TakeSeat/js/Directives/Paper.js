@@ -21,6 +21,7 @@ seatApp
                     scope.gridStep = 10;
 
                     function mouseDown(event) {
+                        if (scope.loadingRoom) return;
                         fixEvent(event);
                         var x = scope.toScaledGridX(event.offsetX);
                         var y = scope.toScaledGridY(event.offsetY);
@@ -53,6 +54,7 @@ seatApp
                     }
 
                     function mouseUp(event) {
+                        if (scope.loadingRoom) return;
                         fixEvent(event);
                         if (pathToMove && isMoved) {
                             if (pathToMove.RoomObject.save)
@@ -72,6 +74,7 @@ seatApp
                     }
 
                     function mouseMove(event) {
+                        if (scope.loadingRoom) return;
                         fixEvent(event);
 
                         var x = event.offsetX;
@@ -339,6 +342,12 @@ seatApp
                         if (scope.scale === 1) return scope.toGrid(y);
                         var projectY = scope.view2ProjectY(y);
                         return scope.project2ViewY(projectY);
+                    }
+
+                    scope.clearSelectedElements = function() {
+                        selectedPath = null;
+                        selectedSegment = null;
+                        selectedTable = null;
                     }
 
                     element.on('mousedown', mouseDown)
