@@ -37,11 +37,11 @@
     }
 
     this.isFoundItem = function() {
-        return this.roomObjectId === scope.foundRoomObjectId;
+        return this.roomObjectId === scope.foundRoomObjectId && !scope.editPlanMode;
     }
 
     this.isSelectedItem = function() {
-        return this.roomObjectId === scope.selectedTableId;
+        return this.roomObjectId === scope.selectedTableId && !scope.editPlanMode;
     }
 
     this.createNew = function (x, y, width, height) {
