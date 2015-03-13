@@ -9,7 +9,7 @@ seatApp
                     var isMoved = false;
                     var rectangleWidth = 70, rectangleHeight = 100;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
-                    var selectedPath, selectedSegment, selectedTable, numberOfPointUnderMove, pathToMove, segmentToMove;
+                    var selectedPath, selectedSegment, selectedTable, numberOfPointUnderMove, roomObjectToMove, segmentToMove;
 
                     scope.color = '#000000';
                     scope.fontColor = '#000000';
@@ -43,7 +43,7 @@ seatApp
                                     selectedPath.remove();
                                 }
                             } else {
-                                pathToMove = selectedPath;
+                                roomObjectToMove = selectedPath ? selectedPath.RoomObject : undefined;
                                 segmentToMove = selectedSegment;
                             }
                         }
@@ -56,10 +56,10 @@ seatApp
                     function mouseUp(event) {
                         if (scope.loadingRoom) return;
                         fixEvent(event);
-                        if (pathToMove && isMoved) {
-                            if (pathToMove.RoomObject.save)
-                                pathToMove.RoomObject.save();
-                            pathToMove = undefined;
+                        if (roomObjectToMove && isMoved) {
+                            if (roomObjectToMove.save)
+                                roomObjectToMove.save();
+                            roomObjectToMove = undefined;
                         } else {
                             if (selectedPath && selectedPath.RoomObject.showDropDownMenu)
                                 selectedPath.RoomObject.showDropDownMenu();
@@ -122,22 +122,14 @@ seatApp
                         var scaledGridStep = scope.gridStep * scope.scale;
                         if (Math.abs(offsetX) < scaledGridStep && Math.abs(offsetY) < scaledGridStep) return;
 
-                        //if (segmentToMove && scope.editPlanMode) moveSegment(x, y);
-                        //else
-                        if (pathToMove && scope.editPlanMode) movePath(offsetX, offsetY);
+                        if (roomObjectToMove && scope.editPlanMode) movePath(offsetX, offsetY);
                         else moveAllItems(offsetX, offsetY);
                         mouseDownPoint = new paper.Point(x, y);
                     }
 
                     function movePath(offsetX, offsetY) {
-                        pathToMove.RoomObject.move(offsetX, offsetY, numberOfPointUnderMove);
+                        roomObjectToMove.move(offsetX, offsetY, numberOfPointUnderMove);
                         
-                    }
-
-                    function getAnotherPoint(segment) {
-                        return segment.path.segments[0].point.x === segment.point.x &&
-                            segment.path.segments[0].point.y === segment.point.y ?
-                            segment.path.segments[1].point : segment.path.segments[0].point;
                     }
 
                     function moveAllItems(offsetX, offsetY) {
@@ -166,9 +158,6 @@ seatApp
                                 selectedPath = table;
                             }
                             
-                            //scope.HitResult = '(' + table.position.x + ' : ' + table.position.y + ') - (' + 
-                            //    (scope.view2ProjectX(table.position.x) - table.RoomObject.width / 2) + ' : ' +
-                            //    (scope.view2ProjectY(table.position.y) - table.RoomObject.height / 2) + ')';
                             return;
                         }
                          
@@ -177,8 +166,6 @@ seatApp
                         if (!hitResult) return;
                         if (hitResult.type === 'stroke' || hitResult.type === 'screentext') {
                             selectedPath = hitResult.item;
-                            //scope.HitResult = 'Line: (' + selectedPath.segments[0].point.x + ',' + selectedPath.segments[0].point.y + ') - (' +
-                            //    selectedPath.segments[1].point.x + ',' + selectedPath.segments[1].point.y + ')';
                             scope.HitResult = selectedPath.RoomObject.dbCoordinatesString();
                         }
                         else if (hitResult.type === 'segment') {
@@ -190,7 +177,6 @@ seatApp
 
                         if (selectedPath) selectedPath.selected = true;
                         if (selectedSegment) selectedSegment.selected = true;
-                        //scope.LogMessage1 = 'Point: ' + point;
 
                     }
 
