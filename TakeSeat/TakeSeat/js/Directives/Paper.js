@@ -10,7 +10,7 @@ seatApp
                     var rectangleWidth = 70, rectangleHeight = 100;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
                     var selectedSegment, selectedTable, numberOfPointUnderMove,
-                        roomObjectToMove, selectedRoomObject, segmentToMove;
+                        roomObjectToMove, selectedRoomObject;
 
                     scope.color = '#000000';
                     scope.fontColor = '#000000';
@@ -45,7 +45,6 @@ seatApp
                                 }
                             } else {
                                 roomObjectToMove = selectedRoomObject;
-                                segmentToMove = selectedSegment;
                             }
                         }
 
