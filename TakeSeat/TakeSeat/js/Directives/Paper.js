@@ -9,7 +9,8 @@ seatApp
                     var isMoved = false;
                     var rectangleWidth = 70, rectangleHeight = 100;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
-                    var selectedPath, selectedSegment, selectedTable, numberOfPointUnderMove, roomObjectToMove, segmentToMove;
+                    var selectedSegment, selectedTable, numberOfPointUnderMove,
+                        roomObjectToMove, selectedRoomObject, segmentToMove;
 
                     scope.color = '#000000';
                     scope.fontColor = '#000000';
@@ -37,13 +38,13 @@ seatApp
                                 scope.screenTextDropDownY = y;
                                 scope.showScreenTextDropDownMenu(x - 50, y - 10, '');
                             } else if (scope.mode === 'delete') {
-                                if (selectedPath) {
-                                    scope.roomObjectCollection.deleteRoomObjectById(selectedPath.RoomObject.Id);
-                                    selectedPath.RoomObject.deleteRoomObject();
-                                    selectedPath.remove();
+                                if (selectedRoomObject) {
+                                    scope.roomObjectCollection.deleteRoomObjectById(selectedRoomObject.Id);
+                                    selectedRoomObject.deleteRoomObject();
+                                    selectedRoomObject = undefined;
                                 }
                             } else {
-                                roomObjectToMove = selectedPath ? selectedPath.RoomObject : undefined;
+                                roomObjectToMove = selectedRoomObject;
                                 segmentToMove = selectedSegment;
                             }
                         }
@@ -61,8 +62,8 @@ seatApp
                                 roomObjectToMove.save();
                             roomObjectToMove = undefined;
                         } else {
-                            if (selectedPath && selectedPath.RoomObject.showDropDownMenu)
-                                selectedPath.RoomObject.showDropDownMenu();
+                            if (selectedRoomObject && selectedRoomObject.showDropDownMenu)
+                                selectedRoomObject.showDropDownMenu();
                         }
 
                         mouseDownPoint = undefined;
@@ -100,10 +101,10 @@ seatApp
                             }
                         } else {
                             selectItemByCoordinates(event.offsetX, event.offsetY);
-                            if (!selectedPath || !(selectedPath.RoomObject.RoomObjectType === 'table')) {
+                            if (!selectedRoomObject || !(selectedRoomObject.RoomObjectType === 'table')) {
                                 scope.tableDropDownMenuVisible = false;
                             }
-                            if (!selectedPath || !(selectedPath.RoomObject.RoomObjectType === 'screentext')) {
+                            if (!selectedRoomObject || !(selectedRoomObject.RoomObjectType === 'screentext')) {
                                 scope.screenTextDropDownMenuVisible = false;
                             }
                         }
@@ -140,7 +141,7 @@ seatApp
 
                     function selectItemByCoordinates(x, y) {
                         project.deselectAll();
-                        selectedPath = null;
+                        selectedRoomObject = undefined;
                         selectedSegment = null;
                         numberOfPointUnderMove = null;
 
@@ -152,10 +153,10 @@ seatApp
                             selectedTable = null;
                         }
                         if (table) {
-                            if (!selectedPath || selectedPath.RoomObject.roomObjectId != scope.selectedTableId) {
+                            if (!selectedRoomObject || selectedRoomObject.roomObjectId != scope.selectedTableId) {
                                 table.RoomObject.getPath();
                                 selectedTable = table;
-                                selectedPath = table;
+                                selectedRoomObject = table.RoomObject;
                             }
                             
                             return;
@@ -165,17 +166,17 @@ seatApp
                         
                         if (!hitResult) return;
                         if (hitResult.type === 'stroke' || hitResult.type === 'screentext') {
-                            selectedPath = hitResult.item;
-                            scope.HitResult = selectedPath.RoomObject.dbCoordinatesString();
+                            selectedRoomObject = hitResult.item.RoomObject;
+                            scope.HitResult = selectedRoomObject.dbCoordinatesString();
                         }
                         else if (hitResult.type === 'segment') {
-                            selectedPath = hitResult.item;
+                            selectedRoomObject = hitResult.item.RoomObject;
                             selectedSegment = hitResult.segment;
                             numberOfPointUnderMove = hitResult.numberOfPointUnderMouse;
                             scope.HitResult = 'Segment: (' + selectedSegment.point.x + ',' + selectedSegment.point.y + ')';
                         }
 
-                        if (selectedPath) selectedPath.selected = true;
+                        if (selectedRoomObject) selectedRoomObject.attachedPath.selected = true;
                         if (selectedSegment) selectedSegment.selected = true;
 
                     }
@@ -185,10 +186,10 @@ seatApp
                         scope.Y = y;
                         scope.XProject = scope.view2ProjectX(x);
                         scope.YProject = scope.view2ProjectY(y);
-                        if (!selectedPath || !selectedPath.segments || selectedPath.segments.length != 2)
+                        if (!selectedRoomObject || !selectedRoomObject.attachedPath.segments || selectedRoomObject.attachedPath.segments.length != 2)
                             scope.LogMessage = undefined;
                         else {
-                            var segments = selectedPath.segments;
+                            var segments = selectedRoomObject.attachedPath.segments;
                             scope.LogMessage = '(' + segments[0].point.x + ' : ' + segments[0].point.y + ') - (' +
                                 segments[1].point.x + ' : ' + segments[1].point.y + ')';
                         }
@@ -331,7 +332,7 @@ seatApp
                     }
 
                     scope.clearSelectedElements = function() {
-                        selectedPath = null;
+                        selectedRoomObject = undefined;
                         selectedSegment = null;
                         selectedTable = null;
                     }
