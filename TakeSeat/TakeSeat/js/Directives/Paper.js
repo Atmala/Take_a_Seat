@@ -9,7 +9,7 @@ seatApp
                     var isMoved = false;
                     var rectangleWidth = 70, rectangleHeight = 100;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
-                    var selectedSegment, selectedTable, numberOfPointUnderMove,
+                    var selectedTable, numberOfPointUnderMove,
                         roomObjectToMove, selectedRoomObject;
 
                     scope.color = '#000000';
@@ -20,7 +20,7 @@ seatApp
                     scope.zoomValue = 100;
                     scope.scale = 1.0;
                     scope.gridStep = 10;
-
+                    
                     function mouseDown(event) {
                         if (scope.loadingRoom) return;
                         fixEvent(event);
@@ -141,7 +141,6 @@ seatApp
                     function selectItemByCoordinates(x, y) {
                         project.deselectAll();
                         selectedRoomObject = undefined;
-                        selectedSegment = null;
                         numberOfPointUnderMove = null;
 
                         var point = new paper.Point(x, y);
@@ -170,14 +169,11 @@ seatApp
                         }
                         else if (hitResult.type === 'segment') {
                             selectedRoomObject = hitResult.item.RoomObject;
-                            selectedSegment = hitResult.segment;
                             numberOfPointUnderMove = hitResult.numberOfPointUnderMouse;
-                            scope.HitResult = 'Segment: (' + selectedSegment.point.x + ',' + selectedSegment.point.y + ')';
+                            //scope.HitResult = 'Segment: (' + selectedSegment.point.x + ',' + selectedSegment.point.y + ')';
                         }
 
-                        if (selectedRoomObject) selectedRoomObject.attachedPath.selected = true;
-                        if (selectedSegment) selectedSegment.selected = true;
-
+                        if (selectedRoomObject.select) selectedRoomObject.select();
                     }
 
                     function setCurrentCoords(x, y) {
@@ -332,7 +328,6 @@ seatApp
 
                     scope.clearSelectedElements = function() {
                         selectedRoomObject = undefined;
-                        selectedSegment = null;
                         selectedTable = null;
                     }
 

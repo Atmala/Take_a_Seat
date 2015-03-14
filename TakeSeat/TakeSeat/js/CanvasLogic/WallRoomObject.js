@@ -186,6 +186,7 @@
     }
 
     this.move = function (offsetX, offsetY, numberOfPointUnderMouse) {
+        this.numberOfPointUnderMouse = numberOfPointUnderMouse;
         var correctedPoint;
         if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 1) {
             this.x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x + offsetX);
@@ -216,5 +217,11 @@
 
     this.dbCoordinatesString = function() {
         return 'Line: (' + this.x1 + ',' + this.y1 + ') - (' + this.x2 + ',' + this.y2 + ')';
+    }
+
+    this.select = function() {
+        this.attachedPath.selected = true;
+        if (numberOfPointUnderMouse)
+            this.attachedPath.segments[this.numberOfPointUnderMouse - 1].selected = true;
     }
 }
