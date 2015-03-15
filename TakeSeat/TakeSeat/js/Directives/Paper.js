@@ -9,8 +9,7 @@ seatApp
                     var isMoved = false;
                     var rectangleWidth = 70, rectangleHeight = 100;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
-                    var selectedTable, numberOfPointUnderMove,
-                        roomObjectToMove, selectedRoomObject;
+                    var selectedTable, roomObjectToMove, selectedRoomObject;
 
                     scope.color = '#000000';
                     scope.fontColor = '#000000';
@@ -20,7 +19,7 @@ seatApp
                     scope.zoomValue = 100;
                     scope.scale = 1.0;
                     scope.gridStep = 10;
-                    
+
                     function mouseDown(event) {
                         if (scope.loadingRoom) return;
                         fixEvent(event);
@@ -128,8 +127,8 @@ seatApp
                     }
 
                     function movePath(offsetX, offsetY) {
-                        roomObjectToMove.move(offsetX, offsetY, numberOfPointUnderMove);
-                        
+                        roomObjectToMove.move(offsetX, offsetY);
+
                     }
 
                     function moveAllItems(offsetX, offsetY) {
@@ -151,44 +150,44 @@ seatApp
                         var point = new paper.Point(x, y);
                         selectedRoomObject = scope.roomObjectCollection.findRoomObject(point, 5);
                     }
-                    
-                    function selectItemByCoordinatesOld(x, y) {
-                        project.deselectAll();
-                        selectedRoomObject = undefined;
-                        numberOfPointUnderMove = null;
 
-                        var point = new paper.Point(x, y);
-                        var table = scope.roomObjectCollection.getTableByPoint(point);
-                        scope.selectedTableId = table ? table.RoomObject.roomObjectId : undefined;
-                        if (selectedTable && (!table || table.RoomObject.roomObjectId !== selectedTable.RoomObject.roomObjectId)) {
-                            selectedTable.RoomObject.getPath();
-                            selectedTable = null;
-                        }
-                        if (table) {
-                            if (!selectedRoomObject || selectedRoomObject.roomObjectId != scope.selectedTableId) {
-                                table.RoomObject.getPath();
-                                selectedTable = table;
-                                selectedRoomObject = table.RoomObject;
-                            }
-                            
-                            return;
-                        }
-                         
-                        var hitResult = scope.roomObjectCollection.customHitTest(point, 5);
-                        
-                        if (!hitResult) return;
-                        if (hitResult.type === 'stroke' || hitResult.type === 'screentext') {
-                            selectedRoomObject = hitResult.item.RoomObject;
-                            scope.HitResult = selectedRoomObject.dbCoordinatesString();
-                        }
-                        else if (hitResult.type === 'segment') {
-                            selectedRoomObject = hitResult.item.RoomObject;
-                            numberOfPointUnderMove = hitResult.numberOfPointUnderMouse;
-                            //scope.HitResult = 'Segment: (' + selectedSegment.point.x + ',' + selectedSegment.point.y + ')';
-                        }
+                    //function selectItemByCoordinatesOld(x, y) {
+                    //    project.deselectAll();
+                    //    selectedRoomObject = undefined;
+                    //    numberOfPointUnderMove = null;
 
-                        if (selectedRoomObject.select) selectedRoomObject.select();
-                    }
+                    //    var point = new paper.Point(x, y);
+                    //    var table = scope.roomObjectCollection.getTableByPoint(point);
+                    //    scope.selectedTableId = table ? table.RoomObject.roomObjectId : undefined;
+                    //    if (selectedTable && (!table || table.RoomObject.roomObjectId !== selectedTable.RoomObject.roomObjectId)) {
+                    //        selectedTable.RoomObject.getPath();
+                    //        selectedTable = null;
+                    //    }
+                    //    if (table) {
+                    //        if (!selectedRoomObject || selectedRoomObject.roomObjectId != scope.selectedTableId) {
+                    //            table.RoomObject.getPath();
+                    //            selectedTable = table;
+                    //            selectedRoomObject = table.RoomObject;
+                    //        }
+
+                    //        return;
+                    //    }
+
+                    //    var hitResult = scope.roomObjectCollection.customHitTest(point, 5);
+
+                    //    if (!hitResult) return;
+                    //    if (hitResult.type === 'stroke' || hitResult.type === 'screentext') {
+                    //        selectedRoomObject = hitResult.item.RoomObject;
+                    //        scope.HitResult = selectedRoomObject.dbCoordinatesString();
+                    //    }
+                    //    else if (hitResult.type === 'segment') {
+                    //        selectedRoomObject = hitResult.item.RoomObject;
+                    //        numberOfPointUnderMove = hitResult.numberOfPointUnderMouse;
+                    //        //scope.HitResult = 'Segment: (' + selectedSegment.point.x + ',' + selectedSegment.point.y + ')';
+                    //    }
+
+                    //    if (selectedRoomObject.select) selectedRoomObject.select();
+                    //}
 
                     function setCurrentCoords(x, y) {
                         scope.X = x;
@@ -255,7 +254,14 @@ seatApp
                         return scope.toGrid(Math.round((viewY - scope.globalOffset.y) / scope.scale));
                     }
 
-                    scope.view2ProjectXNoGrid = function(viewX) {
+                    scope.view2Project = function (point) {
+                        return {
+                            x: scope.view2ProjectX(point.x),
+                            y: scope.view2ProjectY(point.y)
+                        };
+                    }
+
+                    scope.view2ProjectXNoGrid = function (viewX) {
                         return Math.round((viewX - scope.globalOffset.x) / scope.scale);
                     }
 
@@ -271,7 +277,6 @@ seatApp
                         return Math.round(projectY * scope.scale + scope.globalOffset.y);
                     }
 
-                    
                     function get90PointForWall(start, point) {
                         if (Math.abs(point.x - start.x) > Math.abs(point.y - start.y))
                             return new paper.Point([point.x, start.y]);
@@ -340,7 +345,7 @@ seatApp
                         return scope.project2ViewY(projectY);
                     }
 
-                    scope.clearSelectedElements = function() {
+                    scope.clearSelectedElements = function () {
                         selectedRoomObject = undefined;
                         selectedTable = null;
                     }

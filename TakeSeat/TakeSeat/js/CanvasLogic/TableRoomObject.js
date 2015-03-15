@@ -1,4 +1,6 @@
 ﻿function TableRoomObject(scope, mapProvider) {
+    var isSelected = false;
+
     this.setTextRectangle = function () {
         switch (this.angle) {
             case 0:
@@ -41,7 +43,7 @@
     }
 
     this.isSelectedItem = function() {
-        return this.roomObjectId === scope.selectedTableId && !scope.editPlanMode;
+        return isSelected && !scope.editPlanMode;
     }
 
     this.createNew = function (x, y, width, height) {
@@ -129,8 +131,6 @@
             data: { id: this.roomObjectId },
             success: function (response) {
                 scope.loadEmployees();
-            }, error: function (req, status, error) {
-                alert("Error: " + error);
             }
         });
     }
@@ -288,5 +288,22 @@
                 this.attachedPath.captions[i].point.y = this.attachedPath.captions[i].point.y + realOffsetY;
             }
         }
+    }
+
+    this.select = function () {
+        this.getPath();
+    }
+
+    this.unselect = function () {
+        isSelected = false;
+        this.getPath();
+    }
+
+    this.selectByPoint = function (point, tolerance) {
+        var projectPoint = scope.view2Project(point);
+        isSelected = projectPoint.x >= this.left() && projectPoint.x <= this.right()
+            && projectPoint.y >= this.top() && projectPoint.y <= this.bottom();
+        if (isSelected) this.select();
+        return isSelected;
     }
 }
