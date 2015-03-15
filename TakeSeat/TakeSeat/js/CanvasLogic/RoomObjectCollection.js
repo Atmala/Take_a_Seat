@@ -9,15 +9,6 @@
         this.collection = [];
     }
 
-    this.getTableByPoint = function(point) {
-        for (var i = 0; i < this.collection.length; i++) {
-            if (this.collection[i].attachedPath && this.collection[i].attachedPath.contains(point)) {
-                return this.collection[i].attachedPath;
-            }
-        }
-        return undefined;
-    }
-
     this.findRoomObjectByType = function (roomObjectType, point, tolerance) {
         for (var i = 0; i < this.collection.length; i++) {
             var roomObject = this.collection[i];
@@ -80,7 +71,7 @@
         };
         return undefined;
     }
-
+    
     this.deleteRoomObjectById = function(roomObjectId) {
         var index = this.getIndexById(roomObjectId);
         if (index) this.collection.splice(index);

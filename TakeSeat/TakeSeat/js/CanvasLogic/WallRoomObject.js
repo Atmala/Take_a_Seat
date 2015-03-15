@@ -2,12 +2,13 @@
     this.RoomObjectType = 'wall';
     var isSelected = false;
     var numberOfPointUnderMouse;
+    var x1, y1, x2, y2;
 
     this.loadFromDb = function (dbRoomObject) {
-        this.x1 = dbRoomObject.Points[0].X;
-        this.y1 = dbRoomObject.Points[0].Y;
-        this.x2 = dbRoomObject.Points[1].X;
-        this.y2 = dbRoomObject.Points[1].Y;
+        x1 = dbRoomObject.Points[0].X;
+        y1 = dbRoomObject.Points[0].Y;
+        x2 = dbRoomObject.Points[1].X;
+        y2 = dbRoomObject.Points[1].Y;
         this.subType = dbRoomObject.SubType;
         this.roomObjectId = dbRoomObject.Id;
     }
@@ -17,24 +18,24 @@
         this.attachedPath = path;
         this.roomObjectId = 0;
         this.subType = scope.roomObjectSubType;
-        this.x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x);
-        this.y1 = scope.view2ProjectY(this.attachedPath.segments[0].point.y);
-        this.x2 = scope.view2ProjectX(this.attachedPath.segments[1].point.x);
-        this.y2 = scope.view2ProjectY(this.attachedPath.segments[1].point.y);
+        x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x);
+        y1 = scope.view2ProjectY(this.attachedPath.segments[0].point.y);
+        x2 = scope.view2ProjectX(this.attachedPath.segments[1].point.x);
+        y2 = scope.view2ProjectY(this.attachedPath.segments[1].point.y);
         this.save();
     }
 
     this.getFirstPoint = function() {
-        return new paper.Point(scope.project2ViewX(this.x1), scope.project2ViewY(this.y1));
+        return new paper.Point(scope.project2ViewX(x1), scope.project2ViewY(y1));
     }
 
     this.getSecondPoint = function() {
-        return new paper.Point(scope.project2ViewX(this.x2), scope.project2ViewY(this.y2));
+        return new paper.Point(scope.project2ViewX(x2), scope.project2ViewY(y2));
     }
 
     this.getPath = function () {
         if (this.attachedPath) this.attachedPath.remove();
-        if (Math.abs(this.x1 - this.x2) < scope.gridStep && Math.abs(this.y1 - this.y2) < scope.gridStep)
+        if (Math.abs(x1 - x2) < scope.gridStep && Math.abs(y1 - y2) < scope.gridStep)
             return null;
         var path = new paper.Path();
         scope.setWallAppearance(path, this.subType);
@@ -51,10 +52,10 @@
         var lineInfo = {
             RoomObjectId: this.roomObjectId,
             SubType: this.subType,
-            X1: this.x1,
-            Y1: this.y1,
-            X2: this.x2,
-            Y2: this.y2
+            X1: x1,
+            Y1: y1,
+            X2: x2,
+            Y2: y2
         };
 
         $.ajax({
@@ -63,10 +64,10 @@
             data: lineInfo,
             success: function (response) {
                 thisObject.roomObjectId = response.RoomObjectId;
-                thisObject.x1 = response.X1;
-                thisObject.y1 = response.Y1;
-                thisObject.x2 = response.X2;
-                thisObject.y2 = response.Y2;
+                x1 = response.X1;
+                y1 = response.Y1;
+                x2 = response.X2;
+                y2 = response.Y2;
                 thisObject.attachedPath.segments[0].point = thisObject.getFirstPoint();
                 thisObject.attachedPath.segments[1].point = thisObject.getSecondPoint();
             }
@@ -151,19 +152,19 @@
     }
     
     this.left = function () {
-        return Math.min(this.x1, this.x2);
+        return Math.min(x1, x2);
     }
 
     this.top = function () {
-        return Math.min(this.y1, this.y2);
+        return Math.min(y1, y2);
     }
 
     this.right = function () {
-        return Math.max(this.x1, this.x2);
+        return Math.max(x1, x2);
     }
 
     this.bottom = function () {
-        return Math.max(this.y1, this.y2);
+        return Math.max(y1, y2);
     }
 
     this.get90PointForWall = function(start, point) {
@@ -185,22 +186,22 @@
     this.move = function (offsetX, offsetY) {
         var correctedPoint;
         if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 1) {
-            this.x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x + offsetX);
-            this.y1 = scope.view2ProjectY(this.attachedPath.segments[0].point.y + offsetY);
+            x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x + offsetX);
+            y1 = scope.view2ProjectY(this.attachedPath.segments[0].point.y + offsetY);
             if (numberOfPointUnderMouse) {
-                correctedPoint = this.getCorrectedPoint({ x: this.x2, y: this.y2 }, { x: this.x1, y: this.y1 });
-                this.x1 = correctedPoint.x;
-                this.y1 = correctedPoint.y;
+                correctedPoint = this.getCorrectedPoint({ x: x2, y: y2 }, { x: x1, y: y1 });
+                x1 = correctedPoint.x;
+                y1 = correctedPoint.y;
             }
         }
         
         if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 2) {
-            this.x2 = scope.view2ProjectX(this.attachedPath.segments[1].point.x + offsetX);
-            this.y2 = scope.view2ProjectY(this.attachedPath.segments[1].point.y + offsetY);
+            x2 = scope.view2ProjectX(this.attachedPath.segments[1].point.x + offsetX);
+            y2 = scope.view2ProjectY(this.attachedPath.segments[1].point.y + offsetY);
             if (numberOfPointUnderMouse) {
-                correctedPoint = this.getCorrectedPoint({ x: this.x1, y: this.y1 }, { x: this.x2, y: this.y2 });
-                this.x2 = correctedPoint.x;
-                this.y2 = correctedPoint.y;
+                correctedPoint = this.getCorrectedPoint({ x: x1, y: y1 }, { x: x2, y: y2 });
+                x2 = correctedPoint.x;
+                y2 = correctedPoint.y;
             }
         }
         this.updatePosition();
@@ -213,7 +214,7 @@
     }
 
     this.dbCoordinatesString = function() {
-        return 'Line: (' + this.x1 + ',' + this.y1 + ') - (' + this.x2 + ',' + this.y2 + ')';
+        return 'Line: (' + x1 + ',' + y1 + ') - (' + x2 + ',' + y2 + ')';
     }
 
     this.select = function() {
