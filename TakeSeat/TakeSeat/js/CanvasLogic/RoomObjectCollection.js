@@ -18,37 +18,6 @@
         return undefined;
     }
 
-    this.findSegment = function(point, tolerance) {
-        for (var i = 0; i < this.collection.length; i++) {
-            if (this.collection[i].findSegment) {
-                var hitResult = this.collection[i].findSegment(point, tolerance);
-                if (hitResult) return hitResult;
-            }
-        }
-        return undefined;
-    }
-
-    this.findLine = function(point, tolerance) {
-        for (var i = 0; i < this.collection.length; i++) {
-            if (this.collection[i].findLine) {
-                var hitResult = this.collection[i].findLine(point, tolerance);
-                if (hitResult) return hitResult;
-            }
-        }
-        return undefined;
-    }
-
-    this.findScreenText = function(point, tolerance) {
-        for (var i = 0; i < this.collection.length; i++) {
-            if (this.collection[i].findScreenText) {
-                var hitResult = this.collection[i].findScreenText(point, tolerance);
-                if (hitResult)
-                    return hitResult;
-            }
-        }
-        return undefined;
-    }
-
     this.findRoomObjectByType = function (roomObjectType, point, tolerance) {
         for (var i = 0; i < this.collection.length; i++) {
             var roomObject = this.collection[i];
@@ -69,15 +38,6 @@
         return undefined;
     }
 
-    this.customHitTest = function (point, tolerance) {
-        var screenText = this.findScreenText(point, tolerance);
-        if (screenText) return screenText;
-        var segment = this.findSegment(point, tolerance);
-        if (segment) return segment;
-        var line = this.findLine(point, tolerance);
-        return line;
-    }
-    
     this.updateAllPositions = function () {
         for (var i = 0; i < this.collection.length; i++) {
             var roomObject = this.collection[i];

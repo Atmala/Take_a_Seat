@@ -151,44 +151,6 @@ seatApp
                         selectedRoomObject = scope.roomObjectCollection.findRoomObject(point, 5);
                     }
 
-                    //function selectItemByCoordinatesOld(x, y) {
-                    //    project.deselectAll();
-                    //    selectedRoomObject = undefined;
-                    //    numberOfPointUnderMove = null;
-
-                    //    var point = new paper.Point(x, y);
-                    //    var table = scope.roomObjectCollection.getTableByPoint(point);
-                    //    scope.selectedTableId = table ? table.RoomObject.roomObjectId : undefined;
-                    //    if (selectedTable && (!table || table.RoomObject.roomObjectId !== selectedTable.RoomObject.roomObjectId)) {
-                    //        selectedTable.RoomObject.getPath();
-                    //        selectedTable = null;
-                    //    }
-                    //    if (table) {
-                    //        if (!selectedRoomObject || selectedRoomObject.roomObjectId != scope.selectedTableId) {
-                    //            table.RoomObject.getPath();
-                    //            selectedTable = table;
-                    //            selectedRoomObject = table.RoomObject;
-                    //        }
-
-                    //        return;
-                    //    }
-
-                    //    var hitResult = scope.roomObjectCollection.customHitTest(point, 5);
-
-                    //    if (!hitResult) return;
-                    //    if (hitResult.type === 'stroke' || hitResult.type === 'screentext') {
-                    //        selectedRoomObject = hitResult.item.RoomObject;
-                    //        scope.HitResult = selectedRoomObject.dbCoordinatesString();
-                    //    }
-                    //    else if (hitResult.type === 'segment') {
-                    //        selectedRoomObject = hitResult.item.RoomObject;
-                    //        numberOfPointUnderMove = hitResult.numberOfPointUnderMouse;
-                    //        //scope.HitResult = 'Segment: (' + selectedSegment.point.x + ',' + selectedSegment.point.y + ')';
-                    //    }
-
-                    //    if (selectedRoomObject.select) selectedRoomObject.select();
-                    //}
-
                     function setCurrentCoords(x, y) {
                         scope.X = x;
                         scope.Y = y;

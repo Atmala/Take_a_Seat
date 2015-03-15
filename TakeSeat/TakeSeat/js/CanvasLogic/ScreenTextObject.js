@@ -1,4 +1,5 @@
 ﻿function ScreenTextObject(scope, mapProvider) {
+    var isSelected = false;
     this.RoomObjectType = 'screentext';
 
     this.createNew = function (x, y, text) {
@@ -7,16 +8,24 @@
         this.text = text;
     }
 
+    this.isSelectedItem = function () {
+        return isSelected && !scope.editPlanMode;
+    }
+
     this.getPath = function () {
         if (this.attachedPath) this.attachedPath.remove();
         this.currentScale = scope.scale;
+        this.realScale = this.isSelectedItem() && this.currentScale < 1 ? 1 : this.currentScale;
         var style = {
             fitToCenter: true,
-            fontSize: 16 * this.currentScale,
-            fontweight: this.isFoundItem ? 900 : 300,
-            fontColor: this.isFoundItem ? scope.foundColor : scope.fontColor
+            fontSize: 16 * this.realScale,
+            fontweight: 300,
+            fontColor: isSelected ? '#0000CD' : scope.fontColor
         };
         this.attachedPath = getPointText(scope.project2ViewX(this.leftTopX), scope.project2ViewY(this.leftTopY), style, this.text);
+        var width = this.attachedPath.bounds.width;
+        var offsetX = width * (this.realScale - this.currentScale) / 2;
+        this.attachedPath.point.x -= offsetX;
         this.attachedPath.RoomObject = this;
         this.width = Math.round(this.attachedPath.bounds.width);
         return this.attachedPath;
@@ -132,5 +141,21 @@
         this.text = text;
         this.save();
         this.getPath();
+    }
+
+    this.select = function () {
+        this.getPath();
+    }
+
+    this.unselect = function () {
+        isSelected = false;
+        this.getPath();
+    }
+
+    this.selectByPoint = function (point, tolerance) {
+        isSelected = point.x >= this.attachedPath.bounds.left && point.x <= this.attachedPath.bounds.left + this.attachedPath.bounds.width
+            && point.y >= this.attachedPath.bounds.top && point.y <= this.attachedPath.bounds.top + this.attachedPath.bounds.height;
+        if (isSelected) this.select();
+        return isSelected;
     }
 }
