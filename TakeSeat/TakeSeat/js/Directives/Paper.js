@@ -51,7 +51,7 @@ seatApp
                             mouseDownPoint = new paper.Point([x, y]);
                         }
                     }
-
+                    
                     function mouseUp(event) {
                         if (scope.loadingRoom) return;
                         fixEvent(event);
@@ -151,19 +151,19 @@ seatApp
                         selectedRoomObject = scope.roomObjectCollection.findRoomObject(point, 5);
                     }
 
-                    function setCurrentCoords(x, y) {
-                        scope.X = x;
-                        scope.Y = y;
-                        scope.XProject = scope.view2ProjectX(x);
-                        scope.YProject = scope.view2ProjectY(y);
-                        if (!selectedRoomObject || !selectedRoomObject.attachedPath.segments || selectedRoomObject.attachedPath.segments.length != 2)
-                            scope.LogMessage = undefined;
-                        else {
-                            var segments = selectedRoomObject.attachedPath.segments;
-                            scope.LogMessage = '(' + segments[0].point.x + ' : ' + segments[0].point.y + ') - (' +
-                                segments[1].point.x + ' : ' + segments[1].point.y + ')';
-                        }
-                    }
+                    //function setCurrentCoords(x, y) {
+                    //    scope.X = x;
+                    //    scope.Y = y;
+                    //    scope.XProject = scope.view2ProjectX(x);
+                    //    scope.YProject = scope.view2ProjectY(y);
+                    //    if (!selectedRoomObject || !selectedRoomObject.attachedPath.segments || selectedRoomObject.attachedPath.segments.length != 2)
+                    //        scope.LogMessage = undefined;
+                    //    else {
+                    //        var segments = selectedRoomObject.attachedPath.segments;
+                    //        scope.LogMessage = '(' + segments[0].point.x + ' : ' + segments[0].point.y + ') - (' +
+                    //            segments[1].point.x + ' : ' + segments[1].point.y + ')';
+                    //    }
+                    //}
 
                     function drawLine(startPoint, endPoint) {
                         path.moveTo(startPoint);

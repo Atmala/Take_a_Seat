@@ -124,17 +124,19 @@
     }
 
     this.deleteRoomObject = function () {
-        this.removeCaptions();
+        var thisObject = this;
         $.ajax({
             url: window.deleteRoomObjectPath,
             type: 'POST',
             data: { id: this.roomObjectId },
             success: function (response) {
+                thisObject.removeCaptions();
+                thisObject.attachedPath.remove();
                 scope.loadEmployees();
             }
         });
     }
-
+    
     this.save = function () {
         var thisObject = this;
         var rectangleInfo = {
