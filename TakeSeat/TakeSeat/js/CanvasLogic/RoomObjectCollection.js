@@ -46,6 +46,27 @@
                     return hitResult;
             }
         }
+        return undefined;
+    }
+
+    this.findRoomObjectByType = function (roomObjectType, point, tolerance) {
+        for (var i = 0; i < this.collection.length; i++) {
+            var roomObject = this.collection[i];
+            if (roomObject.RoomObjectType === roomObjectType && roomObject.selectByPoint) {
+                if (roomObject.selectByPoint(point, tolerance))
+                    return roomObject;
+            }
+        }
+        return undefined;
+    }
+    
+    this.findRoomObject = function(point, tolerance) {
+        var typePriority = ['table', 'screentext', 'wall'];
+        for (var i = 0; i < typePriority.length; i++) {
+            var roomObject = this.findRoomObjectByType(typePriority[i], point, tolerance);
+            if (roomObject) return roomObject;
+        }
+        return undefined;
     }
 
     this.customHitTest = function (point, tolerance) {
@@ -56,7 +77,7 @@
         var line = this.findLine(point, tolerance);
         return line;
     }
-
+    
     this.updateAllPositions = function () {
         for (var i = 0; i < this.collection.length; i++) {
             var roomObject = this.collection[i];

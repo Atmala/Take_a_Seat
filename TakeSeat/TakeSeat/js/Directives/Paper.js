@@ -138,7 +138,21 @@ seatApp
                         scope.roomObjectCollection.updateAllPositions();
                     }
 
+                    function unselectSelectedRoomObject() {
+                        if (selectedRoomObject) {
+                            if (selectedRoomObject.unselect)
+                                selectedRoomObject.unselect();
+                            selectedRoomObject = undefined;
+                        }
+                    }
+
                     function selectItemByCoordinates(x, y) {
+                        unselectSelectedRoomObject();
+                        var point = new paper.Point(x, y);
+                        selectedRoomObject = scope.roomObjectCollection.findRoomObject(point, 5);
+                    }
+                    
+                    function selectItemByCoordinatesOld(x, y) {
                         project.deselectAll();
                         selectedRoomObject = undefined;
                         numberOfPointUnderMove = null;

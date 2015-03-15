@@ -1,5 +1,7 @@
 ﻿function WallRoomObject(scope, mapProvider) {
     this.RoomObjectType = 'wall';
+    var isSelected = false;
+    var numberOfPointUnderMouse;
 
     this.loadFromDb = function (dbRoomObject) {
         this.x1 = dbRoomObject.Points[0].X;
@@ -9,7 +11,7 @@
         this.subType = dbRoomObject.SubType;
         this.roomObjectId = dbRoomObject.Id;
     }
-
+    
     this.createNew = function (path) {
         path.RoomObject = this;
         this.attachedPath = path;
@@ -90,18 +92,13 @@
     this.findSegment = function (point, tolerance) {
         for (var i = 0; i < this.attachedPath.segments.length; i++) {
             if (this.checkTwoPointsProximity(this.attachedPath.segments[i].point, point, tolerance)) {
-                return {
-                    type: 'segment',
-                    item: this.attachedPath,
-                    segment: this.attachedPath.segments[i],
-                    numberOfPointUnderMouse: i + 1
-                }
+                numberOfPointUnderMouse = i + 1;
+                return true;
             }
         }
-        this.numberOfPointUnderMouse = undefined;
-        return undefined;
+        return false;
     }
-
+    
     this.isVerticalLine = function() {
         return this.attachedPath.segments[0].point.x == this.attachedPath.segments[1].point.x;
     }
@@ -141,18 +138,18 @@
     this.findLine = function (point, tolerance) {
         if (this.isVerticalLine()) {
             if (this.checkVerticalProximity(point, tolerance))
-                return { type: 'stroke', item: this.attachedPath };
+                return true;
         }
         else if (this.isHorizontalLine()) {
             if (this.checkHorizontalProximity(point, tolerance))
-                return { type: 'stroke', item: this.attachedPath };
+                return true;
         } else {
             if (this.checkDiagonalProximity(point, tolerance))
-                return { type: 'stroke', item: this.attachedPath };
+                return true;
         }
-        return undefined;   
+        return false;
     }
-
+    
     this.left = function () {
         return Math.min(this.x1, this.x2);
     }
@@ -185,8 +182,7 @@
         }
     }
 
-    this.move = function (offsetX, offsetY, numberOfPointUnderMouse) {
-        this.numberOfPointUnderMouse = numberOfPointUnderMouse;
+    this.move = function (offsetX, offsetY) {
         var correctedPoint;
         if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 1) {
             this.x1 = scope.view2ProjectX(this.attachedPath.segments[0].point.x + offsetX);
@@ -197,6 +193,7 @@
                 this.y1 = correctedPoint.y;
             }
         }
+        
         if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 2) {
             this.x2 = scope.view2ProjectX(this.attachedPath.segments[1].point.x + offsetX);
             this.y2 = scope.view2ProjectY(this.attachedPath.segments[1].point.y + offsetY);
@@ -222,6 +219,22 @@
     this.select = function() {
         this.attachedPath.selected = true;
         if (numberOfPointUnderMouse)
-            this.attachedPath.segments[this.numberOfPointUnderMouse - 1].selected = true;
+            this.attachedPath.segments[numberOfPointUnderMouse - 1].selected = true;
     }
+
+    this.unselect = function() {
+        this.attachedPath.selected = false;
+    }
+
+    this.isSelected = function() {
+        return isSelected;
+    }
+
+    this.selectByPoint = function(point, tolerance) {
+        numberOfPointUnderMouse = undefined;
+        isSelected = this.findSegment(point, tolerance) || this.findLine(point, tolerance);
+        if (isSelected) this.select();
+        return isSelected;
+    }
+    
 }
