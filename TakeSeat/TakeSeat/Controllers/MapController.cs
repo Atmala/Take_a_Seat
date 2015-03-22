@@ -33,11 +33,9 @@ namespace TakeSeat.Controllers
             }
             set { Session["Room"] = value; }
         }
-        //
-        // GET: /Map/
-        public ActionResult Index()
+        public ActionResult Index(string id)
         {
-            _logger.Info("Index()");
+            _logger.Info(id);
             return View();
         }
 
@@ -58,7 +56,6 @@ namespace TakeSeat.Controllers
         [HttpGet]
         public JsonResult GetEmployeesWithoutSeat()
         {
-            _logger.Info("GetEmployeesWithoutSeat");
             try
             {
                 return Json(ServiceProxy.GetEmployeesWithoutSeat(), JsonRequestBehavior.AllowGet);
@@ -174,7 +171,7 @@ namespace TakeSeat.Controllers
             var json = webClient.DownloadString(employeesUrl);
             return JsonHelper.JsonDeserialize<MethodResult<List<ImportEmployeeInfo>>>(json);
         }
-
+        
         [HttpGet]
         public JsonResult GetImportStatistics()
         {

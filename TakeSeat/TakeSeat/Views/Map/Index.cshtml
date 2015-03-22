@@ -33,6 +33,7 @@
 <img id="maptable_active" class="visuallyhidden" src="@Url.Content("~/img/maptable_active.png")">
 <img id="maptable_found" class="visuallyhidden" src="@Url.Content("~/img/maptable_found.png")">
 <script type="text/javascript">
+    window.paramUid = '@(ViewContext.RouteData.Values["id"])';
     window.getEmployeesWithoutSeatPath = '@Url.Action("GetEmployeesWithoutSeat", "Map")';
     window.saveRoomPath = '@Url.Action("SaveRoom", "Map")';
     window.saveTablePath = '@Url.Action("SaveTable", "Map")';
