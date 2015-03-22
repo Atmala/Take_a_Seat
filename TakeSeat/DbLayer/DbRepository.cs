@@ -621,7 +621,10 @@ namespace DbLayer
                 {
                     ExternalId = importedEmployee.EmployeeId,
                     FirstName = importedEmployee.FirstName,
-                    Surname = importedEmployee.Surname
+                    Surname = importedEmployee.Surname,
+                    Uid = importedEmployee.Uid,
+                    FirstNameEn = importedEmployee.FirstNameEn,
+                    SurnameEn = importedEmployee.SurnameEn
                 };
                 Save(employee);
             }
@@ -633,6 +636,19 @@ namespace DbLayer
                 RemoveEmployeeTableLinks(employee.Id);
                 _db.Employees.Remove(employee);
                 _db.SaveChanges();
+            }
+
+            foreach (var importedEmployee in
+                    importedEmployees.Where(ie => employeeExternalIds.Any(id => id == ie.EmployeeId)))
+            {
+                var employee = _db.Employees.FirstOrDefault(e => e.ExternalId == importedEmployee.EmployeeId);
+                if (employee == null) continue;
+                employee.FirstName = importedEmployee.FirstName;
+                employee.Surname = importedEmployee.Surname;
+                employee.Uid = importedEmployee.Uid;
+                employee.FirstNameEn = importedEmployee.FirstNameEn;
+                employee.SurnameEn = importedEmployee.SurnameEn;
+                Save(employee);
             }
         }
 

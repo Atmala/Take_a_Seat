@@ -112,7 +112,7 @@
         this.setCaptions();
         return raster;
     }
-
+    
     this.updatePosition = function () {
         if (scope.scale !== this.currentScale) {
             this.getPath();

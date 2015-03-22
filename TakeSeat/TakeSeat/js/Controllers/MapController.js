@@ -123,9 +123,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
                 $scope.employeeList = response;
 
                 setDropDownEmployeeInputAutocomplete();
-                //$scope.$apply();
-            }, error: function (req, status, error) {
-                alert("Error: " + error);
             }
         });
 

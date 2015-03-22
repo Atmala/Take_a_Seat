@@ -14,5 +14,8 @@ namespace CommonClasses.Database
         public string FirstName { get; set; }
         public string Surname { get; set; }
         public int ExternalId { get; set; }
+        public string Uid { get; set; }
+        public string FirstNameEn { get; set; }
+        public string SurnameEn { get; set; }
     }
 }

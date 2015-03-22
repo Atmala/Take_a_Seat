@@ -10,5 +10,8 @@ namespace CommonClasses.InfoClasses
         public int EmployeeId { get; set; }
         public string FirstName { get; set; }
         public string Surname { get; set; }
+        public string Uid { get; set; }
+        public string FirstNameEn { get; set; }
+        public string SurnameEn { get; set; }
     }
 }
