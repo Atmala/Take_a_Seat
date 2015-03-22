@@ -500,7 +500,8 @@ namespace DbLayer
                                EmployeeId = r.Employee.Id,
                                RoomObjectId = r.RoomObject == null ? 0 : r.RoomObject.Id,
                                FioShort = r.Employee.Surname + " " + r.Employee.FirstName,
-                               IdentNumber = r.RoomObject == null ? string.Empty : r.RoomObject.IdentNumber
+                               IdentNumber = r.RoomObject == null ? string.Empty : r.RoomObject.IdentNumber,
+                               Uid = r.Employee.Uid
                            }).ToList();
             result.AddRange(
                 from ro in _db.RoomObjects
@@ -512,14 +513,16 @@ namespace DbLayer
                            EmployeeId = 0,
                            RoomObjectId = ro.Id,
                            FioShort = "",
-                           ro.IdentNumber
+                           ro.IdentNumber,
+                           Uid = ""
                        });
             return result.Select(r => new SearchElementInfo
                                  {
                                      RoomId = r.RoomId,
                                      EmployeeId = r.EmployeeId,
                                      RoomObjectId = r.RoomObjectId,
-                                     label = GetSearchLabel(r.FioShort, r.IdentNumber)
+                                     label = GetSearchLabel(r.FioShort, r.IdentNumber),
+                                     Uid = r.Uid
                                  }).ToList();
         }
 

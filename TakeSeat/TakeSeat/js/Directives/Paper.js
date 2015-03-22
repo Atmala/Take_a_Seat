@@ -151,7 +151,7 @@ seatApp
                         selectedRoomObject = scope.roomObjectCollection.findRoomObject(point, 5);
                     }
 
-                    //function setCurrentCoords(x, y) {
+                    function setCurrentCoords(x, y) {
                     //    scope.X = x;
                     //    scope.Y = y;
                     //    scope.XProject = scope.view2ProjectX(x);
@@ -163,7 +163,7 @@ seatApp
                     //        scope.LogMessage = '(' + segments[0].point.x + ' : ' + segments[0].point.y + ') - (' +
                     //            segments[1].point.x + ' : ' + segments[1].point.y + ')';
                     //    }
-                    //}
+                    }
 
                     function drawLine(startPoint, endPoint) {
                         path.moveTo(startPoint);

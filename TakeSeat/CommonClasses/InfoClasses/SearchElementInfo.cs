@@ -12,5 +12,6 @@ namespace CommonClasses.InfoClasses
         public int EmployeeId { get; set; }
         public int RoomObjectId { get; set; }
         public string label { get; set; }
+        public string Uid { get; set; }
     }
 }

@@ -165,7 +165,7 @@ namespace TakeSeat.Controllers
 
         private MethodResult<List<ImportEmployeeInfo>> GetEmployeeImport()
         {
-            var employeesUrl = "http://aas/aas-prod-service/AasRest.svc/allEmployeesForTakeSeat";
+            var employeesUrl = "http://192.168.0.30/aas-prod-service/AasRest.svc/allEmployeesForTakeSeat";
             var webClient = new WebClient();
             webClient.Encoding = Encoding.UTF8;
             var json = webClient.DownloadString(employeesUrl);

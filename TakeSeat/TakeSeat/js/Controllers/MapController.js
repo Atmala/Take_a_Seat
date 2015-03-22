@@ -63,6 +63,10 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         $scope.loadEmployees();
         $scope.loadRooms();
         $scope.getUserAccess();
+        if (window.paramUid) {
+            var searchItem = $scope.searchByUid(window.paramUid);
+            if (searchItem) $scope.doSearch(searchItem);
+        }
         $scope.$apply();
     }
 
@@ -128,14 +132,12 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
         $.ajax({
             url: window.getElementsForSearchPath,
+            async: false,
             data: {},
             success: function (response) {
                 $scope.searchList = response;
 
                 setSearchAutocomplete();
-                //$scope.$apply();
-            }, error: function (req, status, error) {
-                alert("Error: " + error);
             }
         });
     }
@@ -144,6 +146,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         try {
             $.ajax({
                 url: window.getRoomsPath,
+                async: false,
                 data: { },
                 success: function (response) {
                     $scope.rooms = response;
@@ -382,6 +385,14 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         catch (e) {
             alert(e.description);
         }
+    }
+
+    $scope.searchByUid = function(uid) {
+        for (var i = 0; i < $scope.searchList.length; i++) {
+            var item = $scope.searchList[i];
+            if (item.Uid === uid) return item;
+        }
+        return undefined;
     }
 }]);
 
