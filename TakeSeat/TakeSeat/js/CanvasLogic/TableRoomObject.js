@@ -173,8 +173,8 @@
 
         var dropDownMenu = $("#tableDropDownMenu");
         dropDownMenu.css({
-            left: this.attachedPath.bounds.left + canvas.offsetLeft - 56,
-            top: this.attachedPath.bounds.bottom + canvas.offsetTop,
+            left: this.left() - 56,
+            top: this.bottom(),
         });
     }
 
