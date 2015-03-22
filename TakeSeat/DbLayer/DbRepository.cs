@@ -493,6 +493,8 @@ namespace DbLayer
                 (from e in _db.Employees
                  from etl in _db.EmployeeTableLinks.Where(r => r.EmployeeId == e.Id)
                  from ro in _db.RoomObjects.Where(r => r.Id == etl.RoomObjectId)
+                 from r in _db.Rooms.Where(r => r.Id == ro.RoomId)
+                 where r.IsActive
                  select new { Employee = e, RoomObject = ro }).AsEnumerable().
                 Select(r => new
                            {
