@@ -39,7 +39,7 @@
     }
 
     this.getBorders = function () {
-        var borders;
+        var borders = undefined;
         for (var i = 0; i < this.collection.length; i++) {
             var roomObject = this.collection[i];
             if (!roomObject) continue;
@@ -53,8 +53,10 @@
                 if (roomObject.bottom() > borders.bottom) borders.bottom = roomObject.bottom();
             }
         };
-        borders.width = borders.right - borders.left + 40;
-        borders.height = borders.bottom - borders.top + 40;
+        if (borders) {
+            borders.width = borders.right - borders.left + 40;
+            borders.height = borders.bottom - borders.top + 40;
+        }
         return borders;
     }
 

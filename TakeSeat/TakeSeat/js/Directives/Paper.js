@@ -26,29 +26,36 @@ seatApp
                         var x = scope.toScaledGridX(event.offsetX);
                         var y = scope.toScaledGridY(event.offsetY);
 
-                        if (scope.editPlanMode) {
-                            if (scope.mode === 'line') {
-                                path = getNewPath();
-                            } else if (scope.mode === 'table') {
-                                path = roomObjectFactory.createTable(x, y, rectangleWidth, rectangleHeight);
-                            } else if (scope.mode === 'text') {
-                                scope.screenTextDroppedDown = undefined;
-                                scope.screenTextDropDownX = x;
-                                scope.screenTextDropDownY = y;
-                                scope.showScreenTextDropDownMenu(x - 50, y - 10, '');
-                            } else if (scope.mode === 'delete') {
-                                if (selectedRoomObject) {
-                                    scope.roomObjectCollection.deleteRoomObjectById(selectedRoomObject.Id);
-                                    selectedRoomObject.deleteRoomObject();
-                                    selectedRoomObject = undefined;
-                                }
-                            } else {
-                                roomObjectToMove = selectedRoomObject;
-                            }
+                        if (scope.regime.mode === 'view') {
+                            roomObjectToMove = selectedRoomObject;
+                            mouseDownPoint = new paper.Point([x, y]);
+                            return;
                         }
 
-                        if (scope.mode !== 'delete' && scope.mode != 'text') {
-                            mouseDownPoint = new paper.Point([x, y]);
+                        if (scope.editPlanMode) {
+                            switch (scope.regime.mode) {
+                                case 'add': 
+                                    if (scope.regime.type === 'line') {
+                                        path = getNewPath();
+                                        mouseDownPoint = new paper.Point([x, y]);
+                                    } else if (scope.regime.type === 'table') {
+                                        path = roomObjectFactory.createTable(x, y, rectangleWidth, rectangleHeight);
+                                        mouseDownPoint = new paper.Point([x, y]);
+                                    } else if (scope.regime.type === 'text') {
+                                        scope.screenTextDroppedDown = undefined;
+                                        scope.screenTextDropDownX = x;
+                                        scope.screenTextDropDownY = y;
+                                        scope.showScreenTextDropDownMenu(x - 50, y - 10, '');
+                                    }
+                                    break;
+                                case 'delete': 
+                                    if (selectedRoomObject) {
+                                        scope.roomObjectCollection.deleteRoomObjectById(selectedRoomObject.Id);
+                                        selectedRoomObject.deleteRoomObject();
+                                        selectedRoomObject = undefined;
+                                    }
+                                    break;
+                            }
                         }
                     }
                     
@@ -67,7 +74,7 @@ seatApp
                         mouseDownPoint = undefined;
                         isMoved = false;
 
-                        if (path && scope.mode === 'line') {
+                        if (path && scope.regime.mode === 'add' && scope.regime.type === 'line') {
                             roomObjectFactory.createWall(path);
                         }
                     }
@@ -79,7 +86,7 @@ seatApp
                         var x = event.offsetX;
                         var y = event.offsetY;
 
-                        if (scope.mode === 'line' && mouseDownPoint) {
+                        if (scope.regime.type === 'line' && mouseDownPoint) {
                             if (event.offsetX <= 2 || event.offsetY <= 2 ||
                                 event.offsetX >= event.currentTarget.width - 2 || event.offsetY >= event.currentTarget.height - 2) {
                                 mouseUp();
@@ -90,9 +97,9 @@ seatApp
                             drawLine(mouseDownPoint, new getPointForWall(
                                 mouseDownPoint, new paper.Point([x, y]), scope.wallMode));
 
-                        } else if (scope.mode === 'table' && mouseDownPoint) {
+                        } else if (scope.regime.type === 'table' && mouseDownPoint) {
                             path.position = new paper.Point([x, y]);
-                        } else if (scope.mode === 'view' && mouseDownPoint) {
+                        } else if (scope.regime.mode === 'view' && mouseDownPoint) {
                             if (Math.abs(x - mouseDownPoint.x) > 0 || Math.abs(y - mouseDownPoint.y) > 0) {
                                 isMoved = true;
                                 moveMapObjects(x, y);
@@ -182,7 +189,7 @@ seatApp
 
                     function getNewPath() {
                         var newPath = new paper.Path();
-                        scope.setWallAppearance(newPath, scope.roomObjectSubType);
+                        scope.setWallAppearance(newPath, scope.regime.subtype);
                         return newPath;
                     }
 

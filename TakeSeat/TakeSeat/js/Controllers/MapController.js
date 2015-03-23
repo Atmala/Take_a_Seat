@@ -50,8 +50,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
     
     function setDefaultMode() {
-        $scope.mode = 'view';
-        $scope.roomObjectSubType = undefined;
+        $scope.regime = { mode: 'view' };
     }
 
     $scope.Init = function () {
@@ -82,7 +81,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
     }
 
     $scope.isSelected = function (section) {
-        return $scope.mode === section;
+        return $scope.regime.type === section || $scope.regime.mode === section;
     }
 
     $scope.isSelectedEmployee = function (employee) {
@@ -93,12 +92,11 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         return $scope.selectedEmployee = employee;
     }
 
-    $scope.changeMode = function (mode, subtype) {
-        if ($scope.isSelected(mode) && (!subtype || subtype === $scope.roomObjectSubType))
+    $scope.changeMode = function (regime) {
+        if ($scope.regime.mode === regime.mode && $scope.regime.type === regime.type && $scope.regime.subtype === regime.subtype)
             setDefaultMode();
         else {
-            $scope.mode = mode;
-            $scope.roomObjectSubType = subtype;
+            $scope.regime = regime;
         }
     }
 
@@ -293,10 +291,16 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     function setRightScale() {
         var borders = $scope.roomObjectCollection.getBorders();
-        var canvas = $('#paperCanvas')[0];
-        var zoomVert = (canvas.clientHeight - 200) / borders.height;
-        var zoomHor = (canvas.clientWidth) / borders.width;
-        var zoom = Math.min(zoomVert, zoomHor);
+        var zoomVert, zoomHor, zoom;
+        if (borders) {
+            var canvas = $('#paperCanvas')[0];
+            zoomVert = (canvas.clientHeight) / borders.height;
+            zoomHor = (canvas.clientWidth) / borders.width;
+            zoom = Math.min(zoomVert, zoomHor);
+        } else {
+            zoom = 1;
+        }
+
         $scope.zoomValue = Math.round(zoom * 100);
         if ($scope.zoomValue > 100) $scope.zoomValue = 100;
         //if ($scope.zoomValue < 75 && $scope.foundRoomObjectId) $scope.zoomValue = 75;
@@ -304,8 +308,8 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         $scope.zoomValue = Math.round($scope.zoomValue / 5) * 5;
         zoom = $scope.zoomValue / 100;
         $scope.scale = zoom;
-        $scope.globalOffset.x = Math.round(-borders.left * zoom + $scope.gridStep);
-        $scope.globalOffset.y = Math.round(-borders.top * zoom + $scope.gridStep);
+        $scope.globalOffset.x = borders ? Math.round(-borders.left * zoom + $scope.gridStep) : 0;
+        $scope.globalOffset.y = borders ? Math.round(-borders.top * zoom + $scope.gridStep) : 0;
 
         if ($scope.foundRoomObjectId) {
             var table = $scope.roomObjectCollection.getRoomObjectById($scope.foundRoomObjectId);
@@ -396,5 +400,6 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         }
         return undefined;
     }
+
 }]);
 

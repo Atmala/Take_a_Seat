@@ -166,7 +166,6 @@
 
     this.showDropDownMenu = function () {
         scope.tableDroppedDown = this.attachedPath;
-        var canvas = $('#paperCanvas')[0];
         scope.setTableDropDownMenuMode('buttons');
         scope.tableDropDownMenuVisible = true;
         scope.$apply();

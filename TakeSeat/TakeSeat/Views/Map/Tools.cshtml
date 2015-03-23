@@ -2,7 +2,7 @@
     <div class="panel-body">
         <div class="md-overlay">
             <button title="Pointer"
-                    type="button" class="btn-tool" ng-click="changeMode('view')"
+                    type="button" class="btn-tool" ng-click="changeMode({ mode: 'view' })"
                     ng-class="{activeBtn : isSelected('view')}">
                 <img ng-show="! isSelected('view')" src=@Url.Content("~/img/pointer.png") />
                 <img ng-show="isSelected('view')" src=@Url.Content("~/img/pointer_active.png") />
@@ -17,13 +17,13 @@
                 <img ng-show="isSelected('line')" src=@Url.Content("~/img/wall_active.png") />
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownCountry">
-                <li><a ng-click="changeMode('line', 1)">External</a></li>
-                <li><a ng-click="changeMode('line', 2)">Internal</a></li>
+                <li><a ng-click="changeMode({ mode: 'add', type: 'line', subtype: 1})">External</a></li>
+                <li><a ng-click="changeMode({ mode: 'add', type: 'line', subtype: 2})">Internal</a></li>
             </ul>
         </div>
         <div class="md-overlay">
             <button title="Add Table"
-                    type="button" class="btn-tool" ng-click="changeMode('table')"
+                    type="button" class="btn-tool" ng-click="changeMode({ mode: 'add', type: 'table'})"
                     ng-class="{activeBtn : isSelected('table')}">
                 <img ng-show="! isSelected('table')" src=@Url.Content("~/img/table.png") />
                 <img ng-show="isSelected('table')" src=@Url.Content("~/img/table_active.png") />
@@ -31,7 +31,7 @@
         </div>
         <div class="md-overlay">
             <button title="Add Text"
-                    type="button" class="btn-tool" ng-click="changeMode('text')"
+                    type="button" class="btn-tool" ng-click="changeMode({ mode: 'add', type: 'text'})"
                     ng-class="{activeBtn : isSelected('text')}">
                 <img ng-show="! isSelected('text')" src=@Url.Content("~/img/text.png") />
                 <img ng-show="isSelected('text')" src=@Url.Content("~/img/text_active.png") />
@@ -39,7 +39,7 @@
         </div>
         <div class="md-overlay">
             <button title="Add Window"
-                    type="button" class="btn-tool" ng-click="changeMode('window')"
+                    type="button" class="btn-tool" ng-click="changeMode({ mode: 'add', type: 'window', parenttype: 'line'})"
                     ng-class="{activeBtn : isSelected('window')}">
                 <img ng-show="! isSelected('window')" src=@Url.Content("~/img/window.png") />
                 <img ng-show="isSelected('window')" src=@Url.Content("~/img/window_active.png") />
@@ -47,7 +47,7 @@
         </div>
         <div class="md-overlay">
             <button title="Add Door"
-                    type="button" class="btn-tool" ng-click="changeMode('door')"
+                    type="button" class="btn-tool" ng-click="changeMode({ mode: 'add', type: 'door', parenttype: 'line'})"
                     ng-class="{activeBtn : isSelected('door')}">
                 <img ng-show="! isSelected('door')" src=@Url.Content("~/img/door.png") />
                 <img ng-show="isSelected('door')" src=@Url.Content("~/img/door_active.png") />
@@ -55,7 +55,7 @@
         </div>
         <div class="md-overlay">
             <button title="Delete"
-                    type="button" class="btn-tool" ng-click="changeMode('delete')"
+                    type="button" class="btn-tool" ng-click="changeMode({ mode: 'delete' })"
                     ng-class="{activeBtn : isSelected('delete')}">
                 <img ng-show="! isSelected('delete')" src=@Url.Content("~/img/delete.png") />
                 <img ng-show="isSelected('delete')" src=@Url.Content("~/img/delete_active.png") />

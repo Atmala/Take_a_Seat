@@ -17,7 +17,7 @@
         path.RoomObject = this;
         attachedPath = path;
         this.roomObjectId = 0;
-        subType = scope.roomObjectSubType;
+        subType = scope.regime.subtype;
         x1 = scope.view2ProjectX(attachedPath.segments[0].point.x);
         y1 = scope.view2ProjectY(attachedPath.segments[0].point.y);
         x2 = scope.view2ProjectX(attachedPath.segments[1].point.x);
