@@ -36,7 +36,9 @@ seatApp
                             switch (scope.regime.mode) {
                                 case 'add': 
                                     if (scope.regime.type === 'wall') {
-                                        path = getNewPath();
+                                        selectedRoomObject = roomObjectFactory.createByType(scope.regime.type);
+                                        selectedRoomObject.createByClick(new paper.Point[x, y]);
+                                        //path = getNewPath();
                                         mouseDownPoint = new paper.Point([x, y]);
                                     } else if (scope.regime.type === 'table') {
                                         path = roomObjectFactory.createTable(x, y, rectangleWidth, rectangleHeight);
@@ -175,22 +177,6 @@ seatApp
                     function drawLine(startPoint, endPoint) {
                         path.moveTo(startPoint);
                         path.lineTo(endPoint);
-                    }
-
-                    scope.setWallAppearance = function (wallPath, subtype) {
-                        if (subtype === 1) {
-                            wallPath.strokeWidth = 4;
-                            wallPath.strokeColor = scope.wallColor;
-                        } else {
-                            wallPath.strokeWidth = 2;
-                            wallPath.strokeColor = scope.wallColor;
-                        }
-                    }
-
-                    function getNewPath() {
-                        var newPath = new paper.Path();
-                        scope.setWallAppearance(newPath, scope.regime.subtype);
-                        return newPath;
                     }
 
                     function initPaper() {

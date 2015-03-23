@@ -41,4 +41,15 @@
         roomObject.save();
         scope.roomObjectCollection.add(roomObject);
     }
+
+    this.createByType = function(type) {
+        switch (type) {
+            case 'wall':
+                return new WallRoomObject(scope, mapProvider);
+            case 'table':
+                return new TableRoomObject(scope, mapProvider);
+            case 'text':
+                return new ScreenTextObject(scope, mapProvider);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 ﻿function WallRoomObject(scope, mapProvider) {
     this.RoomObjectType = 'wall';
-    var isSelected = false;
+    var isSelected = false, creatingNew = false;
     var numberOfPointUnderMouse, attachedPath;
     var x1, y1, x2, y2, subType;
 
@@ -23,6 +23,31 @@
         x2 = scope.view2ProjectX(attachedPath.segments[1].point.x);
         y2 = scope.view2ProjectY(attachedPath.segments[1].point.y);
         this.save();
+    }
+
+    this.createByClick = function(point) {
+        subType = scope.regime.subtype;
+        
+        x1 = scope.view2ProjectX(point.x);
+        y1 = scope.view2ProjectY(point.y);
+        x2 = x1;
+        y2 = y1;
+        attachedPath = new paper.Path();
+        creatingNew = true;
+        setWallAppearance();
+    }
+
+    function setWallAppearance() {
+        switch (subType) {
+            case 1:
+                attachedPath.strokeWidth = 4;
+                attachedPath.strokeColor = scope.wallColor;
+                break;
+            case 2:
+                attachedPath.strokeWidth = 2;
+                attachedPath.strokeColor = scope.wallColor;
+                break;
+        }
     }
 
     function getFirstPoint () {
