@@ -35,7 +35,7 @@ seatApp
                         if (scope.editPlanMode) {
                             switch (scope.regime.mode) {
                                 case 'add': 
-                                    if (scope.regime.type === 'line') {
+                                    if (scope.regime.type === 'wall') {
                                         path = getNewPath();
                                         mouseDownPoint = new paper.Point([x, y]);
                                     } else if (scope.regime.type === 'table') {
@@ -74,7 +74,7 @@ seatApp
                         mouseDownPoint = undefined;
                         isMoved = false;
 
-                        if (path && scope.regime.mode === 'add' && scope.regime.type === 'line') {
+                        if (path && scope.regime.mode === 'add' && scope.regime.type === 'wall') {
                             roomObjectFactory.createWall(path);
                         }
                     }
@@ -86,7 +86,7 @@ seatApp
                         var x = event.offsetX;
                         var y = event.offsetY;
 
-                        if (scope.regime.type === 'line' && mouseDownPoint) {
+                        if (scope.regime.type === 'wall' && mouseDownPoint) {
                             if (event.offsetX <= 2 || event.offsetY <= 2 ||
                                 event.offsetX >= event.currentTarget.width - 2 || event.offsetY >= event.currentTarget.height - 2) {
                                 mouseUp();
