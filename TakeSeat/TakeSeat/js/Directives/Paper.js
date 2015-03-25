@@ -25,6 +25,7 @@ seatApp
                         fixEvent(event);
                         var x = scope.toScaledGridX(event.offsetX);
                         var y = scope.toScaledGridY(event.offsetY);
+                        var point = new paper.Point([x, y]);
 
                         if (scope.regime.mode === 'view') {
                             roomObjectToMove = selectedRoomObject;
@@ -37,7 +38,8 @@ seatApp
                                 case 'add': 
                                     if (scope.regime.type === 'wall') {
                                         selectedRoomObject = roomObjectFactory.createByType(scope.regime.type);
-                                        selectedRoomObject.createByClick(new paper.Point[x, y]);
+                                        selectedRoomObject.createByClick(point);
+                                        roomObjectToMove = selectedRoomObject;
                                         //path = getNewPath();
                                         mouseDownPoint = new paper.Point([x, y]);
                                     } else if (scope.regime.type === 'table') {
@@ -77,10 +79,10 @@ seatApp
                         isMoved = false;
 
                         if (path && scope.regime.mode === 'add' && scope.regime.type === 'wall') {
-                            roomObjectFactory.createWall(path);
+                            selectedRoomObject.onMouseUp();
                         }
                     }
-
+                    
                     function mouseMove(event) {
                         if (scope.loadingRoom) return;
                         fixEvent(event);
@@ -94,10 +96,11 @@ seatApp
                                 mouseUp();
                                 return;
                             }
-
-                            path.removeSegments();
-                            drawLine(mouseDownPoint, new getPointForWall(
-                                mouseDownPoint, new paper.Point([x, y]), scope.wallMode));
+                            isMoved = true;
+                            moveMapObjects(x, y);
+                            //path.removeSegments();
+                            //drawLine(mouseDownPoint, new getPointForWall(
+                            //    mouseDownPoint, new paper.Point([x, y]), scope.wallMode));
 
                         } else if (scope.regime.type === 'table' && mouseDownPoint) {
                             path.position = new paper.Point([x, y]);

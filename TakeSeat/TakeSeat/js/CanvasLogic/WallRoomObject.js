@@ -30,11 +30,20 @@
         
         x1 = scope.view2ProjectX(point.x);
         y1 = scope.view2ProjectY(point.y);
-        x2 = x1;
+        x2 = x1 + scope.gridStep;
         y2 = y1;
-        attachedPath = new paper.Path();
-        creatingNew = true;
-        setWallAppearance();
+        numberOfPointUnderMouse = 2;
+        this.getPath();
+    }
+
+    this.onMouseUp = function() {
+        this.save();
+    }
+
+    function viewPoint(index) {
+        return index === 1 ?
+            new paper.Point(scope.project2ViewX(x1), scope.project2ViewY(y1)) :
+            new paper.Point(scope.project2ViewX(x2), scope.project2ViewY(y2));
     }
 
     function setWallAppearance() {
@@ -50,25 +59,16 @@
         }
     }
 
-    function getFirstPoint () {
-        return new paper.Point(scope.project2ViewX(x1), scope.project2ViewY(y1));
-    }
-
-    function getSecondPoint () {
-        return new paper.Point(scope.project2ViewX(x2), scope.project2ViewY(y2));
-    }
-
     this.getPath = function () {
         if (attachedPath) attachedPath.remove();
         if (Math.abs(x1 - x2) < scope.gridStep && Math.abs(y1 - y2) < scope.gridStep)
             return null;
-        var path = new paper.Path();
-        scope.setWallAppearance(path, subType);
-        path.add(getFirstPoint());
-        path.add(getSecondPoint());
-        path.RoomObject = this;
-        attachedPath = path;
-        return path;
+        attachedPath = new paper.Path();
+        setWallAppearance();
+        attachedPath.add(viewPoint(1));
+        attachedPath.add(viewPoint(2));
+        attachedPath.RoomObject = this;
+        return attachedPath;
     }
 
     this.save = function () {
@@ -82,7 +82,7 @@
             X2: x2,
             Y2: y2
         };
-
+        
         $.ajax({
             url: window.saveWallPath,
             type: 'POST',
@@ -93,12 +93,12 @@
                 y1 = response.Y1;
                 x2 = response.X2;
                 y2 = response.Y2;
-                thisObject.attachedPath.segments[0].point = thisObject.getFirstPoint();
-                thisObject.attachedPath.segments[1].point = thisObject.getSecondPoint();
+                attachedPath.segments[0].point = viewPoint(1);
+                attachedPath.segments[1].point = viewPoint(2);
             }
         });
     }
-
+    
     this.deleteRoomObject = function () {
         $.ajax({
             url: window.deleteRoomObjectPath,
@@ -233,8 +233,8 @@
     }
 
     this.updatePosition = function() {
-        attachedPath.segments[0].point = getFirstPoint();
-        attachedPath.segments[1].point = getSecondPoint();
+        attachedPath.segments[0].point = viewPoint(1);
+        attachedPath.segments[1].point = viewPoint(2);
     }
 
     this.dbCoordinatesString = function() {
