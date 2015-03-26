@@ -1,5 +1,6 @@
 ﻿function TableRoomObject(scope, mapProvider) {
     var isSelected = false;
+    var standardWidth = 70, standardHeight = 100;
 
     this.setTextRectangle = function () {
         switch (this.angle) {
@@ -56,6 +57,12 @@
         this.save();
     }
 
+    this.createByClick = function (point) {
+        this.createNew(point.x, point.y, standardWidth, standardHeight);
+        this.getPath();
+        this.save();
+    }
+    
     this.removeCaptions = function () {
         if (!this.attachedPath.captions) return;
         for (var i = 0; i < this.attachedPath.captions.length; i++) {
@@ -63,7 +70,7 @@
         }
         this.attachedPath.captions = undefined;
     }
-
+    
     this.setCaptions = function () {
         var style = {
             fitToCenter: true,
@@ -163,7 +170,7 @@
             }
         });
     }
-
+    
     this.showDropDownMenu = function () {
         scope.tableDroppedDown = this.attachedPath;
         scope.setTableDropDownMenuMode('buttons');
@@ -172,8 +179,8 @@
 
         var dropDownMenu = $("#tableDropDownMenu");
         dropDownMenu.css({
-            left: this.left() - 56,
-            top: this.bottom(),
+            left: scope.project2ViewX(this.left() - 56),
+            top: scope.project2ViewY(this.bottom())
         });
     }
 
@@ -306,5 +313,9 @@
             && projectPoint.y >= this.top() && projectPoint.y <= this.bottom();
         if (isSelected) this.select();
         return isSelected;
+    }
+    
+    this.onMouseUp = function () {
+        this.save();
     }
 }

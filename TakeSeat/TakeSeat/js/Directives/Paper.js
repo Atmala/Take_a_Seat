@@ -7,7 +7,6 @@ seatApp
 
                     var path, mouseDownPoint;
                     var isMoved = false;
-                    var rectangleWidth = 70, rectangleHeight = 100;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
                     var selectedTable, roomObjectToMove, selectedRoomObject;
 
@@ -40,10 +39,11 @@ seatApp
                                         selectedRoomObject = roomObjectFactory.createByType(scope.regime.type);
                                         selectedRoomObject.createByClick(point);
                                         roomObjectToMove = selectedRoomObject;
-                                        //path = getNewPath();
                                         mouseDownPoint = new paper.Point([x, y]);
                                     } else if (scope.regime.type === 'table') {
-                                        path = roomObjectFactory.createTable(x, y, rectangleWidth, rectangleHeight);
+                                        selectedRoomObject = roomObjectFactory.createByType(scope.regime.type);
+                                        selectedRoomObject.createByClick(point);
+                                        roomObjectToMove = selectedRoomObject;
                                         mouseDownPoint = new paper.Point([x, y]);
                                     } else if (scope.regime.type === 'text') {
                                         scope.screenTextDroppedDown = undefined;
@@ -54,7 +54,7 @@ seatApp
                                     break;
                                 case 'delete': 
                                     if (selectedRoomObject) {
-                                        scope.roomObjectCollection.deleteRoomObjectById(selectedRoomObject.Id);
+                                        scope.roomObjectCollection.deleteRoomObjectById(selectedRoomObject.roomObjectId);
                                         selectedRoomObject.deleteRoomObject();
                                         selectedRoomObject = undefined;
                                     }
@@ -177,11 +177,6 @@ seatApp
                     //    }
                     }
 
-                    function drawLine(startPoint, endPoint) {
-                        path.moveTo(startPoint);
-                        path.lineTo(endPoint);
-                    }
-
                     function initPaper() {
                         paper.install(window);
                         var canvas = $('#paperCanvas');
@@ -233,28 +228,6 @@ seatApp
 
                     scope.project2ViewY = function (projectY) {
                         return Math.round(projectY * scope.scale + scope.globalOffset.y);
-                    }
-
-                    function get90PointForWall(start, point) {
-                        if (Math.abs(point.x - start.x) > Math.abs(point.y - start.y))
-                            return new paper.Point([point.x, start.y]);
-                        else
-                            return new paper.Point([start.x, point.y]);
-                    }
-
-                    function get45PointForWall(start, point) {
-                        return point;
-                    }
-
-                    function getPointForWall(start, point, mode) {
-                        switch (mode) {
-                            case '90':
-                                return get90PointForWall(start, point);
-                            case '45':
-                                return get45PointForWall(start, point);
-                            default:
-                                return point;
-                        }
                     }
 
                     scope.showScreenTextDropDownMenu = function (x, y, text) {

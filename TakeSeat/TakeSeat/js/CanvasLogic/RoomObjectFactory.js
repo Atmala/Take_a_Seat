@@ -28,12 +28,6 @@
         return path;
     }
 
-    this.createWall = function(path) {
-        var roomObject = new WallRoomObject(scope, mapProvider);
-        roomObject.createNew(path);
-        scope.roomObjectCollection.add(roomObject);
-    }
-
     this.createScreenText = function(x, y, text) {
         var roomObject = new ScreenTextObject(scope, mapProvider);
         roomObject.createNew(x, y, text);
@@ -42,14 +36,21 @@
         scope.roomObjectCollection.add(roomObject);
     }
 
-    this.createByType = function(type) {
+    this.createByType = function (type) {
+        var roomObject;
         switch (type) {
             case 'wall':
-                return new WallRoomObject(scope, mapProvider);
+                roomObject = new WallRoomObject(scope, mapProvider);
+                break;
             case 'table':
-                return new TableRoomObject(scope, mapProvider);
+                roomObject = new TableRoomObject(scope, mapProvider);
+                break;
             case 'text':
-                return new ScreenTextObject(scope, mapProvider);
+                roomObject = new ScreenTextObject(scope, mapProvider);
+                break;
         }
+        if (roomObject) scope.roomObjectCollection.add(roomObject);
+        return roomObject;
     }
+    
 }
