@@ -149,6 +149,7 @@
 
     this.unselect = function () {
         isSelected = false;
+        scope.screenTextDropDownMenuVisible = false;
         this.getPath();
     }
 

@@ -238,7 +238,7 @@
     }
 
     this.dbCoordinatesString = function() {
-        return 'Line: (' + x1 + ',' + y1 + ') - (' + x2 + ',' + y2 + ')';
+        return 'Wall: (' + x1 + ',' + y1 + ') - (' + x2 + ',' + y2 + ')';
     }
 
     this.select = function() {

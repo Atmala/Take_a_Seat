@@ -53,8 +53,8 @@
         this.leftTopY = scope.toGrid(scope.view2ProjectY(y) - height / 2);
         this.width = width;
         this.height = height;
-
-        this.save();
+        this.getPath();
+        //this.save();
     }
 
     this.createByClick = function (point) {
@@ -156,9 +156,11 @@
 
         $.ajax({
             url: window.saveTablePath,
+            async: false,
             type: 'POST',
             data: rectangleInfo,
             success: function (response) {
+                console.log("Table is saved. RoomObjectId = " + response.RoomObjectId);
                 if (response.RoomObjectId == 0) {
                     thisObject.attachedPath.remove();
                 } else {
@@ -304,6 +306,7 @@
 
     this.unselect = function () {
         isSelected = false;
+        scope.tableDropDownMenuVisible = false;
         this.getPath();
     }
 
@@ -318,4 +321,9 @@
     this.onMouseUp = function () {
         this.save();
     }
+
+    this.dbCoordinatesString = function () {
+        return 'Table: (' + this.leftTopX + ',' + this.leftTopY + ')';
+    }
+
 }

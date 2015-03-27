@@ -78,7 +78,7 @@ seatApp
                         mouseDownPoint = undefined;
                         isMoved = false;
 
-                        if (path && scope.regime.mode === 'add' && scope.regime.type === 'wall') {
+                        if (selectedRoomObject && selectedRoomObject.onMouseUp) {
                             selectedRoomObject.onMouseUp();
                         }
                     }
@@ -90,7 +90,7 @@ seatApp
                         var x = event.offsetX;
                         var y = event.offsetY;
 
-                        if (scope.regime.type === 'wall' && mouseDownPoint) {
+                        if (mouseDownPoint) {
                             if (event.offsetX <= 2 || event.offsetY <= 2 ||
                                 event.offsetX >= event.currentTarget.width - 2 || event.offsetY >= event.currentTarget.height - 2) {
                                 mouseUp();
@@ -98,25 +98,14 @@ seatApp
                             }
                             isMoved = true;
                             moveMapObjects(x, y);
-                            //path.removeSegments();
-                            //drawLine(mouseDownPoint, new getPointForWall(
-                            //    mouseDownPoint, new paper.Point([x, y]), scope.wallMode));
-
-                        } else if (scope.regime.type === 'table' && mouseDownPoint) {
-                            path.position = new paper.Point([x, y]);
-                        } else if (scope.regime.mode === 'view' && mouseDownPoint) {
-                            if (Math.abs(x - mouseDownPoint.x) > 0 || Math.abs(y - mouseDownPoint.y) > 0) {
-                                isMoved = true;
-                                moveMapObjects(x, y);
-                            }
                         } else {
-                            selectItemByCoordinates(event.offsetX, event.offsetY);
-                            if (!selectedRoomObject || !(selectedRoomObject.RoomObjectType === 'table')) {
-                                scope.tableDropDownMenuVisible = false;
+                            var point = new paper.Point(x, y);
+                            var newSelectedRoomObject = scope.roomObjectCollection.findRoomObject(point, 5);
+                            if (selectedRoomObject && selectedRoomObject !== newSelectedRoomObject) {
+                                if (selectedRoomObject.unselect) selectedRoomObject.unselect();
                             }
-                            if (!selectedRoomObject || !(selectedRoomObject.RoomObjectType === 'screentext')) {
-                                scope.screenTextDropDownMenuVisible = false;
-                            }
+                            selectedRoomObject = newSelectedRoomObject;
+                            if (selectedRoomObject && selectedRoomObject.select) selectedRoomObject.select();
                         }
                         setCurrentCoords(x, y);
                         scope.$apply();
@@ -149,32 +138,19 @@ seatApp
                         scope.roomObjectCollection.updateAllPositions();
                     }
 
-                    function unselectSelectedRoomObject() {
-                        if (selectedRoomObject) {
-                            if (selectedRoomObject.unselect)
-                                selectedRoomObject.unselect();
-                            selectedRoomObject = undefined;
-                        }
-                    }
-
-                    function selectItemByCoordinates(x, y) {
-                        unselectSelectedRoomObject();
-                        var point = new paper.Point(x, y);
-                        selectedRoomObject = scope.roomObjectCollection.findRoomObject(point, 5);
-                    }
-
                     function setCurrentCoords(x, y) {
-                    //    scope.X = x;
-                    //    scope.Y = y;
-                    //    scope.XProject = scope.view2ProjectX(x);
-                    //    scope.YProject = scope.view2ProjectY(y);
-                    //    if (!selectedRoomObject || !selectedRoomObject.attachedPath.segments || selectedRoomObject.attachedPath.segments.length != 2)
-                    //        scope.LogMessage = undefined;
-                    //    else {
-                    //        var segments = selectedRoomObject.attachedPath.segments;
-                    //        scope.LogMessage = '(' + segments[0].point.x + ' : ' + segments[0].point.y + ') - (' +
-                    //            segments[1].point.x + ' : ' + segments[1].point.y + ')';
-                    //    }
+                        scope.X = x;
+                        scope.Y = y;
+                        scope.selectedItemLogText = selectedRoomObject ? selectedRoomObject.dbCoordinatesString() : "unselected";
+                        //    scope.XProject = scope.view2ProjectX(x);
+                        //    scope.YProject = scope.view2ProjectY(y);
+                        //    if (!selectedRoomObject || !selectedRoomObject.attachedPath.segments || selectedRoomObject.attachedPath.segments.length != 2)
+                        //        scope.LogMessage = undefined;
+                        //    else {
+                        //        var segments = selectedRoomObject.attachedPath.segments;
+                        //        scope.LogMessage = '(' + segments[0].point.x + ' : ' + segments[0].point.y + ') - (' +
+                        //            segments[1].point.x + ' : ' + segments[1].point.y + ')';
+                        //    }
                     }
 
                     function initPaper() {
