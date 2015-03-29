@@ -34,22 +34,12 @@ seatApp
 
                         if (scope.editPlanMode) {
                             switch (scope.regime.mode) {
-                                case 'add': 
-                                    if (scope.regime.type === 'wall') {
-                                        selectedRoomObject = roomObjectFactory.createByType(scope.regime.type);
-                                        selectedRoomObject.createByClick(point);
+                                case 'add':
+                                    selectedRoomObject = roomObjectFactory.createByType(scope.regime.type);
+                                    selectedRoomObject.createByClick(point);
+                                    if (!selectedRoomObject.createInProgress) {
                                         roomObjectToMove = selectedRoomObject;
                                         mouseDownPoint = new paper.Point([x, y]);
-                                    } else if (scope.regime.type === 'table') {
-                                        selectedRoomObject = roomObjectFactory.createByType(scope.regime.type);
-                                        selectedRoomObject.createByClick(point);
-                                        roomObjectToMove = selectedRoomObject;
-                                        mouseDownPoint = new paper.Point([x, y]);
-                                    } else if (scope.regime.type === 'text') {
-                                        scope.screenTextDroppedDown = undefined;
-                                        scope.screenTextDropDownX = x;
-                                        scope.screenTextDropDownY = y;
-                                        scope.showScreenTextDropDownMenu(x - 50, y - 10, '');
                                     }
                                     break;
                                 case 'delete': 
@@ -71,7 +61,7 @@ seatApp
                                 roomObjectToMove.save();
                             roomObjectToMove = undefined;
                         } else {
-                            if (selectedRoomObject && selectedRoomObject.showDropDownMenu)
+                            if (selectedRoomObject && !selectedRoomObject.createInProgress && selectedRoomObject.showDropDownMenu)
                                 selectedRoomObject.showDropDownMenu();
                         }
 
@@ -206,30 +196,11 @@ seatApp
                         return Math.round(projectY * scope.scale + scope.globalOffset.y);
                     }
 
-                    scope.showScreenTextDropDownMenu = function (x, y, text) {
-                        var canvas = $('#paperCanvas')[0];
-                        scope.screenTextDropDownMenuVisible = true;
-                        scope.$apply();
-
-                        var dropDownMenu = $("#screenTextDropDownMenu");
-                        dropDownMenu.css({
-                            left: x + canvas.offsetLeft,
-                            top: y + canvas.offsetTop,
-                        });
-                        scope.screenTextDropDownText = text;
-                        $("#screenTextDropDownNumberInput").focus();
-                    }
-
-                    scope.screenTextDropDownKeyPress = function (event) {
+                    scope.screenTextDropDownKeyPress = function(event) {
                         if (event.which === 13) {
-                            if (scope.screenTextDroppedDown) {
-                                scope.screenTextDroppedDown.RoomObject.saveText(scope.screenTextDropDownText);
-                            } else {
-                                roomObjectFactory.createScreenText(scope.screenTextDropDownX, scope.screenTextDropDownY,
-                                    scope.screenTextDropDownText);
+                            if (selectedRoomObject && selectedRoomObject.saveText) {
+                                selectedRoomObject.saveText(scope.screenTextDropDownText);
                             }
-                            scope.screenTextDropDownText = "";
-                            scope.screenTextDropDownMenuVisible = false;
                         }
                     }
 

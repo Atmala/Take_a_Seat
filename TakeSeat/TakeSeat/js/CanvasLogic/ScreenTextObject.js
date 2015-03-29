@@ -8,6 +8,26 @@
         this.text = text;
     }
 
+    this.createByClick = function (point) {
+        this.createInProgress = true;
+        this.createNew(point.x, point.y, '');
+        showScreenTextDropDownMenu(point.x - 50, point.y - 20, '');
+    }
+    
+    function showScreenTextDropDownMenu (x, y, text) {
+        var canvas = $('#paperCanvas')[0];
+        scope.screenTextDropDownMenuVisible = true;
+        scope.$apply();
+
+        var dropDownMenu = $("#screenTextDropDownMenu");
+        dropDownMenu.css({
+            left: x + canvas.offsetLeft,
+            top: y + canvas.offsetTop,
+        });
+        scope.screenTextDropDownText = text;
+        $("#screenTextDropDownNumberInput").focus();
+    }
+
     this.isSelectedItem = function () {
         return isSelected && !scope.editPlanMode;
     }
@@ -134,12 +154,14 @@
 
     this.showDropDownMenu = function () {
         scope.screenTextDroppedDown = this.attachedPath;
-        scope.showScreenTextDropDownMenu(scope.project2ViewX(this.left()), scope.project2ViewY(this.bottom()), this.text);
+        showScreenTextDropDownMenu(scope.project2ViewX(this.left()), scope.project2ViewY(this.bottom()), this.text);
     }
 
     this.saveText = function(text) {
         this.text = text;
         this.save();
+        scope.screenTextDropDownText = "";
+        scope.screenTextDropDownMenuVisible = false;
         this.getPath();
     }
 
@@ -154,6 +176,7 @@
     }
 
     this.selectByPoint = function (point, tolerance) {
+        if (!this.attachedPath) return false;
         isSelected = point.x >= this.attachedPath.bounds.left && point.x <= this.attachedPath.bounds.left + this.attachedPath.bounds.width
             && point.y >= this.attachedPath.bounds.top && point.y <= this.attachedPath.bounds.top + this.attachedPath.bounds.height;
         if (isSelected) this.select();
