@@ -5,10 +5,8 @@ seatApp
                 restrict: 'A',
                 link: function (scope, element, attrs) {
 
-                    var mouseDownPoint;
-                    var isMoved = false;
+                    var mouseDownPoint, selectedRoomObject;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
-                    var roomObjectToMove, selectedRoomObject;
 
                     scope.color = '#000000';
                     scope.fontColor = '#000000';
@@ -21,13 +19,13 @@ seatApp
 
                     function mouseDown(event) {
                         if (scope.loadingRoom) return;
-                        fixEvent(event);
+                        fixEventForFirefox(event);
                         var x = scope.toScaledGridX(event.offsetX);
                         var y = scope.toScaledGridY(event.offsetY);
                         var point = new paper.Point([x, y]);
 
                         if (scope.regime.mode === 'view') {
-                            roomObjectToMove = selectedRoomObject;
+                            if (selectedRoomObject) selectedRoomObject.onMouseDown();
                             mouseDownPoint = new paper.Point([x, y]);
                             return;
                         }
@@ -37,10 +35,8 @@ seatApp
                                 case 'add':
                                     selectedRoomObject = roomObjectFactory.createByType(scope.regime.type);
                                     selectedRoomObject.createByClick(point);
-                                    if (!selectedRoomObject.createInProgress) {
-                                        roomObjectToMove = selectedRoomObject;
+                                    if (selectedRoomObject.isMoving())
                                         mouseDownPoint = new paper.Point([x, y]);
-                                    }
                                     break;
                                 case 'delete': 
                                     if (selectedRoomObject) {
@@ -55,38 +51,25 @@ seatApp
                     
                     function mouseUp(event) {
                         if (scope.loadingRoom) return;
-                        fixEvent(event);
-                        if (roomObjectToMove && isMoved) {
-                            if (roomObjectToMove.save)
-                                roomObjectToMove.save();
-                            roomObjectToMove = undefined;
-                        } else {
-                            if (selectedRoomObject && !selectedRoomObject.createInProgress && selectedRoomObject.showDropDownMenu)
-                                selectedRoomObject.showDropDownMenu();
-                        }
-
-                        mouseDownPoint = undefined;
-                        isMoved = false;
 
                         if (selectedRoomObject && selectedRoomObject.onMouseUp) {
                             selectedRoomObject.onMouseUp();
                         }
+                        mouseDownPoint = undefined;
                     }
                     
                     function mouseMove(event) {
                         if (scope.loadingRoom) return;
-                        fixEvent(event);
+                        fixEventForFirefox(event);
 
                         var x = event.offsetX;
                         var y = event.offsetY;
-
+                        
                         if (mouseDownPoint) {
-                            if (event.offsetX <= 2 || event.offsetY <= 2 ||
-                                event.offsetX >= event.currentTarget.width - 2 || event.offsetY >= event.currentTarget.height - 2) {
+                            if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
                                 mouseUp();
                                 return;
                             }
-                            isMoved = true;
                             moveMapObjects(x, y);
                         } else {
                             var point = new paper.Point(x, y);
@@ -101,7 +84,7 @@ seatApp
                         scope.$apply();
                     }
 
-                    function fixEvent(event) {
+                    function fixEventForFirefox(event) {
                         event.offsetX = (event.offsetX || event.clientX - $(event.target).offset().left);
                         event.offsetY = (event.offsetY || event.clientY - $(event.target).offset().top);
                     }
@@ -112,14 +95,12 @@ seatApp
                         var scaledGridStep = scope.gridStep * scope.scale;
                         if (Math.abs(offsetX) < scaledGridStep && Math.abs(offsetY) < scaledGridStep) return;
 
-                        if (roomObjectToMove && scope.editPlanMode) movePath(offsetX, offsetY);
-                        else moveAllItems(offsetX, offsetY);
+                        if (scope.editPlanMode && selectedRoomObject && selectedRoomObject.isMoving())
+                            selectedRoomObject.move(offsetX, offsetY);
+                        else
+                            moveAllItems(offsetX, offsetY);
+
                         mouseDownPoint = new paper.Point(x, y);
-                    }
-
-                    function movePath(offsetX, offsetY) {
-                        roomObjectToMove.move(offsetX, offsetY);
-
                     }
 
                     function moveAllItems(offsetX, offsetY) {
@@ -132,15 +113,6 @@ seatApp
                         scope.X = x;
                         scope.Y = y;
                         scope.selectedItemLogText = selectedRoomObject ? selectedRoomObject.dbCoordinatesString() : "unselected";
-                        //    scope.XProject = scope.view2ProjectX(x);
-                        //    scope.YProject = scope.view2ProjectY(y);
-                        //    if (!selectedRoomObject || !selectedRoomObject.attachedPath.segments || selectedRoomObject.attachedPath.segments.length != 2)
-                        //        scope.LogMessage = undefined;
-                        //    else {
-                        //        var segments = selectedRoomObject.attachedPath.segments;
-                        //        scope.LogMessage = '(' + segments[0].point.x + ' : ' + segments[0].point.y + ') - (' +
-                        //            segments[1].point.x + ' : ' + segments[1].point.y + ')';
-                        //    }
                     }
 
                     function initPaper() {

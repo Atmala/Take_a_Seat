@@ -1,5 +1,5 @@
 ﻿function TableRoomObject(scope, mapProvider) {
-    var isSelected = false;
+    var isSelected = false, isMoving = false, isMoved = false;
     var standardWidth = 70, standardHeight = 100;
 
     this.setTextRectangle = function () {
@@ -54,12 +54,12 @@
         this.width = width;
         this.height = height;
         this.getPath();
-        //this.save();
     }
 
     this.createByClick = function (point) {
         this.createNew(point.x, point.y, standardWidth, standardHeight);
         this.getPath();
+        isMoving = true;
         this.save();
     }
     
@@ -283,6 +283,8 @@
     }
 
     this.move = function (offsetX, offsetY) {
+        if (!isMoving) return;
+        isMoved = true;
         this.leftTopX = scope.toGrid(scope.view2ProjectXNoGrid(this.attachedPath.position.x + offsetX) - this.width / 2);
         this.leftTopY = scope.toGrid(scope.view2ProjectYNoGrid(this.attachedPath.position.y + offsetY) - this.height / 2);
 
@@ -294,8 +296,8 @@
         this.attachedPath.position.y = newY;
         if (this.attachedPath.captions) {
             for (var i = 0; i < this.attachedPath.captions.length; i++) {
-                this.attachedPath.captions[i].point.x = this.attachedPath.captions[i].point.x + realOffsetX;
-                this.attachedPath.captions[i].point.y = this.attachedPath.captions[i].point.y + realOffsetY;
+                this.attachedPath.captions[i].point.x += realOffsetX;
+                this.attachedPath.captions[i].point.y += realOffsetY;
             }
         }
     }
@@ -319,7 +321,21 @@
     }
     
     this.onMouseUp = function () {
-        this.save();
+        if (isMoved) {
+            this.save();
+            isMoving = false;
+            isMoved = false;
+        } else {
+            this.showDropDownMenu();
+        }
+    }
+
+    this.onMouseDown = function () {
+        isMoving = true;
+    }
+
+    this.isMoving = function () {
+        return isMoving;
     }
 
     this.dbCoordinatesString = function () {

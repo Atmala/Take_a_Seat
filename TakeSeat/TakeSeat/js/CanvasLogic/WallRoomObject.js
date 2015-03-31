@@ -1,6 +1,6 @@
 ﻿function WallRoomObject(scope, mapProvider) {
     this.RoomObjectType = 'wall';
-    var isSelected = false, creatingNew = false;
+    var isSelected = false, isMoving = false, isMoved = false;
     var numberOfPointUnderMouse, attachedPath;
     var x1, y1, x2, y2, subType;
 
@@ -33,11 +33,20 @@
         x2 = x1 + scope.gridStep;
         y2 = y1;
         numberOfPointUnderMouse = 2;
+        isMoving = true;
         this.getPath();
     }
 
     this.onMouseUp = function() {
-        this.save();
+        if (isMoved) {
+            this.save();
+            isMoving = false;
+            isMoved = false;
+        }
+    }
+
+    this.onMouseDown = function() {
+        isMoving = true;
     }
 
     function viewPoint(index) {
@@ -208,6 +217,8 @@
     }
 
     this.move = function (offsetX, offsetY) {
+        if (!isMoving) return;
+        isMoved = true;
         var correctedPoint;
         if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 1) {
             x1 = scope.view2ProjectX(attachedPath.segments[0].point.x + offsetX);
@@ -253,6 +264,10 @@
 
     this.isSelected = function() {
         return isSelected;
+    }
+
+    this.isMoving = function() {
+        return isMoving;
     }
 
     this.selectByPoint = function(point, tolerance) {

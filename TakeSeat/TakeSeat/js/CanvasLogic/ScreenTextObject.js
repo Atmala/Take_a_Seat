@@ -1,5 +1,5 @@
 ﻿function ScreenTextObject(scope, mapProvider) {
-    var isSelected = false;
+    var isSelected = false, isMoving = false, isMoved = false;
     this.RoomObjectType = 'screentext';
 
     this.createNew = function (x, y, text) {
@@ -133,6 +133,8 @@
     }
 
     this.move = function (offsetX, offsetY) {
+        if (!isMoving) return;
+        isMoved = true;
         var viewX = scope.project2ViewX(this.leftTopX) + offsetX;
         var viewY = scope.project2ViewY(this.leftTopY) + offsetY;
         this.leftTopX = scope.view2ProjectX(viewX);
@@ -153,8 +155,7 @@
     }
 
     this.showDropDownMenu = function () {
-        scope.screenTextDroppedDown = this.attachedPath;
-        showScreenTextDropDownMenu(scope.project2ViewX(this.left()), scope.project2ViewY(this.bottom()), this.text);
+        showScreenTextDropDownMenu(scope.project2ViewX(this.left()), scope.project2ViewY(this.top()), this.text);
     }
 
     this.saveText = function(text) {
@@ -173,6 +174,24 @@
         isSelected = false;
         scope.screenTextDropDownMenuVisible = false;
         this.getPath();
+    }
+
+    this.onMouseUp = function () {
+        if (isMoved) {
+            this.save();
+            isMoving = false;
+            isMoved = false;
+        } else {
+            this.showDropDownMenu();
+        }
+    }
+
+    this.onMouseDown = function () {
+        isMoving = true;
+    }
+
+    this.isMoving = function () {
+        return isMoving;
     }
 
     this.selectByPoint = function (point, tolerance) {
