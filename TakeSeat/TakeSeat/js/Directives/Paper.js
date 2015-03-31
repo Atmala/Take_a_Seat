@@ -5,10 +5,10 @@ seatApp
                 restrict: 'A',
                 link: function (scope, element, attrs) {
 
-                    var path, mouseDownPoint;
+                    var mouseDownPoint;
                     var isMoved = false;
                     var roomObjectFactory = new RoomObjectFactory(scope, mapProvider);
-                    var selectedTable, roomObjectToMove, selectedRoomObject;
+                    var roomObjectToMove, selectedRoomObject;
 
                     scope.color = '#000000';
                     scope.fontColor = '#000000';
@@ -225,7 +225,6 @@ seatApp
 
                     scope.clearSelectedElements = function () {
                         selectedRoomObject = undefined;
-                        selectedTable = null;
                     }
 
                     element.on('mousedown', mouseDown)
