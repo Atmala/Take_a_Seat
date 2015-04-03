@@ -1,58 +1,60 @@
 ﻿function TableRoomObject(scope, mapProvider) {
     var isSelected = false, isMoving = false, isMoved = false;
     var standardWidth = 70, standardHeight = 100;
+    var leftTopX, leftTopY, width, height, textRectangle, realScale;
+    var employeeFio, employeeId, identNumber, angle;
 
-    this.setTextRectangle = function () {
-        switch (this.angle) {
+    function setTextRectangle () {
+        switch (angle) {
             case 0:
-                this.textRectangle = { x: 4, y: 12, width: 44, height: 90 };
+                textRectangle = { x: 4, y: 12, width: 44, height: 90 };
                 break;
             case 90:
-                this.textRectangle = { x: 4, y: 12, width: 90, height: 44 };
+                textRectangle = { x: 4, y: 12, width: 90, height: 44 };
                 break;
             case 180:
-                this.textRectangle = { x: 20, y: 12, width: 44, height: 90 };
+                textRectangle = { x: 20, y: 12, width: 44, height: 90 };
                 break;
             case 270:
-                this.textRectangle = { x: 4, y: 30, width: 90, height: 44 };
+                textRectangle = { x: 4, y: 30, width: 90, height: 44 };
                 break;
         }
-        this.textRectangle.x *= this.realScale;
-        this.textRectangle.y *= this.realScale;
-        this.textRectangle.width *= this.realScale;
-        this.textRectangle.height *= this.realScale;
+        textRectangle.x *= realScale;
+        textRectangle.y *= realScale;
+        textRectangle.width *= realScale;
+        textRectangle.height *= realScale;
     }
 
     this.RoomObjectType = 'table';
-    this.angle = 0;
-    this.setTextRectangle();
+    angle = 0;
+    setTextRectangle();
 
     this.loadFromDb = function (dbRoomObject) {
-        this.leftTopX = dbRoomObject.Rectangles[0].LeftTopX;
-        this.leftTopY = dbRoomObject.Rectangles[0].LeftTopY;
-        this.width = dbRoomObject.Rectangles[0].Width;
-        this.height = dbRoomObject.Rectangles[0].Height;
+        leftTopX = dbRoomObject.Rectangles[0].LeftTopX;
+        leftTopY = dbRoomObject.Rectangles[0].LeftTopY;
+        width = dbRoomObject.Rectangles[0].Width;
+        height = dbRoomObject.Rectangles[0].Height;
         this.roomObjectId = dbRoomObject.Id;
-        this.employeeFio = dbRoomObject.EmployeeFio;
-        this.employeeId = dbRoomObject.EmployeeId;
-        this.identNumber = dbRoomObject.IdentNumber;
-        this.angle = dbRoomObject.Angle;
+        employeeFio = dbRoomObject.EmployeeFio;
+        employeeId = dbRoomObject.EmployeeId;
+        identNumber = dbRoomObject.IdentNumber;
+        angle = dbRoomObject.Angle;
     }
 
-    this.isFoundItem = function() {
+    function isFoundItem () {
         return this.roomObjectId === scope.foundRoomObjectId && !scope.editPlanMode;
     }
 
-    this.isSelectedItem = function() {
+    function isSelectedItem () {
         return isSelected && !scope.editPlanMode;
     }
 
-    this.createNew = function (x, y, width, height) {
+    this.createNew = function (x, y, newWidth, newHeight) {
         this.roomObjectId = 0;
-        this.leftTopX = scope.toGrid(scope.view2ProjectX(x) - width / 2);
-        this.leftTopY = scope.toGrid(scope.view2ProjectY(y) - height / 2);
-        this.width = width;
-        this.height = height;
+        leftTopX = scope.toGrid(scope.view2ProjectX(x) - width / 2);
+        leftTopY = scope.toGrid(scope.view2ProjectY(y) - height / 2);
+        width = newWidth;
+        height = newHeight;
         this.getPath();
     }
 
@@ -63,7 +65,7 @@
         this.save();
     }
     
-    this.removeCaptions = function () {
+    function removeCaptions () {
         if (!this.attachedPath.captions) return;
         for (var i = 0; i < this.attachedPath.captions.length; i++) {
             this.attachedPath.captions[i].remove();
@@ -71,52 +73,52 @@
         this.attachedPath.captions = undefined;
     }
     
-    this.setCaptions = function () {
+    function setCaptions () {
         var style = {
             fitToCenter: true,
-            fontSize: Math.min(11 * this.realScale, 14),
-            fontweight: this.isFoundItem() ? 900 : 300,
-            fontColor: this.isFoundItem() ? scope.foundColor : scope.fontColor
+            fontSize: Math.min(11 * realScale, 14),
+            fontweight: isFoundItem() ? 900 : 300,
+            fontColor: isFoundItem() ? scope.foundColor : scope.fontColor
         };
 
-        this.removeCaptions();
+        removeCaptions();
         var rect = {
-            left: this.attachedPath.bounds.x + this.textRectangle.x,
-            top: this.attachedPath.bounds.y + this.textRectangle.y,
-            width: this.textRectangle.width,
-            height: this.textRectangle.height
+            left: this.attachedPath.bounds.x + textRectangle.x,
+            top: this.attachedPath.bounds.y + textRectangle.y,
+            width: textRectangle.width,
+            height: textRectangle.height
         }
         //this.attachedPath.captions = getMultiLineText(rect, style,
-        //    this.roomObjectId + ' (' + this.leftTopX + ', ' + this.leftTopY + '');
-        this.attachedPath.captions = getMultiLineText(rect, style, this.employeeFio);
-        if (this.identNumber) {
+        //    this.roomObjectId + ' (' + leftTopX + ', ' + leftTopY + '');
+        this.attachedPath.captions = getMultiLineText(rect, style, employeeFio);
+        if (identNumber) {
             this.attachedPath.captions.push(getPointText(rect.left, rect.top + rect.height - style.fontSize,
-                style, this.identNumber));
+                style, identNumber));
         }
         fitCaptionsToCenter(this.attachedPath.captions, rect.width);
     }
 
     this.getCurrentPosition = function () {
-        return new paper.Point(scope.project2ViewX(this.leftTopX + this.width / 2),
-            scope.project2ViewY(this.leftTopY + this.height / 2));
+        return new paper.Point(scope.project2ViewX(leftTopX + width / 2),
+            scope.project2ViewY(leftTopY + height / 2));
     }
 
     this.getPath = function () {
         if (this.attachedPath) {
-            this.removeCaptions();
+            removeCaptions();
             this.attachedPath.remove();
         }
-        var imagename = this.isFoundItem() ? "maptable_found" : (this.isSelectedItem() ? "maptable_active" : "maptable");
+        var imagename = isFoundItem() ? "maptable_found" : (isSelectedItem() ? "maptable_active" : "maptable");
         var raster = new paper.Raster(imagename);
         raster.position = this.getCurrentPosition();
         raster.RoomObject = this;
         this.currentScale = scope.scale;
-        this.realScale = (this.isSelectedItem() || this.isFoundItem()) && this.currentScale < 1 ? 1 : this.currentScale;
-        raster.scale(this.realScale);
+        realScale = (isSelectedItem() || isFoundItem()) && this.currentScale < 1 ? 1 : this.currentScale;
+        raster.scale(realScale);
         this.attachedPath = raster;
-        raster.rotate(this.angle);
-        this.setTextRectangle();
-        this.setCaptions();
+        raster.rotate(angle);
+        setTextRectangle();
+        setCaptions();
         return raster;
     }
     
@@ -125,8 +127,8 @@
             this.getPath();
         } else {
             this.attachedPath.position = this.getCurrentPosition();
-            this.setTextRectangle();
-            this.setCaptions();
+            setTextRectangle();
+            setCaptions();
         }
     }
 
@@ -148,10 +150,10 @@
         var thisObject = this;
         var rectangleInfo = {
             RoomObjectId: this.roomObjectId,
-            LeftTopX: this.leftTopX,
-            LeftTopY: this.leftTopY,
-            Width: this.width,
-            Height: this.height
+            LeftTopX: leftTopX,
+            LeftTopY: leftTopY,
+            Width: width,
+            Height: height
         };
 
         $.ajax({
@@ -195,24 +197,24 @@
                 scope.loadEmployees();
             }
         });
-        this.identNumber = identNumber;
-        this.setCaptions();
+        identNumber = identNumber;
+        setCaptions();
         scope.tableDropDownMenuVisible = false;
     }
 
     this.rotate = function () {
         this.attachedPath.rotate(90);
-        this.angle += 90;
-        if (this.angle == 360) this.angle = 0;
-        this.setTextRectangle();
-        this.setCaptions();
+        angle += 90;
+        if (angle == 360) angle = 0;
+        setTextRectangle();
+        setCaptions();
     }
 
     this.saveAngle = function () {
         $.ajax({
             url: window.saveAnglePath,
             type: 'POST',
-            data: { RoomObjectId: this.roomObjectId, Angle: this.angle }
+            data: { RoomObjectId: this.roomObjectId, Angle: angle }
         });
     }
 
@@ -247,51 +249,51 @@
     }
 
     this.assignEmployee = function (employee) {
-        this.employeeId = employee.Id;
-        this.employeeFio = employee.FioShort;
-        this.setCaptions();
+        employeeId = employee.Id;
+        employeeFio = employee.FioShort;
+        setCaptions();
         saveEmployeeTableLink(employee.Id, this.roomObjectId);
     }
 
     this.discardEmployee = function () {
-        removeEmployeeTableLink(this.employeeId, this.roomObjectId);
-        this.employeeId = undefined;
-        this.employeeFio = undefined;
-        this.setCaptions();
+        removeEmployeeTableLink(employeeId, this.roomObjectId);
+        employeeId = undefined;
+        employeeFio = undefined;
+        setCaptions();
     }
 
     this.left = function () {
-        return this.leftTopX;
+        return leftTopX;
     }
 
     this.top = function () {
-        return this.leftTopY;
+        return leftTopY;
     }
 
     this.right = function () {
-        if (this.angle === 90 || this.angle === 270)
-            return this.leftTopX + this.height;
+        if (angle === 90 || angle === 270)
+            return leftTopX + height;
         else
-            return this.leftTopX + this.width;
+            return leftTopX + width;
     }
 
     this.bottom = function () {
-        if (this.angle === 90 || this.angle === 270)
-            return this.leftTopY + this.width;
+        if (angle === 90 || angle === 270)
+            return leftTopY + width;
         else
-            return this.leftTopY + this.height;
+            return leftTopY + height;
     }
 
     this.move = function (offsetX, offsetY) {
         if (!isMoving) return;
         isMoved = true;
-        this.leftTopX = scope.toGrid(scope.view2ProjectXNoGrid(this.attachedPath.position.x + offsetX) - this.width / 2);
-        this.leftTopY = scope.toGrid(scope.view2ProjectYNoGrid(this.attachedPath.position.y + offsetY) - this.height / 2);
+        leftTopX = scope.toGrid(scope.view2ProjectXNoGrid(this.attachedPath.position.x + offsetX) - width / 2);
+        leftTopY = scope.toGrid(scope.view2ProjectYNoGrid(this.attachedPath.position.y + offsetY) - height / 2);
 
-        var newX = scope.project2ViewX(this.leftTopX + this.width / 2);
+        var newX = scope.project2ViewX(leftTopX + width / 2);
         var realOffsetX = newX - this.attachedPath.position.x;
         this.attachedPath.position.x = newX;
-        var newY = scope.project2ViewY(this.leftTopY + this.height / 2);
+        var newY = scope.project2ViewY(leftTopY + height / 2);
         var realOffsetY = newY - this.attachedPath.position.y;
         this.attachedPath.position.y = newY;
         if (this.attachedPath.captions) {
@@ -339,7 +341,7 @@
     }
 
     this.dbCoordinatesString = function () {
-        return 'Table: (' + this.leftTopX + ',' + this.leftTopY + ')';
+        return 'Table: (' + leftTopX + ',' + leftTopY + ')';
     }
 
 }
