@@ -66,7 +66,7 @@ seatApp
                         var y = event.offsetY;
                         
                         if (mouseDownPoint) {
-                            if (x <= 2 || y <= 2 || x >= event.currentTarget.width - 2 || y >= event.currentTarget.height - 2) {
+                            if (mouseAtTheEdgeOfCanvas(event)) {
                                 mouseUp();
                                 return;
                             }
@@ -76,6 +76,10 @@ seatApp
                         }
                         setCurrentCoords(x, y);
                         scope.$apply();
+                    }
+
+                    function mouseAtTheEdgeOfCanvas(event) {
+                        return event.offsetX <= 2 || event.offsetY <= 2 || event.offsetX >= event.currentTarget.width - 2 || event.offsetY >= event.currentTarget.height - 2;
                     }
 
                     function selectRoomObject(point) {

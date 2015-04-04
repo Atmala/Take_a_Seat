@@ -13,24 +13,12 @@
         this.roomObjectId = dbRoomObject.Id;
     }
     
-    this.createNew = function (path) {
-        path.RoomObject = this;
-        attachedPath = path;
-        this.roomObjectId = 0;
-        subType = scope.regime.subtype;
-        x1 = scope.view2ProjectX(attachedPath.segments[0].point.x);
-        y1 = scope.view2ProjectY(attachedPath.segments[0].point.y);
-        x2 = scope.view2ProjectX(attachedPath.segments[1].point.x);
-        y2 = scope.view2ProjectY(attachedPath.segments[1].point.y);
-        this.save();
-    }
-
     this.createByClick = function(point) {
         subType = scope.regime.subtype;
         
         x1 = scope.view2ProjectX(point.x);
         y1 = scope.view2ProjectY(point.y);
-        x2 = x1 + scope.gridStep;
+        x2 = x1;
         y2 = y1;
         numberOfPointUnderMouse = 2;
         isMoving = true;
@@ -39,7 +27,12 @@
 
     this.onMouseUp = function() {
         if (isMoved) {
-            this.save();
+            if (lengthIsZero()) {
+                if (this.roomObjectId != 0)
+                    this.deleteRoomObject();
+            } else {
+                save();
+            }
             isMoving = false;
             isMoved = false;
         }
@@ -80,7 +73,7 @@
         return attachedPath;
     }
 
-    this.save = function () {
+    function save () {
         var thisObject = this;
 
         var lineInfo = {
@@ -277,7 +270,20 @@
         return isSelected;
     }
 
+    function lengthIsZero() {
+        return Math.abs(x1 - x2) < scope.gridStep && Math.abs(y1 - y2) < scope.gridStep;
+    }
+
+    function setCoordinates(newX1, newY1, newX2, newY2) {
+        x1 = newX1;
+        y1 = newY1;
+        x2 = newX2;
+        y2 = newY2;
+    }
+
     this.__unittestonly__ = {
-        isBetween: isBetween
+        isBetween: isBetween,
+        lengthIsZero: lengthIsZero,
+        setCoordinates: setCoordinates,
     };
 }
