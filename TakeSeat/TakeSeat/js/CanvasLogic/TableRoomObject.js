@@ -2,7 +2,8 @@
     var isSelected = false, isMoving = false, isMoved = false;
     var standardWidth = 70, standardHeight = 100;
     var leftTopX, leftTopY, width, height, textRectangle, realScale;
-    var employeeFio, employeeId, identNumber, angle;
+    var attachedPath, employeeFio, employeeId, identNumber, angle;
+    var thisObject = this;
 
     function setTextRectangle () {
         switch (angle) {
@@ -42,7 +43,7 @@
     }
 
     function isFoundItem () {
-        return this.roomObjectId === scope.foundRoomObjectId && !scope.editPlanMode;
+        return thisObject.roomObjectId === scope.foundRoomObjectId && !scope.editPlanMode;
     }
 
     function isSelectedItem () {
@@ -66,11 +67,11 @@
     }
     
     function removeCaptions () {
-        if (!this.attachedPath.captions) return;
-        for (var i = 0; i < this.attachedPath.captions.length; i++) {
-            this.attachedPath.captions[i].remove();
+        if (!attachedPath.captions) return;
+        for (var i = 0; i < attachedPath.captions.length; i++) {
+            attachedPath.captions[i].remove();
         }
-        this.attachedPath.captions = undefined;
+        attachedPath.captions = undefined;
     }
     
     function setCaptions () {
@@ -83,19 +84,19 @@
 
         removeCaptions();
         var rect = {
-            left: this.attachedPath.bounds.x + textRectangle.x,
-            top: this.attachedPath.bounds.y + textRectangle.y,
+            left: attachedPath.bounds.x + textRectangle.x,
+            top: attachedPath.bounds.y + textRectangle.y,
             width: textRectangle.width,
             height: textRectangle.height
         }
-        //this.attachedPath.captions = getMultiLineText(rect, style,
+        //attachedPath.captions = getMultiLineText(rect, style,
         //    this.roomObjectId + ' (' + leftTopX + ', ' + leftTopY + '');
-        this.attachedPath.captions = getMultiLineText(rect, style, employeeFio);
+        attachedPath.captions = getMultiLineText(rect, style, employeeFio);
         if (identNumber) {
-            this.attachedPath.captions.push(getPointText(rect.left, rect.top + rect.height - style.fontSize,
+            attachedPath.captions.push(getPointText(rect.left, rect.top + rect.height - style.fontSize,
                 style, identNumber));
         }
-        fitCaptionsToCenter(this.attachedPath.captions, rect.width);
+        fitCaptionsToCenter(attachedPath.captions, rect.width);
     }
 
     this.getCurrentPosition = function () {
@@ -104,9 +105,9 @@
     }
 
     this.getPath = function () {
-        if (this.attachedPath) {
+        if (attachedPath) {
             removeCaptions();
-            this.attachedPath.remove();
+            attachedPath.remove();
         }
         var imagename = isFoundItem() ? "maptable_found" : (isSelectedItem() ? "maptable_active" : "maptable");
         var raster = new paper.Raster(imagename);
@@ -115,7 +116,7 @@
         this.currentScale = scope.scale;
         realScale = (isSelectedItem() || isFoundItem()) && this.currentScale < 1 ? 1 : this.currentScale;
         raster.scale(realScale);
-        this.attachedPath = raster;
+        attachedPath = raster;
         raster.rotate(angle);
         setTextRectangle();
         setCaptions();
@@ -126,7 +127,7 @@
         if (scope.scale !== this.currentScale) {
             this.getPath();
         } else {
-            this.attachedPath.position = this.getCurrentPosition();
+            attachedPath.position = this.getCurrentPosition();
             setTextRectangle();
             setCaptions();
         }
@@ -176,7 +177,7 @@
     }
     
     this.showDropDownMenu = function () {
-        scope.tableDroppedDown = this.attachedPath;
+        scope.tableDroppedDown = attachedPath;
         scope.setTableDropDownMenuMode('buttons');
         scope.tableDropDownMenuVisible = true;
         scope.$apply();
@@ -203,7 +204,7 @@
     }
 
     this.rotate = function () {
-        this.attachedPath.rotate(90);
+        attachedPath.rotate(90);
         angle += 90;
         if (angle == 360) angle = 0;
         setTextRectangle();
@@ -287,19 +288,19 @@
     this.move = function (offsetX, offsetY) {
         if (!isMoving) return;
         isMoved = true;
-        leftTopX = scope.toGrid(scope.view2ProjectXNoGrid(this.attachedPath.position.x + offsetX) - width / 2);
-        leftTopY = scope.toGrid(scope.view2ProjectYNoGrid(this.attachedPath.position.y + offsetY) - height / 2);
+        leftTopX = scope.toGrid(scope.view2ProjectXNoGrid(attachedPath.position.x + offsetX) - width / 2);
+        leftTopY = scope.toGrid(scope.view2ProjectYNoGrid(attachedPath.position.y + offsetY) - height / 2);
 
         var newX = scope.project2ViewX(leftTopX + width / 2);
-        var realOffsetX = newX - this.attachedPath.position.x;
-        this.attachedPath.position.x = newX;
+        var realOffsetX = newX - attachedPath.position.x;
+        attachedPath.position.x = newX;
         var newY = scope.project2ViewY(leftTopY + height / 2);
-        var realOffsetY = newY - this.attachedPath.position.y;
-        this.attachedPath.position.y = newY;
-        if (this.attachedPath.captions) {
-            for (var i = 0; i < this.attachedPath.captions.length; i++) {
-                this.attachedPath.captions[i].point.x += realOffsetX;
-                this.attachedPath.captions[i].point.y += realOffsetY;
+        var realOffsetY = newY - attachedPath.position.y;
+        attachedPath.position.y = newY;
+        if (attachedPath.captions) {
+            for (var i = 0; i < attachedPath.captions.length; i++) {
+                attachedPath.captions[i].point.x += realOffsetX;
+                attachedPath.captions[i].point.y += realOffsetY;
             }
         }
     }
