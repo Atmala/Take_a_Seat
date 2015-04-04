@@ -2,13 +2,13 @@
     this.RoomObjectType = 'wall';
     var isSelected = false, isMoving = false, isMoved = false;
     var numberOfPointUnderMouse, attachedPath;
-    var x2, y2, subType;
+    var y2, subType;
     var points = [{}, {}];
 
     this.loadFromDb = function (dbRoomObject) {
         points[0].x = dbRoomObject.Points[0].X;
         points[0].y = dbRoomObject.Points[0].Y;
-        x2 = dbRoomObject.Points[1].X;
+        points[1].x = dbRoomObject.Points[1].X;
         y2 = dbRoomObject.Points[1].Y;
         subType = dbRoomObject.SubType;
         this.roomObjectId = dbRoomObject.Id;
@@ -19,7 +19,7 @@
         
         points[0].x = scope.view2ProjectX(point.x);
         points[0].y = scope.view2ProjectY(point.y);
-        x2 = points[0].x;
+        points[1].x = points[0].x;
         y2 = points[0].y;
         numberOfPointUnderMouse = 2;
         isMoving = true;
@@ -44,9 +44,8 @@
     }
 
     function viewPoint(index) {
-        return index === 1 ?
-            new paper.Point(scope.project2ViewX(points[0].x), scope.project2ViewY(points[0].y)) :
-            new paper.Point(scope.project2ViewX(x2), scope.project2ViewY(y2));
+        return new paper.Point(scope.project2ViewX(points[index - 1].x),
+            scope.project2ViewY(points[index - 1].y));
     }
 
     function setWallAppearance() {
@@ -80,7 +79,7 @@
             SubType: subType,
             X1: points[0].x,
             Y1: points[0].y,
-            X2: x2,
+            X2: points[1].x,
             Y2: y2
         };
         
@@ -92,7 +91,7 @@
                 thisObject.roomObjectId = response.RoomObjectId;
                 points[0].x = response.X1;
                 points[0].y = response.Y1;
-                x2 = response.X2;
+                points[1].x = response.X2;
                 y2 = response.Y2;
                 attachedPath.segments[0].point = viewPoint(1);
                 attachedPath.segments[1].point = viewPoint(2);
@@ -177,7 +176,7 @@
     }
     
     this.left = function () {
-        return Math.min(points[0].x, x2);
+        return Math.min(points[0].x, points[1].x);
     }
 
     this.top = function () {
@@ -185,7 +184,7 @@
     }
 
     this.right = function () {
-        return Math.max(points[0].x, x2);
+        return Math.max(points[0].x, points[1].x);
     }
 
     this.bottom = function () {
@@ -216,18 +215,18 @@
             points[0].x = scope.view2ProjectX(attachedPath.segments[0].point.x + offsetX);
             points[0].y = scope.view2ProjectY(attachedPath.segments[0].point.y + offsetY);
             if (numberOfPointUnderMouse) {
-                correctedPoint = getCorrectedPoint({ x: x2, y: y2 }, { x: points[0].x, y: points[0].y });
+                correctedPoint = getCorrectedPoint({ x: points[1].x, y: y2 }, { x: points[0].x, y: points[0].y });
                 points[0].x = correctedPoint.x;
                 points[0].y = correctedPoint.y;
             }
         }
         
         if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 2) {
-            x2 = scope.view2ProjectX(attachedPath.segments[1].point.x + offsetX);
+            points[1].x = scope.view2ProjectX(attachedPath.segments[1].point.x + offsetX);
             y2 = scope.view2ProjectY(attachedPath.segments[1].point.y + offsetY);
             if (numberOfPointUnderMouse) {
-                correctedPoint = getCorrectedPoint({ x: points[0].x, y: points[0].y }, { x: x2, y: y2 });
-                x2 = correctedPoint.x;
+                correctedPoint = getCorrectedPoint({ x: points[0].x, y: points[0].y }, { x: points[1].x, y: y2 });
+                points[1].x = correctedPoint.x;
                 y2 = correctedPoint.y;
             }
         }
@@ -241,7 +240,7 @@
     }
 
     this.dbCoordinatesString = function() {
-        return 'Wall: (' + points[0].x + ',' + points[0].y + ') - (' + x2 + ',' + y2 + ')';
+        return 'Wall: (' + points[0].x + ',' + points[0].y + ') - (' + points[1].x + ',' + y2 + ')';
     }
 
     this.select = function() {
@@ -270,13 +269,13 @@
     }
 
     function lengthIsZero() {
-        return Math.abs(points[0].x - x2) < scope.gridStep && Math.abs(points[0].y - y2) < scope.gridStep;
+        return Math.abs(points[0].x - points[1].x) < scope.gridStep && Math.abs(points[0].y - y2) < scope.gridStep;
     }
 
     function setCoordinates(newX1, newY1, newX2, newY2) {
         points[0].x = newX1;
         points[0].y = newY1;
-        x2 = newX2;
+        points[1].x = newX2;
         y2 = newY2;
     }
 
