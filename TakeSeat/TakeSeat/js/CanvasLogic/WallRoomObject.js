@@ -1,15 +1,14 @@
 ﻿function WallRoomObject(scope, mapProvider) {
     this.RoomObjectType = 'wall';
     var isSelected = false, isMoving = false, isMoved = false;
-    var numberOfPointUnderMouse, attachedPath;
-    var y2, subType;
+    var numberOfPointUnderMouse, attachedPath, subType;
     var points = [{}, {}];
 
     this.loadFromDb = function (dbRoomObject) {
         points[0].x = dbRoomObject.Points[0].X;
         points[0].y = dbRoomObject.Points[0].Y;
         points[1].x = dbRoomObject.Points[1].X;
-        y2 = dbRoomObject.Points[1].Y;
+        points[1].y = dbRoomObject.Points[1].Y;
         subType = dbRoomObject.SubType;
         this.roomObjectId = dbRoomObject.Id;
     }
@@ -20,7 +19,7 @@
         points[0].x = scope.view2ProjectX(point.x);
         points[0].y = scope.view2ProjectY(point.y);
         points[1].x = points[0].x;
-        y2 = points[0].y;
+        points[1].y = points[0].y;
         numberOfPointUnderMouse = 2;
         isMoving = true;
         this.getPath();
@@ -80,7 +79,7 @@
             X1: points[0].x,
             Y1: points[0].y,
             X2: points[1].x,
-            Y2: y2
+            Y2: points[1].y
         };
         
         $.ajax({
@@ -92,7 +91,7 @@
                 points[0].x = response.X1;
                 points[0].y = response.Y1;
                 points[1].x = response.X2;
-                y2 = response.Y2;
+                points[1].y = response.Y2;
                 attachedPath.segments[0].point = viewPoint(1);
                 attachedPath.segments[1].point = viewPoint(2);
             }
@@ -180,7 +179,7 @@
     }
 
     this.top = function () {
-        return Math.min(points[0].y, y2);
+        return Math.min(points[0].y, points[1].y);
     }
 
     this.right = function () {
@@ -188,7 +187,7 @@
     }
 
     this.bottom = function () {
-        return Math.max(points[0].y, y2);
+        return Math.max(points[0].y, points[1].y);
     }
 
     function get90PointForWall (start, point) {
@@ -215,7 +214,7 @@
             points[0].x = scope.view2ProjectX(attachedPath.segments[0].point.x + offsetX);
             points[0].y = scope.view2ProjectY(attachedPath.segments[0].point.y + offsetY);
             if (numberOfPointUnderMouse) {
-                correctedPoint = getCorrectedPoint({ x: points[1].x, y: y2 }, { x: points[0].x, y: points[0].y });
+                correctedPoint = getCorrectedPoint({ x: points[1].x, y: points[1].y }, { x: points[0].x, y: points[0].y });
                 points[0].x = correctedPoint.x;
                 points[0].y = correctedPoint.y;
             }
@@ -223,11 +222,11 @@
         
         if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 2) {
             points[1].x = scope.view2ProjectX(attachedPath.segments[1].point.x + offsetX);
-            y2 = scope.view2ProjectY(attachedPath.segments[1].point.y + offsetY);
+            points[1].y = scope.view2ProjectY(attachedPath.segments[1].point.y + offsetY);
             if (numberOfPointUnderMouse) {
-                correctedPoint = getCorrectedPoint({ x: points[0].x, y: points[0].y }, { x: points[1].x, y: y2 });
+                correctedPoint = getCorrectedPoint({ x: points[0].x, y: points[0].y }, { x: points[1].x, y: points[1].y });
                 points[1].x = correctedPoint.x;
-                y2 = correctedPoint.y;
+                points[1].y = correctedPoint.y;
             }
         }
         this.updatePosition();
@@ -240,7 +239,7 @@
     }
 
     this.dbCoordinatesString = function() {
-        return 'Wall: (' + points[0].x + ',' + points[0].y + ') - (' + points[1].x + ',' + y2 + ')';
+        return 'Wall: (' + points[0].x + ',' + points[0].y + ') - (' + points[1].x + ',' + points[1].y + ')';
     }
 
     this.select = function() {
@@ -269,14 +268,14 @@
     }
 
     function lengthIsZero() {
-        return Math.abs(points[0].x - points[1].x) < scope.gridStep && Math.abs(points[0].y - y2) < scope.gridStep;
+        return Math.abs(points[0].x - points[1].x) < scope.gridStep && Math.abs(points[0].y - points[1].y) < scope.gridStep;
     }
 
     function setCoordinates(newX1, newY1, newX2, newY2) {
         points[0].x = newX1;
         points[0].y = newY1;
         points[1].x = newX2;
-        y2 = newY2;
+        points[1].y = newY2;
     }
 
     this.__unittestonly__ = {
