@@ -39,7 +39,7 @@
         </div>
         <div class="md-overlay">
             <button title="Add Window"
-                    type="button" class="btn-tool" ng-click="changeMode({ mode: 'add', type: 'window', parenttype: 'wall'})"
+                    type="button" class="btn-tool" ng-click="changeMode({ mode: 'addon', type: 'window', parenttype: 'wall'})"
                     ng-class="{activeBtn : isSelected('window')}">
                 <img ng-show="! isSelected('window')" src=@Url.Content("~/img/window.png") />
                 <img ng-show="isSelected('window')" src=@Url.Content("~/img/window_active.png") />
@@ -47,7 +47,7 @@
         </div>
         <div class="md-overlay">
             <button title="Add Door"
-                    type="button" class="btn-tool" ng-click="changeMode({ mode: 'add', type: 'door', parenttype: 'wall'})"
+                    type="button" class="btn-tool" ng-click="changeMode({ mode: 'addon', type: 'door', parenttype: 'wall'})"
                     ng-class="{activeBtn : isSelected('door')}">
                 <img ng-show="! isSelected('door')" src=@Url.Content("~/img/door.png") />
                 <img ng-show="isSelected('door')" src=@Url.Content("~/img/door_active.png") />

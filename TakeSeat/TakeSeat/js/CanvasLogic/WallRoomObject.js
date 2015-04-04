@@ -276,5 +276,8 @@
         if (isSelected) this.select();
         return isSelected;
     }
-    
+
+    this.__unittestonly__ = {
+        isBetween: isBetween
+    };
 }

@@ -72,16 +72,19 @@ seatApp
                             }
                             moveMapObjects(x, y);
                         } else {
-                            var point = new paper.Point(x, y);
-                            var newSelectedRoomObject = scope.roomObjectCollection.findRoomObject(point, 5);
-                            if (selectedRoomObject && selectedRoomObject !== newSelectedRoomObject) {
-                                if (selectedRoomObject.unselect) selectedRoomObject.unselect();
-                            }
-                            selectedRoomObject = newSelectedRoomObject;
-                            if (selectedRoomObject && selectedRoomObject.select) selectedRoomObject.select();
+                            selectRoomObject(new paper.Point(x, y));
                         }
                         setCurrentCoords(x, y);
                         scope.$apply();
+                    }
+
+                    function selectRoomObject(point) {
+                        var newSelectedRoomObject = scope.roomObjectCollection.findRoomObject(point, 5);
+                        if (selectedRoomObject && selectedRoomObject !== newSelectedRoomObject) {
+                            if (selectedRoomObject.unselect) selectedRoomObject.unselect();
+                        }
+                        selectedRoomObject = newSelectedRoomObject;
+                        if (selectedRoomObject && selectedRoomObject.select) selectedRoomObject.select();
                     }
 
                     function fixEventForFirefox(event) {
