@@ -21,3 +21,12 @@ QUnit.test("lengthIsZero test", function(assert) {
     obj.__unittestonly__.setCoordinates(10, 20, 10, 30);
     assert.ok(!obj.__unittestonly__.lengthIsZero());
 });
+QUnit.test("selectByProjectPoint test", function(assert) {
+    var obj = new WallRoomObject();
+    
+    obj.__unittestonly__.setCoordinates(10, 10, 100, 100);
+    assert.ok(obj.selectByProjectPoint({ x: 8, y: 8 }, 5));
+    assert.equal(obj.__unittestonly__.getSelectedPointIndex(), 0);
+
+
+});
