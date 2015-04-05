@@ -1,31 +1,31 @@
 ﻿function WallRoomObject(scope, mapProvider) {
     this.RoomObjectType = 'wall';
     var isSelected = false, isMoving = false, isMoved = false;
-    var numberOfPointUnderMouse, attachedPath, subType;
+    var selectedPointIndex, attachedPath, subType;
     var points = [{}, {}];
 
     this.loadFromDb = function (dbRoomObject) {
-        points[0].x = dbRoomObject.Points[0].X;
-        points[0].y = dbRoomObject.Points[0].Y;
-        points[1].x = dbRoomObject.Points[1].X;
-        points[1].y = dbRoomObject.Points[1].Y;
+        for (var i = 0; i < 2; i++) {
+            points[i].x = dbRoomObject.Points[i].X;
+            points[i].y = dbRoomObject.Points[i].Y;
+        }
         subType = dbRoomObject.SubType;
         this.roomObjectId = dbRoomObject.Id;
     }
-    
-    this.createByClick = function(point) {
+
+    this.createByClick = function (point) {
         subType = scope.regime.subtype;
-        
+
         points[0].x = scope.view2ProjectX(point.x);
         points[0].y = scope.view2ProjectY(point.y);
         points[1].x = points[0].x;
         points[1].y = points[0].y;
-        numberOfPointUnderMouse = 2;
+        selectedPointIndex = 1;
         isMoving = true;
         this.getPath();
     }
 
-    this.onMouseUp = function() {
+    this.onMouseUp = function () {
         if (isMoved) {
             if (lengthIsZero()) {
                 if (this.roomObjectId != 0)
@@ -38,7 +38,7 @@
         }
     }
 
-    this.onMouseDown = function() {
+    this.onMouseDown = function () {
         isMoving = true;
     }
 
@@ -70,7 +70,7 @@
         return attachedPath;
     }
 
-    function save () {
+    function save() {
         var thisObject = this;
 
         var lineInfo = {
@@ -81,7 +81,7 @@
             X2: points[1].x,
             Y2: points[1].y
         };
-        
+
         $.ajax({
             url: window.saveWallPath,
             type: 'POST',
@@ -97,7 +97,7 @@
             }
         });
     }
-    
+
     this.deleteRoomObject = function () {
         $.ajax({
             url: window.deleteRoomObjectPath,
@@ -109,25 +109,25 @@
         });
     }
 
-    function checkTwoPointsProximity (point1, point2, tolerance) {
+    function checkTwoPointsProximity(point1, point2, tolerance) {
         return Math.abs(point1.x - point2.x) <= tolerance && Math.abs(point1.y - point2.y) <= tolerance;
     }
 
-    function findSegment (point, tolerance) {
+    function findSegment(point, tolerance) {
         for (var i = 0; i < attachedPath.segments.length; i++) {
             if (checkTwoPointsProximity(attachedPath.segments[i].point, point, tolerance)) {
-                numberOfPointUnderMouse = i + 1;
+                selectedPointIndex = i;
                 return true;
             }
         }
         return false;
     }
-    
-    function isVerticalLine () {
+
+    function isVerticalLine() {
         return attachedPath.segments[0].point.x == attachedPath.segments[1].point.x;
     }
 
-    function isHorizontalLine () {
+    function isHorizontalLine() {
         return attachedPath.segments[0].point.y == attachedPath.segments[1].point.y;
     }
 
@@ -135,17 +135,17 @@
         return a >= b && a <= c || a >= c && a <= b;
     }
 
-    function checkVerticalProximity (point, tolerance) {
+    function checkVerticalProximity(point, tolerance) {
         return isBetween(point.y, attachedPath.segments[0].point.y, attachedPath.segments[1].point.y)
             && Math.abs(point.x - attachedPath.segments[0].point.x) <= tolerance;
     }
 
-    function checkHorizontalProximity (point, tolerance) {
+    function checkHorizontalProximity(point, tolerance) {
         return isBetween(point.x, attachedPath.segments[0].point.x, attachedPath.segments[1].point.x)
             && Math.abs(point.y - attachedPath.segments[0].point.y) <= tolerance;
     }
 
-    function checkDiagonalProximity (point, tolerance) {
+    function checkDiagonalProximity(point, tolerance) {
         var x1 = attachedPath.segments[0].point.x;
         var y1 = attachedPath.segments[0].point.y;
         var x2 = attachedPath.segments[1].point.x;
@@ -159,7 +159,7 @@
         return distance <= tolerance;
     }
 
-    function findLine (point, tolerance) {
+    function findLine(point, tolerance) {
         if (isVerticalLine()) {
             if (checkVerticalProximity(point, tolerance))
                 return true;
@@ -173,7 +173,7 @@
         }
         return false;
     }
-    
+
     this.left = function () {
         return Math.min(points[0].x, points[1].x);
     }
@@ -190,14 +190,14 @@
         return Math.max(points[0].y, points[1].y);
     }
 
-    function get90PointForWall (start, point) {
+    function get90PointForWall(start, point) {
         if (Math.abs(point.x - start.x) > Math.abs(point.y - start.y))
             return { x: point.x, y: start.y };
         else
             return { x: start.x, y: point.y };
     }
 
-    function getCorrectedPoint (start, point) {
+    function getCorrectedPoint(start, point) {
         switch (scope.wallMode) {
             case '90':
                 return get90PointForWall(start, point);
@@ -210,58 +210,51 @@
         if (!isMoving) return;
         isMoved = true;
         var correctedPoint;
-        if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 1) {
-            points[0].x = scope.view2ProjectX(attachedPath.segments[0].point.x + offsetX);
-            points[0].y = scope.view2ProjectY(attachedPath.segments[0].point.y + offsetY);
-            if (numberOfPointUnderMouse) {
-                correctedPoint = getCorrectedPoint({ x: points[1].x, y: points[1].y }, { x: points[0].x, y: points[0].y });
-                points[0].x = correctedPoint.x;
-                points[0].y = correctedPoint.y;
+
+        if (selectedPointIndex) {
+            correctedPoint = getCorrectedPoint(points[1 - selectedPointIndex], points[selectedPointIndex]);
+            points[0].x = correctedPoint.x;
+            points[0].y = correctedPoint.y;
+        } else {
+            for (var i = 0; i < points.length; i++) {
+                points[i].x = scope.view2ProjectX(attachedPath.segments[i].point.x + offsetX);
+                points[i].y = scope.view2ProjectY(attachedPath.segments[i].point.y + offsetY);
             }
         }
-        
-        if (!numberOfPointUnderMouse || numberOfPointUnderMouse == 2) {
-            points[1].x = scope.view2ProjectX(attachedPath.segments[1].point.x + offsetX);
-            points[1].y = scope.view2ProjectY(attachedPath.segments[1].point.y + offsetY);
-            if (numberOfPointUnderMouse) {
-                correctedPoint = getCorrectedPoint({ x: points[0].x, y: points[0].y }, { x: points[1].x, y: points[1].y });
-                points[1].x = correctedPoint.x;
-                points[1].y = correctedPoint.y;
-            }
-        }
+
         this.updatePosition();
         scope.HitResult = this.dbCoordinatesString();
     }
 
-    this.updatePosition = function() {
+    this.updatePosition = function () {
         attachedPath.segments[0].point = viewPoint(1);
         attachedPath.segments[1].point = viewPoint(2);
     }
 
-    this.dbCoordinatesString = function() {
+    this.dbCoordinatesString = function () {
         return 'Wall: (' + points[0].x + ',' + points[0].y + ') - (' + points[1].x + ',' + points[1].y + ')';
     }
 
-    this.select = function() {
+    this.select = function () {
         attachedPath.selected = true;
-        if (numberOfPointUnderMouse)
-            attachedPath.segments[numberOfPointUnderMouse - 1].selected = true;
+        if (selectedPointIndex)
+            attachedPath.segments[selectedPointIndex].selected = true;
     }
 
-    this.unselect = function() {
+    this.unselect = function () {
         attachedPath.selected = false;
     }
 
-    this.isSelected = function() {
+    this.isSelected = function () {
         return isSelected;
     }
 
-    this.isMoving = function() {
+    this.isMoving = function () {
         return isMoving;
     }
 
-    this.selectByPoint = function(point, tolerance) {
-        numberOfPointUnderMouse = undefined;
+    this.selectByPoint = function (point, tolerance) {
+        selectedPointIndex = undefined;
         isSelected = findSegment(point, tolerance) || findLine(point, tolerance);
         if (isSelected) this.select();
         return isSelected;

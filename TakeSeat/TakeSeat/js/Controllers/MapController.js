@@ -67,7 +67,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             var searchItem = $scope.searchByUid(window.paramUid);
             if (searchItem) $scope.doSearch(searchItem);
         }
-        $scope.$apply();
+        //$scope.$apply();
     }
 
     $scope.getUserAccess = function() {
@@ -106,7 +106,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
 
     $scope.showSelectRoom = function () {
         $scope.roomMode = "select";
-        $scope.$apply();
+        //$scope.$apply();
     }
 
     $scope.showEditRoom = function () {
