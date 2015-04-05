@@ -134,21 +134,19 @@
     }
 
     this.deleteRoomObject = function () {
-        var thisObject = this;
         $.ajax({
             url: window.deleteRoomObjectPath,
             type: 'POST',
             data: { id: this.roomObjectId },
             success: function (response) {
                 thisObject.removeCaptions();
-                thisObject.attachedPath.remove();
+                attachedPath.remove();
                 scope.loadEmployees();
             }
         });
     }
     
     this.save = function () {
-        var thisObject = this;
         var rectangleInfo = {
             RoomObjectId: this.roomObjectId,
             LeftTopX: leftTopX,
@@ -163,14 +161,13 @@
             type: 'POST',
             data: rectangleInfo,
             success: function (response) {
-                console.log("Table is saved. RoomObjectId = " + response.RoomObjectId);
                 if (response.RoomObjectId == 0) {
-                    thisObject.attachedPath.remove();
+                    attachedPath.remove();
                 } else {
                     thisObject.roomObjectId = response.RoomObjectId;
                     thisObject.leftTopX = response.LeftTopX;
                     thisObject.leftTopY = response.LeftTopY;
-                    thisObject.attachedPath.position = thisObject.getCurrentPosition();
+                    attachedPath.position = thisObject.getCurrentPosition();
                 }
             }
         });
