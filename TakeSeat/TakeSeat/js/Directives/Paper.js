@@ -45,6 +45,11 @@ seatApp
                                         selectedRoomObject = undefined;
                                     }
                                     break;
+                                case 'addon':
+                                    if (selectedRoomObject && selectedRoomObject.RoomObjectType === scope.regime.parenttype) {
+                                        
+                                    }
+                                    break;
                             }
                         }
                     }
@@ -73,9 +78,17 @@ seatApp
                             moveMapObjects(x, y);
                         } else {
                             selectRoomObject(new paper.Point(x, y));
+                            if (addonIsActive()) {
+                                selectedRoomObject.showAddon(x, y);
+                            }
                         }
                         setCurrentCoords(x, y);
                         scope.$apply();
+                    }
+
+                    function addonIsActive() {
+                        return scope.regime.mode === 'addon' && selectedRoomObject
+                            && selectedRoomObject.RoomObjectType === scope.regime.parenttype;
                     }
 
                     function mouseAtTheEdgeOfCanvas(event) {
