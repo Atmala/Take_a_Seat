@@ -44,8 +44,8 @@
     }
 
     function getViewPoint(index) {
-        return new paper.Point(scope.project2ViewX(points[index - 1].x),
-            scope.project2ViewY(points[index - 1].y));
+        return new paper.Point(scope.project2ViewX(points[index].x),
+            scope.project2ViewY(points[index].y));
     }
 
     function setWallAppearance() {
@@ -65,8 +65,8 @@
         if (attachedPath) attachedPath.remove();
         attachedPath = new paper.Path();
         setWallAppearance();
+        attachedPath.add(getViewPoint(0));
         attachedPath.add(getViewPoint(1));
-        attachedPath.add(getViewPoint(2));
         attachedPath.RoomObject = this;
         return attachedPath;
     }
@@ -91,8 +91,7 @@
                 points[0].y = response.Y1;
                 points[1].x = response.X2;
                 points[1].y = response.Y2;
-                attachedPath.segments[0].point = getViewPoint(1);
-                attachedPath.segments[1].point = getViewPoint(2);
+                thisObject.updatePosition();
             }
         });
     }
@@ -205,21 +204,22 @@
         }
     }
 
-    this.move = function (offsetX, offsetY) {
+    this.move = function (viewOffsetX, viewOffsetY) {
         if (!isMoving) return;
         isMoved = true;
-        var correctedPoint;
+        var offsetX = viewOffsetX / scope.scale;
+        var offsetY = viewOffsetY / scope.scale;
 
         if (selectedPointIndex != undefined) {
-            points[selectedPointIndex].x = scope.view2ProjectX(attachedPath.segments[selectedPointIndex].point.x + offsetX);
-            points[selectedPointIndex].y = scope.view2ProjectY(attachedPath.segments[selectedPointIndex].point.y + offsetY);
-            correctedPoint = getCorrectedPoint(points[1 - selectedPointIndex], points[selectedPointIndex]);
+            points[selectedPointIndex].x += offsetX;
+            points[selectedPointIndex].y += offsetY;
+            var correctedPoint = getCorrectedPoint(points[1 - selectedPointIndex], points[selectedPointIndex]);
             points[selectedPointIndex].x = correctedPoint.x;
             points[selectedPointIndex].y = correctedPoint.y;
         } else {
             for (var i = 0; i < points.length; i++) {
-                points[i].x = scope.view2ProjectX(attachedPath.segments[i].point.x + offsetX);
-                points[i].y = scope.view2ProjectY(attachedPath.segments[i].point.y + offsetY);
+                points[i].x += offsetX;
+                points[i].y += offsetY;
             }
         }
         
@@ -228,8 +228,8 @@
     }
 
     this.updatePosition = function () {
-        attachedPath.segments[0].point = getViewPoint(1);
-        attachedPath.segments[1].point = getViewPoint(2);
+        attachedPath.segments[0].point = getViewPoint(0);
+        attachedPath.segments[1].point = getViewPoint(1);
     }
 
     this.dbCoordinatesString = function () {
