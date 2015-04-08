@@ -56,7 +56,8 @@
         this.leftTopY = dbRoomObject.ScreenTexts[0].LeftTopY;
         this.width = dbRoomObject.ScreenTexts[0].Width;
         this.text = dbRoomObject.ScreenTexts[0].Text;
-        this.roomObjectId = dbRoomObject.Id;    
+        this.roomObjectId = dbRoomObject.Id;
+        this.getPath();
     }
 
     this.save = function () {

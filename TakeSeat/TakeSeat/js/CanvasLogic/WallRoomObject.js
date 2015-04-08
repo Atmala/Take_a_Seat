@@ -1,7 +1,8 @@
 ﻿function WallRoomObject(scope, mapProvider) {
     this.RoomObjectType = 'wall';
     var isSelected = false, isMoving = false, isMoved = false;
-    var selectedPointIndex, attachedPath, subType;
+    var selectedPointIndex, subType;
+    var paperItems = { walls: [] };
     var points = [{}, {}];
     var thisObject = this;
 
@@ -12,6 +13,7 @@
         }
         subType = dbRoomObject.SubType;
         this.roomObjectId = dbRoomObject.Id;
+        getPath();
     }
 
     this.createByClick = function (point) {
@@ -23,7 +25,7 @@
         points[1].y = points[0].y;
         selectedPointIndex = 1;
         isMoving = true;
-        this.getPath();
+        getPath();
     }
 
     this.onMouseUp = function () {
@@ -48,27 +50,26 @@
             scope.project2ViewY(points[index].y));
     }
 
-    function setWallAppearance() {
-        switch (subType) {
-            case 1:
-                attachedPath.strokeWidth = 4;
-                attachedPath.strokeColor = scope.wallColor;
-                break;
-            case 2:
-                attachedPath.strokeWidth = 2;
-                attachedPath.strokeColor = scope.wallColor;
-                break;
+    function setWallAppearance(path) {
+        path.strokeWidth = 2 * subType;
+        path.strokeColor = isSelected ? scope.selectedColor : scope.wallColor;
+    }
+
+    function removePaperItems() {
+        if (paperItems.walls) {
+            for (var i = 0; i < paperItems.walls.length; i++) {
+                paperItems.walls[i].remove();
+            }
         }
     }
 
-    this.getPath = function () {
-        if (attachedPath) attachedPath.remove();
-        attachedPath = new paper.Path();
-        setWallAppearance();
-        attachedPath.add(getViewPoint(0));
-        attachedPath.add(getViewPoint(1));
-        attachedPath.RoomObject = this;
-        return attachedPath;
+    function getPath () {
+        removePaperItems();
+        var path = new paper.Path();
+        setWallAppearance(path);
+        path.add(getViewPoint(0));
+        path.add(getViewPoint(1));
+        paperItems.walls.push(path);
     }
 
     function save() {
@@ -102,7 +103,7 @@
             type: 'POST',
             data: { id: this.roomObjectId },
             success: function (response) {
-                attachedPath.remove();
+                removePaperItems();
             }
         });
     }
@@ -228,23 +229,22 @@
     }
 
     this.updatePosition = function () {
-        attachedPath.segments[0].point = getViewPoint(0);
-        attachedPath.segments[1].point = getViewPoint(1);
+        getPath();
     }
 
     this.dbCoordinatesString = function () {
         return 'Wall: (' + points[0].x + ',' + points[0].y + ') - (' + points[1].x + ',' + points[1].y + ')';
     }
 
-    this.select = function () {
-        attachedPath.selected = true;
-        if (selectedPointIndex != undefined)
-            attachedPath.segments[selectedPointIndex].selected = true;
-    }
+    //this.select = function () {
+    //    attachedPath.selected = true;
+    //    if (selectedPointIndex != undefined)
+    //        attachedPath.segments[selectedPointIndex].selected = true;
+    //}
 
-    this.unselect = function () {
-        attachedPath.selected = false;
-    }
+    //this.unselect = function () {
+    //    attachedPath.selected = false;
+    //}
 
     this.isSelected = function () {
         return isSelected;
@@ -256,8 +256,11 @@
     
     this.selectByProjectPoint = function(point, tolerance) {
         selectedPointIndex = undefined;
-        isSelected = findSegment(point, tolerance) || findLine(point, tolerance);
-        if (isSelected) this.select();
+        var newIsSelected = findSegment(point, tolerance) || findLine(point, tolerance);
+        if (newIsSelected !== isSelected) {
+            isSelected = newIsSelected;
+            getPath();
+        }
         return isSelected;
     }
 
@@ -276,7 +279,6 @@
         points[0].y = newY1;
         points[1].x = newX2;
         points[1].y = newY2;
-        attachedPath = {};
     }
 
     this.__unittestonly__ = {

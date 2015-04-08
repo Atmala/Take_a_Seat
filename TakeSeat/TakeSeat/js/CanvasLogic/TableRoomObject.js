@@ -25,7 +25,7 @@
         textRectangle.width *= realScale;
         textRectangle.height *= realScale;
     }
-
+    
     this.RoomObjectType = 'table';
     angle = 0;
     setTextRectangle();
@@ -40,6 +40,7 @@
         employeeId = dbRoomObject.EmployeeId;
         identNumber = dbRoomObject.IdentNumber;
         angle = dbRoomObject.Angle;
+        this.getPath();
     }
 
     function isFoundItem () {
