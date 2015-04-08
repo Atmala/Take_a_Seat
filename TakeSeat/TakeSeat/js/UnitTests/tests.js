@@ -1,4 +1,15 @@
-﻿QUnit.module("WallRoomObject tests");
+﻿paper.install(window);
+var canvas = document.getElementById('paperCanvas');
+paper.setup(canvas[0]);
+scope = {};
+scope.wallColor = '#888888';
+scope.selectedColor = 'blue';
+scope.view2ProjectX = function (x) { return x; }
+scope.view2ProjectY = function (y) { return y; }
+scope.project2ViewX = function (x) { return x; }
+scope.project2ViewY = function (y) { return y; }
+
+QUnit.module("WallRoomObject tests");
 QUnit.test("isBetween test", function (assert) {
     var obj = new WallRoomObject();
     assert.ok(obj.__unittestonly__.isBetween(4, 3, 5));
@@ -22,7 +33,7 @@ QUnit.test("lengthIsZero test", function(assert) {
     assert.ok(!obj.__unittestonly__.lengthIsZero());
 });
 QUnit.test("selectByProjectPoint test", function(assert) {
-    var obj = new WallRoomObject();
+    var obj = new WallRoomObject(scope);
     
     obj.__unittestonly__.setCoordinates(10, 10, 100, 100);
     assert.ok(obj.selectByProjectPoint({ x: 8, y: 8 }, 5));
