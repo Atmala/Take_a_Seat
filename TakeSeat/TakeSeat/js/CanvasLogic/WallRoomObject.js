@@ -51,7 +51,7 @@
     }
 
     function setWallAppearance(path) {
-        path.strokeWidth = 2 * subType;
+        path.strokeWidth = subType === 1 ? 8 : 2;
         path.strokeColor = isSelected ? scope.selectedColor : scope.wallColor;
     }
 
