@@ -1,18 +1,22 @@
 ﻿function WallRoomObject(scope, mapProvider) {
     this.RoomObjectType = 'wall';
     var isSelected = false, isMoving = false, isMoved = false;
-    var selectedPointIndex, subType;
+    var roomObjectId, selectedPointIndex, subType;
     var paperItems = { walls: [] };
     var points = [{}, {}];
     var thisObject = this;
 
+    this.getRoomObjectId = function() {
+        return roomObjectId;
+    }
+
     this.loadFromDb = function (dbRoomObject) {
-        for (var i = 0; i < 2; i++) {
+        for (var i = 0; i < dbRoomObject.Points.length; i++) {
             points[i].x = dbRoomObject.Points[i].X;
             points[i].y = dbRoomObject.Points[i].Y;
         }
         subType = dbRoomObject.SubType;
-        this.roomObjectId = dbRoomObject.Id;
+        roomObjectId = dbRoomObject.Id;
         getPath();
     }
 
@@ -31,7 +35,7 @@
     this.onMouseUp = function () {
         if (isMoved) {
             if (lengthIsZero()) {
-                if (this.roomObjectId != 0)
+                if (roomObjectId != 0)
                     this.deleteRoomObject();
             } else {
                 save();
@@ -74,7 +78,7 @@
 
     function save() {
         var lineInfo = {
-            RoomObjectId: thisObject.roomObjectId,
+            RoomObjectId: roomObjectId,
             SubType: subType,
             X1: points[0].x,
             Y1: points[0].y,
@@ -87,7 +91,7 @@
             type: 'POST',
             data: lineInfo,
             success: function (response) {
-                thisObject.roomObjectId = response.RoomObjectId;
+                roomObjectId = response.RoomObjectId;
                 points[0].x = response.X1;
                 points[0].y = response.Y1;
                 points[1].x = response.X2;
@@ -101,7 +105,7 @@
         $.ajax({
             url: window.deleteRoomObjectPath,
             type: 'POST',
-            data: { id: this.roomObjectId },
+            data: { id: roomObjectId },
             success: function (response) {
                 removePaperItems();
             }

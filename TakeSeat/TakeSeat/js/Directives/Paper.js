@@ -41,7 +41,7 @@ seatApp
                                     break;
                                 case 'delete': 
                                     if (selectedRoomObject) {
-                                        scope.roomObjectCollection.deleteRoomObjectById(selectedRoomObject.roomObjectId);
+                                        scope.roomObjectCollection.deleteRoomObjectById(selectedRoomObject.getRoomObjectId());
                                         selectedRoomObject.deleteRoomObject();
                                         selectedRoomObject = undefined;
                                     }

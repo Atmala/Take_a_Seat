@@ -68,7 +68,7 @@
 
     this.getIndexById = function (roomObjectId) {
         for (var i = 0; i < this.collection.length; i++) {
-            if (this.collection[i].roomObjectId === roomObjectId) {
+            if (this.collection[i].getRoomObjectId() === roomObjectId) {
                 return i;
             }
         };

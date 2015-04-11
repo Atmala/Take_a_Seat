@@ -2,6 +2,10 @@
     var isSelected = false, isMoving = false, isMoved = false;
     this.RoomObjectType = 'screentext';
 
+    this.getRoomObjectId = function () {
+        return roomObjectId;
+    }
+
     this.createNew = function (x, y, text) {
         this.leftTopX = scope.view2ProjectX(x);
         this.leftTopY = scope.view2ProjectY(y);

@@ -1,9 +1,14 @@
 ﻿function TableRoomObject(scope, mapProvider) {
+    this.RoomObjectType = 'table';
     var isSelected = false, isMoving = false, isMoved = false;
     var standardWidth = 70, standardHeight = 100;
-    var leftTopX, leftTopY, width, height, textRectangle, realScale;
-    var attachedPath, employeeFio, employeeId, identNumber, angle;
+    var roomObjectId, leftTopX, leftTopY, width, height, textRectangle, realScale, currentScale;
+    var attachedPath, employeeFio, employeeId, identNumber, angle = 0;
     var thisObject = this;
+
+    this.getRoomObjectId = function () {
+        return roomObjectId;
+    }
 
     function setTextRectangle () {
         switch (angle) {
@@ -26,8 +31,6 @@
         textRectangle.height *= realScale;
     }
     
-    this.RoomObjectType = 'table';
-    angle = 0;
     setTextRectangle();
 
     this.loadFromDb = function (dbRoomObject) {
@@ -35,7 +38,7 @@
         leftTopY = dbRoomObject.Rectangles[0].LeftTopY;
         width = dbRoomObject.Rectangles[0].Width;
         height = dbRoomObject.Rectangles[0].Height;
-        this.roomObjectId = dbRoomObject.Id;
+        roomObjectId = dbRoomObject.Id;
         employeeFio = dbRoomObject.EmployeeFio;
         employeeId = dbRoomObject.EmployeeId;
         identNumber = dbRoomObject.IdentNumber;
@@ -44,7 +47,7 @@
     }
 
     function isFoundItem () {
-        return thisObject.roomObjectId === scope.foundRoomObjectId && !scope.editPlanMode;
+        return roomObjectId === scope.foundRoomObjectId && !scope.editPlanMode;
     }
 
     function isSelectedItem () {
@@ -52,7 +55,7 @@
     }
 
     this.createNew = function (x, y, newWidth, newHeight) {
-        this.roomObjectId = 0;
+        roomObjectId = 0;
         leftTopX = scope.toGrid(scope.view2ProjectX(x) - width / 2);
         leftTopY = scope.toGrid(scope.view2ProjectY(y) - height / 2);
         width = newWidth;
@@ -114,8 +117,8 @@
         var raster = new paper.Raster(imagename);
         raster.position = this.getCurrentPosition();
         raster.RoomObject = this;
-        this.currentScale = scope.scale;
-        realScale = (isSelectedItem() || isFoundItem()) && this.currentScale < 1 ? 1 : this.currentScale;
+        currentScale = scope.scale;
+        realScale = (isSelectedItem() || isFoundItem()) && currentScale < 1 ? 1 : currentScale;
         raster.scale(realScale);
         attachedPath = raster;
         raster.rotate(angle);
@@ -125,7 +128,7 @@
     }
     
     this.updatePosition = function () {
-        if (scope.scale !== this.currentScale) {
+        if (scope.scale !== currentScale) {
             this.getPath();
         } else {
             attachedPath.position = this.getCurrentPosition();
@@ -138,7 +141,7 @@
         $.ajax({
             url: window.deleteRoomObjectPath,
             type: 'POST',
-            data: { id: this.roomObjectId },
+            data: { id: roomObjectId },
             success: function (response) {
                 thisObject.removeCaptions();
                 attachedPath.remove();
@@ -149,7 +152,7 @@
     
     this.save = function () {
         var rectangleInfo = {
-            RoomObjectId: this.roomObjectId,
+            RoomObjectId: roomObjectId,
             LeftTopX: leftTopX,
             LeftTopY: leftTopY,
             Width: width,
@@ -165,9 +168,9 @@
                 if (response.RoomObjectId == 0) {
                     attachedPath.remove();
                 } else {
-                    thisObject.roomObjectId = response.RoomObjectId;
-                    thisObject.leftTopX = response.LeftTopX;
-                    thisObject.leftTopY = response.LeftTopY;
+                    roomObjectId = response.RoomObjectId;
+                    leftTopX = response.LeftTopX;
+                    leftTopY = response.LeftTopY;
                     attachedPath.position = thisObject.getCurrentPosition();
                 }
             }
@@ -181,9 +184,10 @@
         scope.$apply();
 
         var dropDownMenu = $("#tableDropDownMenu");
+        var currentBounds = this.bounds();
         dropDownMenu.css({
-            left: scope.project2ViewX(this.left() - 56),
-            top: scope.project2ViewY(this.bottom())
+            left: scope.project2ViewX(currentBounds.left - 56),
+            top: scope.project2ViewY(currentBounds.bottom)
         });
     }
 
@@ -191,7 +195,7 @@
         $.ajax({
             url: window.saveIdentNumberPath,
             type: 'POST',
-            data: { RoomObjectId: this.roomObjectId, IdentNumber: identNumber },
+            data: { RoomObjectId: roomObjectId, IdentNumber: identNumber },
             success: function (response) {
                 scope.loadEmployees();
             }
@@ -213,7 +217,7 @@
         $.ajax({
             url: window.saveAnglePath,
             type: 'POST',
-            data: { RoomObjectId: this.roomObjectId, Angle: angle }
+            data: { RoomObjectId: roomObjectId, Angle: angle }
         });
     }
 
@@ -251,11 +255,11 @@
         employeeId = employee.Id;
         employeeFio = employee.FioShort;
         setCaptions();
-        saveEmployeeTableLink(employee.Id, this.roomObjectId);
+        saveEmployeeTableLink(employee.Id, roomObjectId);
     }
 
     this.discardEmployee = function () {
-        removeEmployeeTableLink(employeeId, this.roomObjectId);
+        removeEmployeeTableLink(employeeId, roomObjectId);
         employeeId = undefined;
         employeeFio = undefined;
         setCaptions();
@@ -273,7 +277,7 @@
     function isHorizontalOriented () {
         return angle === 90 || angle === 270;
     }
-        
+                
     this.move = function (offsetX, offsetY) {
         if (!isMoving) return;
         isMoved = true;
@@ -306,8 +310,9 @@
 
     this.selectByPoint = function (point, tolerance) {
         var projectPoint = scope.view2Project(point);
-        isSelected = projectPoint.x >= this.left() && projectPoint.x <= this.right()
-            && projectPoint.y >= this.top() && projectPoint.y <= this.bottom();
+        var currentBounds = this.bounds();
+        isSelected = projectPoint.x >= currentBounds.left && projectPoint.x <= currentBounds.right
+            && projectPoint.y >= currentBounds.top && projectPoint.y <= currentBounds.bottom;
         if (isSelected) this.select();
         return isSelected;
     }
