@@ -42,15 +42,16 @@
         var borders = undefined;
         for (var i = 0; i < this.collection.length; i++) {
             var roomObject = this.collection[i];
-            if (!roomObject) continue;
+            if (!roomObject || !roomObject.bounds) continue;
+            var roomObjectBounds = roomObject.bounds();
 
             if (!borders)
-                borders = { left: roomObject.left(), top: roomObject.top(), right: roomObject.right(), bottom: roomObject.bottom() };
+                borders = roomObjectBounds;
             else {
-                if (roomObject.left() < borders.left) borders.left = roomObject.left();
-                if (roomObject.top() < borders.top) borders.top = roomObject.top();
-                if (roomObject.right() > borders.right) borders.right = roomObject.right();
-                if (roomObject.bottom() > borders.bottom) borders.bottom = roomObject.bottom();
+                if (roomObjectBounds.left < borders.left) borders.left = roomObjectBounds.left;
+                if (roomObjectBounds.top < borders.top) borders.top = roomObjectBounds.top;
+                if (roomObjectBounds.right > borders.right) borders.right = roomObjectBounds.right;
+                if (roomObjectBounds.bottom > borders.bottom) borders.bottom = roomObjectBounds.bottom;
             }
         };
         if (borders) {

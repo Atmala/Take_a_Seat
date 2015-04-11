@@ -99,22 +99,15 @@
         }
     }
 
-    this.left = function () {
-        return this.leftTopX;
+    this.bounds = function() {
+        return {
+            left: this.leftTopX,
+            right: this.leftTopX + this.attachedPath.bounds.width,
+            top: this.leftTopY,
+            bottom: this.leftTopY + this.attachedPath.bounds.height
+        };
     }
-
-    this.top = function () {
-        return this.leftTopY;
-    }
-
-    this.right = function () {
-        return this.leftTopX + this.attachedPath.bounds.width;
-    }
-
-    this.bottom = function () {
-        return this.leftTopY + this.attachedPath.bounds.height;
-    }
-
+    
     this.findScreenText = function(point, tolerance) {
         var x = scope.view2ProjectX(point.x);
         var y = scope.view2ProjectY(point.y);

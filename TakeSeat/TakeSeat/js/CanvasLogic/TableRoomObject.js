@@ -261,28 +261,19 @@
         setCaptions();
     }
 
-    this.left = function () {
-        return leftTopX;
+    this.bounds = function() {
+        return {
+            left: leftTopX,
+            right: isHorizontalOriented ? leftTopX + height : leftTopX + width,
+            top: leftTopY,
+            bottom: isHorizontalOriented ? leftTopY + width : leftTopX + height
+        };
     }
 
-    this.top = function () {
-        return leftTopY;
+    function isHorizontalOriented () {
+        return angle === 90 || angle === 270;
     }
-
-    this.right = function () {
-        if (angle === 90 || angle === 270)
-            return leftTopX + height;
-        else
-            return leftTopX + width;
-    }
-
-    this.bottom = function () {
-        if (angle === 90 || angle === 270)
-            return leftTopY + width;
-        else
-            return leftTopY + height;
-    }
-
+        
     this.move = function (offsetX, offsetY) {
         if (!isMoving) return;
         isMoved = true;

@@ -51,7 +51,7 @@
     }
 
     function setWallAppearance(path) {
-        path.strokeWidth = subType === 1 ? 8 : 2;
+        path.strokeWidth = subType === 1 ? 4 : 2;
         path.strokeColor = isSelected ? scope.selectedColor : scope.wallColor;
     }
 
@@ -173,20 +173,13 @@
         return false;
     }
 
-    this.left = function () {
-        return Math.min(points[0].x, points[1].x);
-    }
-
-    this.top = function () {
-        return Math.min(points[0].y, points[1].y);
-    }
-
-    this.right = function () {
-        return Math.max(points[0].x, points[1].x);
-    }
-
-    this.bottom = function () {
-        return Math.max(points[0].y, points[1].y);
+    this.bounds = function() {
+        return {
+            left: Math.min(points[0].x, points[1].x),
+            right: Math.max(points[0].x, points[1].x),
+            top: Math.min(points[0].y, points[1].y),
+            bottom: Math.max(points[0].y, points[1].y)
+        };
     }
 
     function get90PointForWall(start, point) {
@@ -236,16 +229,6 @@
         return 'Wall: (' + points[0].x + ',' + points[0].y + ') - (' + points[1].x + ',' + points[1].y + ')';
     }
 
-    //this.select = function () {
-    //    attachedPath.selected = true;
-    //    if (selectedPointIndex != undefined)
-    //        attachedPath.segments[selectedPointIndex].selected = true;
-    //}
-
-    //this.unselect = function () {
-    //    attachedPath.selected = false;
-    //}
-
     this.isSelected = function () {
         return isSelected;
     }
@@ -288,4 +271,14 @@
         getSelectedPointIndex: function () { return selectedPointIndex; },
         findSegment: findSegment
     };
+
+    this.getUnitTestOnlyMembers = function() {
+        return {
+            isBetween: isBetween,
+            lengthIsZero: lengthIsZero,
+            setCoordinates: setCoordinates,
+            getSelectedPointIndex: function () { return selectedPointIndex; },
+            findSegment: findSegment
+        };
+    }
 }
