@@ -43,7 +43,6 @@
         employeeId = dbRoomObject.EmployeeId;
         identNumber = dbRoomObject.IdentNumber;
         angle = dbRoomObject.Angle;
-        this.getPath();
     }
 
     function isFoundItem () {

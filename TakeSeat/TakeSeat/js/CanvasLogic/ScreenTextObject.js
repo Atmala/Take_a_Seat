@@ -61,7 +61,6 @@
         this.width = dbRoomObject.ScreenTexts[0].Width;
         this.text = dbRoomObject.ScreenTexts[0].Text;
         this.roomObjectId = dbRoomObject.Id;
-        this.getPath();
     }
 
     this.save = function () {
@@ -115,12 +114,9 @@
     this.findScreenText = function(point, tolerance) {
         var x = scope.view2ProjectX(point.x);
         var y = scope.view2ProjectY(point.y);
-        var left = this.left();
-        var right = this.right();
-        var top = this.top();
-        var bottom = this.bottom();
-        scope.LogMessage1 = '(' + x + ',' + y + '): ' + '[' + left + ',' + top + '] - [' + right + ',' + bottom + ']';
-        if (x >= this.left() && x <= this.right() && y >= this.top() && y <= this.bottom()) {
+        var b = this.bounds();
+        scope.LogMessage1 = '(' + x + ',' + y + '): ' + '[' + b.left + ',' + b.top + '] - [' + b.right + ',' + b.bottom + ']';
+        if (x >= b.left && x <= b.right && y >= b.top && y <= b.bottom) {
             return {type: 'screentext', item: this.attachedPath};
         }
         return undefined;
@@ -129,7 +125,7 @@
     this.dbCoordinatesString = function() {
         return 'ScreenText ' + this.roomObjectId;
     }
-
+    
     this.move = function (offsetX, offsetY) {
         if (!isMoving) return;
         isMoved = true;
@@ -140,7 +136,7 @@
         this.attachedPath.point.x = scope.project2ViewX(this.leftTopX);
         this.attachedPath.point.y = scope.project2ViewY(this.leftTopY);
     }
-
+    
     this.deleteRoomObject = function () {
         $.ajax({
             url: window.deleteRoomObjectPath,
@@ -153,7 +149,8 @@
     }
 
     this.showDropDownMenu = function () {
-        showScreenTextDropDownMenu(scope.project2ViewX(this.left()), scope.project2ViewY(this.top()), this.text);
+        var b = this.bounds();
+        showScreenTextDropDownMenu(scope.project2ViewX(b.left), scope.project2ViewY(b.top), this.text);
     }
 
     this.saveText = function(text) {

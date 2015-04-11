@@ -13,6 +13,7 @@
         }
         if (roomObject) {
             roomObject.loadFromDb(dbRoomObject);
+            roomObject.getPath();
             scope.roomObjectCollection.add(roomObject);
         }
         return null;

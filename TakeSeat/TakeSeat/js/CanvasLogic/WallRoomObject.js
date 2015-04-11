@@ -17,7 +17,6 @@
         }
         subType = dbRoomObject.SubType;
         roomObjectId = dbRoomObject.Id;
-        getPath();
     }
 
     this.createByClick = function (point) {
@@ -29,7 +28,7 @@
         points[1].y = points[0].y;
         selectedPointIndex = 1;
         isMoving = true;
-        getPath();
+        this.getPath();
     }
 
     this.onMouseUp = function () {
@@ -67,7 +66,7 @@
         }
     }
 
-    function getPath () {
+    this.getPath = function () {
         removePaperItems();
         var path = new paper.Path();
         setWallAppearance(path);
@@ -226,7 +225,7 @@
     }
 
     this.updatePosition = function () {
-        getPath();
+        this.getPath();
     }
 
     this.dbCoordinatesString = function () {
@@ -246,7 +245,7 @@
         var newIsSelected = findSegment(point, tolerance) || findLine(point, tolerance);
         if (newIsSelected !== isSelected) {
             isSelected = newIsSelected;
-            getPath();
+            this.getPath();
         }
         return isSelected;
     }
