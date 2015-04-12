@@ -41,6 +41,16 @@ QUnit.test("selectByProjectPoint test", function(assert) {
     privateMembers.setCoordinates(10, 10, 100, 100);
     assert.ok(obj.selectByProjectPoint({ x: 8, y: 8 }, 5));
     assert.equal(privateMembers.getSelectedPointIndex(), 0);
-
-
+});
+QUnit.test("loadFromDb test", function(assert) {
+    var obj = new WallRoomObject(scope);
+    var dbRoomObject = {
+        Points: [{ X: 10, Y: 20 }, { X: 30, Y: 40 }],
+        SubType: 1,
+        Id: 123
+    };
+    obj.loadFromDb(dbRoomObject);
+    var privateMembers = obj.getUnitTestOnlyMembers();
+    assert.equal(privateMembers.state.subType, 1);
+    assert.equal(privateMembers.state.roomObjectId, 123);
 });

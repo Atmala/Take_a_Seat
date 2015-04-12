@@ -267,13 +267,13 @@
         points[1].y = newY2;
     }
 
-    this.__unittestonly__ = {
-        isBetween: isBetween,
-        lengthIsZero: lengthIsZero,
-        setCoordinates: setCoordinates,
-        getSelectedPointIndex: function () { return selectedPointIndex; },
-        findSegment: findSegment
-    };
+    function getState() {
+        return {
+            points: points,
+            roomObjectId: roomObjectId,
+            subType: subType
+        };
+    }
 
     this.getUnitTestOnlyMembers = function() {
         return {
@@ -281,7 +281,8 @@
             lengthIsZero: lengthIsZero,
             setCoordinates: setCoordinates,
             getSelectedPointIndex: function () { return selectedPointIndex; },
-            findSegment: findSegment
+            findSegment: findSegment,
+            state: getState()
         };
     }
 }
