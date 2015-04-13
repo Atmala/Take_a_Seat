@@ -18,7 +18,7 @@
         subType = dbRoomObject.SubType;
         roomObjectId = dbRoomObject.Id;
     }
-
+    
     this.createByClick = function (point) {
         subType = scope.regime.subtype;
 
@@ -90,12 +90,8 @@
             type: 'POST',
             data: lineInfo,
             success: function (response) {
-                roomObjectId = response.RoomObjectId;
-                points[0].x = response.X1;
-                points[0].y = response.Y1;
-                points[1].x = response.X2;
-                points[1].y = response.Y2;
-                thisObject.updatePosition();
+                thisObject.loadFromDb(response);
+                thisObject.getPath();
             }
         });
     }

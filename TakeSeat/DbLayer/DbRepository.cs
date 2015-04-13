@@ -237,9 +237,10 @@ namespace DbLayer
             var savedRoomObjectId = lineInfo.RoomObjectId == 0
                 ? SaveNewWall(roomId, lineInfo)
                 : UpdateWall(lineInfo);
-            var points = _db.Points.Where(r => r.RoomObjectId == savedRoomObjectId).ToList();
+            var points = GetPointModels(savedRoomObjectId);
+            var subType = _db.RoomObjects.Where(ro => ro.Id == savedRoomObjectId).Select(ro => ro.SubType).First();
             if (points.Count != 2) return new SaveWallResult();
-            return new SaveWallResult(savedRoomObjectId, points[0].X, points[0].Y, points[1].X, points[1].Y);
+            return new SaveWallResult(savedRoomObjectId, subType, points);
         }
 
         private int SaveNewWall(int roomId, LineInfo lineInfo)
