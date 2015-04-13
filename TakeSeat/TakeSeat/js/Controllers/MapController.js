@@ -67,7 +67,7 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
             var searchItem = $scope.searchByUid(window.paramUid);
             if (searchItem) $scope.doSearch(searchItem);
         }
-        //$scope.$apply();
+        $scope.dbProvider = new DbProvider();
     }
 
     $scope.getUserAccess = function() {

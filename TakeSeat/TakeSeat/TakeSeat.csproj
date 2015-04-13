@@ -225,6 +225,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="img\window_active.png" />
+    <Content Include="js\Services\DataResources.js" />
+    <Content Include="js\Services\DbProvider.js" />
     <Content Include="js\CanvasLogic\RoomObjectCollection.js" />
     <Content Include="js\CanvasLogic\TextHelper.js" />
     <Content Include="js\CanvasLogic\ScreenTextObject.js" />
@@ -233,7 +235,6 @@
     <Content Include="js\Controllers\MapController.js" />
     <Content Include="js\Directives\Paper.js" />
     <Content Include="js\CanvasLogic\RoomObjectFactory.js" />
-    <Content Include="js\Services\DataResources.js" />
     <Content Include="js\UnitTests\tests.js" />
     <Content Include="UnitTests.html" />
     <Content Include="Web.config">

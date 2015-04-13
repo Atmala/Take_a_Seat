@@ -4,7 +4,6 @@
     var roomObjectId, selectedPointIndex, subType;
     var paperItems = { walls: [] };
     var points = [{}, {}];
-    var thisObject = this;
 
     this.getRoomObjectId = function() {
         return roomObjectId;
@@ -35,9 +34,9 @@
         if (isMoved) {
             if (lengthIsZero()) {
                 if (roomObjectId != 0)
-                    this.deleteRoomObject();
+                    scope.dbProvider.deleteWall(this);
             } else {
-                save();
+                scope.dbProvider.saveWall(this);
             }
             isMoving = false;
             isMoved = false;
@@ -75,8 +74,8 @@
         paperItems.walls.push(path);
     }
 
-    function save() {
-        var lineInfo = {
+    this.getSaveArgument = function() {
+        return {
             RoomObjectId: roomObjectId,
             SubType: subType,
             X1: points[0].x,
@@ -84,27 +83,10 @@
             X2: points[1].x,
             Y2: points[1].y
         };
-
-        $.ajax({
-            url: window.saveWallPath,
-            type: 'POST',
-            data: lineInfo,
-            success: function (response) {
-                thisObject.loadFromDb(response);
-                thisObject.getPath();
-            }
-        });
     }
 
-    this.deleteRoomObject = function () {
-        $.ajax({
-            url: window.deleteRoomObjectPath,
-            type: 'POST',
-            data: { id: roomObjectId },
-            success: function (response) {
-                removePaperItems();
-            }
-        });
+    this.onDelete = function() {
+        removePaperItems();
     }
 
     function checkTwoPointsProximity(point1, point2, tolerance) {
