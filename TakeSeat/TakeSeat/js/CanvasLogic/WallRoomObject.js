@@ -249,7 +249,11 @@
         return {
             points: points,
             roomObjectId: roomObjectId,
-            subType: subType
+            subType: subType,
+            selectedPointIndex: selectedPointIndex,
+            isMoving: isMoving,
+            isMoved: isMoved,
+            paperItems: paperItems
         };
     }
 

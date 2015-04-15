@@ -54,3 +54,20 @@ QUnit.test("loadFromDb test", function(assert) {
     assert.equal(privateMembers.state.subType, 1);
     assert.equal(privateMembers.state.roomObjectId, 123);
 });
+QUnit.test("createByClick test", function(assert) {
+    scope.regime = { subtype: 1 };
+    var obj = new WallRoomObject(scope);
+
+    obj.createByClick({ x: 10, y: 20 });
+
+    var privateMembers = obj.getUnitTestOnlyMembers();
+    var state = privateMembers.state;
+    assert.equal(state.points.length, 2);
+    assert.equal(state.points[0].x, 10);
+    assert.equal(state.points[0].y, 20);
+    assert.equal(state.points[1].x, 10);
+    assert.equal(state.points[1].y, 20);
+    assert.equal(state.selectedPointIndex, 1);
+    assert.ok(state.isMoving);
+    assert.ok(state.paperItems.walls.length > 0);
+});
