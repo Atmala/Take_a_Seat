@@ -38,9 +38,9 @@
             } else {
                 scope.dbProvider.saveWall(this);
             }
-            isMoving = false;
             isMoved = false;
         }
+        isMoving = false;
     }
 
     this.onMouseDown = function () {

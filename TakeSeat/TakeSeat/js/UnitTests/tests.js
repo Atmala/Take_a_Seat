@@ -1,13 +1,25 @@
 ﻿paper.install(window);
 var canvas = document.getElementById('paperCanvas');
 paper.setup(canvas[0]);
-scope = {};
-scope.wallColor = '#888888';
-scope.selectedColor = 'blue';
-scope.view2ProjectX = function (x) { return x; }
-scope.view2ProjectY = function (y) { return y; }
-scope.project2ViewX = function (x) { return x; }
-scope.project2ViewY = function (y) { return y; }
+
+function FakeScope() {
+    this.wallColor = '#888888';
+    this.selectedColor = 'blue';
+    this.scale = 1.0;
+    this.gridStep = 10;
+    this.view2ProjectX = function (x) { return x; }
+    this.view2ProjectY = function (y) { return y; }
+    this.project2ViewX = function (x) { return x; }
+    this.project2ViewY = function (y) { return y; }
+
+    var saveWallWasCalled, deleteWallWasCalled;
+    this.dbProvider = {
+        saveWall: function () { saveWallWasCalled = true; },
+        deleteWall: function() { deleteWallWasCalled = true; }
+    };
+    this._saveWallWasCalled = function () { return saveWallWasCalled; }
+    this._deleteWallWasCalled = function () { return deleteWallWasCalled; }
+}
 
 QUnit.module("WallRoomObject tests");
 QUnit.test("isBetween test", function (assert) {
@@ -18,7 +30,9 @@ QUnit.test("isBetween test", function (assert) {
     assert.ok(!privateMembers.isBetween(1, 5, 3));
 });
 QUnit.test("lengthIsZero test", function(assert) {
-    var scope = { gridStep: 10 };
+    var scope = new FakeScope();
+    scope.gridStep = 10;
+
     var obj = new WallRoomObject(scope);
     var privateMembers = obj.getUnitTestOnlyMembers();
 
@@ -35,7 +49,7 @@ QUnit.test("lengthIsZero test", function(assert) {
     assert.ok(!privateMembers.lengthIsZero());
 });
 QUnit.test("selectByProjectPoint test", function(assert) {
-    var obj = new WallRoomObject(scope);
+    var obj = new WallRoomObject(new FakeScope());
     var privateMembers = obj.getUnitTestOnlyMembers();
     
     privateMembers.setCoordinates(10, 10, 100, 100);
@@ -43,7 +57,7 @@ QUnit.test("selectByProjectPoint test", function(assert) {
     assert.equal(privateMembers.getSelectedPointIndex(), 0);
 });
 QUnit.test("loadFromDb test", function(assert) {
-    var obj = new WallRoomObject(scope);
+    var obj = new WallRoomObject(new FakeScope());
     var dbRoomObject = {
         Points: [{ X: 10, Y: 20 }, { X: 30, Y: 40 }],
         SubType: 1,
@@ -54,7 +68,8 @@ QUnit.test("loadFromDb test", function(assert) {
     assert.equal(privateMembers.state.subType, 1);
     assert.equal(privateMembers.state.roomObjectId, 123);
 });
-QUnit.test("createByClick test", function(assert) {
+QUnit.test("createByClick test", function (assert) {
+    var scope = new FakeScope();
     scope.regime = { subtype: 1 };
     var obj = new WallRoomObject(scope);
 
@@ -71,3 +86,87 @@ QUnit.test("createByClick test", function(assert) {
     assert.ok(state.isMoving);
     assert.ok(state.paperItems.walls.length > 0);
 });
+QUnit.test("onMouseUp without move test", function (assert) {
+    var scope = new FakeScope();
+    var obj = new WallRoomObject(scope);
+    var dbRoomObject = {
+        Points: [{ X: 10, Y: 20 }, { X: 30, Y: 40 }],
+        SubType: 1,
+        Id: 123
+    };
+
+    obj.loadFromDb(dbRoomObject);
+    obj.selectByProjectPoint({ x: 20, y: 30 }, 5);
+    obj.onMouseDown();
+    obj.onMouseUp();
+
+    var privateMembers = obj.getUnitTestOnlyMembers();
+    assert.notOk(privateMembers.state.isMoving);
+    assert.notOk(privateMembers.state.isMoved);
+    assert.notOk(scope._saveWallWasCalled());
+    assert.notOk(scope._deleteWallWasCalled());
+});
+QUnit.test("onMouseUp test", function (assert) {
+    var scope = new FakeScope();
+    var obj = new WallRoomObject(scope);
+    var dbRoomObject = {
+        Points: [{ X: 10, Y: 20 }, { X: 30, Y: 40 }],
+        SubType: 1,
+        Id: 123
+    };
+
+    obj.loadFromDb(dbRoomObject);
+    obj.selectByProjectPoint({ x: 20, y: 30 }, 5);
+    obj.onMouseDown();
+    obj.move(10, 10);
+    obj.onMouseUp();
+
+    var privateMembers = obj.getUnitTestOnlyMembers();
+    assert.notOk(privateMembers.state.isMoving);
+    assert.notOk(privateMembers.state.isMoved);
+    assert.ok(scope._saveWallWasCalled());
+    assert.notOk(scope._deleteWallWasCalled());
+});
+QUnit.test("onMouseUp with delete test", function (assert) {
+    var scope = new FakeScope();
+    var obj = new WallRoomObject(scope);
+    var dbRoomObject = {
+        Points: [{ X: 10, Y: 20 }, { X: 30, Y: 40 }],
+        SubType: 1,
+        Id: 123
+    };
+
+    obj.loadFromDb(dbRoomObject);
+    obj.selectByProjectPoint({ x: 10, y: 20 }, 5);
+    obj.onMouseDown();
+    obj.move(20, 20);
+    obj.onMouseUp();
+
+    var privateMembers = obj.getUnitTestOnlyMembers();
+    assert.notOk(privateMembers.state.isMoving);
+    assert.notOk(privateMembers.state.isMoved);
+    assert.notOk(scope._saveWallWasCalled());
+    assert.ok(scope._deleteWallWasCalled());
+});
+QUnit.test("onMouseUp with zero length, but without delete test", function (assert) {
+    var scope = new FakeScope();
+    var obj = new WallRoomObject(scope);
+    var dbRoomObject = {
+        Points: [{ X: 10, Y: 20 }, { X: 30, Y: 40 }],
+        SubType: 1,
+        Id: 0
+    };
+
+    obj.loadFromDb(dbRoomObject);
+    obj.selectByProjectPoint({ x: 10, y: 20 }, 5);
+    obj.onMouseDown();
+    obj.move(20, 20);
+    obj.onMouseUp();
+
+    var privateMembers = obj.getUnitTestOnlyMembers();
+    assert.notOk(privateMembers.state.isMoving);
+    assert.notOk(privateMembers.state.isMoved);
+    assert.notOk(scope._saveWallWasCalled());
+    assert.notOk(scope._deleteWallWasCalled());
+});
+
