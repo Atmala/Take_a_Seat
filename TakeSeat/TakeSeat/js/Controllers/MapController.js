@@ -401,5 +401,9 @@ seatApp.controller('Map', ['$scope', 'MapProvider', 'EmployeeProvider', function
         return undefined;
     }
 
+    $scope.exportEmployees = function() {
+        window.location.href = window.exportEmployeesPath;
+    }
+
 }]);
 

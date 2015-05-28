@@ -673,6 +673,34 @@ namespace DbLayer
 
         #endregion
 
+        #region Export Methods
+
+        public List<ExportEmployeeInfo> GetEmployeeExport()
+        {
+            var list  = (
+                from e in _db.Employees
+                from etl in _db.EmployeeTableLinks.Where(etl => etl.EmployeeId == e.Id).DefaultIfEmpty()
+                from ro in _db.RoomObjects.Where(ro => ro.Id == etl.EmployeeId).DefaultIfEmpty()
+                select new 
+                       {
+                           e.FirstName,
+                           e.Surname,
+                           e.Uid,
+                           ro.IdentNumber
+                       }
+            ).ToList();
+            return (
+                from r in list
+                select new ExportEmployeeInfo
+                       {
+                           Fio = r.Surname + " " + r.FirstName,
+                           Uid = r.Uid,
+                           TableNumber = r.IdentNumber
+                       }).ToList();
+        }
+
+        #endregion
+
         public void Dispose()
         {
             if (_db != null) _db.Dispose();

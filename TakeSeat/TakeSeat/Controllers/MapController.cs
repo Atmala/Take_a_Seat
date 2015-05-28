@@ -195,5 +195,18 @@ namespace TakeSeat.Controllers
             ServiceProxy.ImportEmployees(webMethodResult.AttachedObject);
             return Json(new { isError = true, message = "" }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpGet]
+        public ActionResult ExportEmployees()
+        {
+            var list = ServiceProxy.GetEmployeeExport();
+            var csv = new StringBuilder();
+            csv.AppendLine("Fio,Uid,Table Number");
+            foreach (var row in list)
+            {
+                csv.AppendLine(row.Fio + "," + row.Uid + "," + row.TableNumber);
+            }
+            return File(Encoding.Default.GetBytes(csv.ToString()), "text/csv", "TakeSeatEmployees.csv");
+        }
     }
 }

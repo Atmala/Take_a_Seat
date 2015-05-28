@@ -181,5 +181,13 @@ namespace TakeSeatServiceProxy
                 return dbRepository.GetUserAccess(userNameWithDomain);
             }
         }
+
+        public static List<ExportEmployeeInfo> GetEmployeeExport()
+        {
+            using (var dbRepository = new DbRepository())
+            {
+                return dbRepository.GetEmployeeExport();
+            }
+        }
     }
 }

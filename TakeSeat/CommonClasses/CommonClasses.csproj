@@ -72,6 +72,7 @@
     <Compile Include="InfoClasses\BaseResult.cs" />
     <Compile Include="InfoClasses\EmployeeInfo.cs" />
     <Compile Include="InfoClasses\EmployeeTableLinkInfo.cs" />
+    <Compile Include="InfoClasses\ExportEmployeeInfo.cs" />
     <Compile Include="InfoClasses\ImportEmployeeInfo.cs" />
     <Compile Include="InfoClasses\LineInfo.cs" />
     <Compile Include="InfoClasses\MethodResult.cs" />
