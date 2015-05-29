@@ -3,7 +3,7 @@
     var isSelected = false, isMoving = false, isMoved = false;
     var standardWidth = 70, standardHeight = 100;
     var roomObjectId, leftTopX, leftTopY, width, height, textRectangle, realScale, currentScale;
-    var attachedPath, employeeFio, employeeId, identNumber, angle = 0;
+    var attachedPath, employeeFio, employeeUrl, employeeId, identNumber, angle = 0;
     var thisObject = this;
 
     this.getRoomObjectId = function () {
@@ -40,6 +40,7 @@
         height = dbRoomObject.Rectangles[0].Height;
         roomObjectId = dbRoomObject.Id;
         employeeFio = dbRoomObject.EmployeeFio;
+        employeeUrl = dbRoomObject.EmployeeUrl;
         employeeId = dbRoomObject.EmployeeId;
         identNumber = dbRoomObject.IdentNumber;
         angle = dbRoomObject.Angle;
@@ -123,6 +124,7 @@
         raster.rotate(angle);
         setTextRectangle();
         setCaptions();
+        document.body.style.cursor = isSelectedItem() && employeeUrl ? "pointer" : "default";
         return raster;
     }
     
@@ -317,12 +319,18 @@
     }
     
     this.onMouseUp = function () {
-        if (isMoved) {
-            this.save();
-            isMoving = false;
-            isMoved = false;
+        if (scope.editPlanMode) {
+            if (isMoved) {
+                this.save();
+                isMoving = false;
+                isMoved = false;
+            } else {
+                this.showDropDownMenu();
+            }
         } else {
-            this.showDropDownMenu();
+            if (employeeUrl) {
+                window.location.href = employeeUrl;
+            }
         }
     }
 

@@ -15,6 +15,7 @@ namespace CommonClasses.Models
         public List<ScreenTextModel> ScreenTexts { get; set; } 
         public int EmployeeId { get; set; }
         public string EmployeeFio { get; set; }
+        public string EmployeeUrl { get; set; }
         public RoomObjectModel()
         {
             Points = new List<PointModel>();

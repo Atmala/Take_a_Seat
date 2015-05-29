@@ -122,6 +122,15 @@ namespace DbLayer
             return roomModel;
         }
 
+        private string GetEmployeeUrl(Employee employee)
+        {
+            if (employee == null) return string.Empty;
+            if (string.IsNullOrEmpty(employee.FirstNameEn) || string.IsNullOrEmpty(employee.SurnameEn))
+                return string.Empty;
+            return string.Format("https://confluence.dio-soft.com/display/LGTK/{0}+{1}", 
+                employee.SurnameEn, employee.FirstNameEn);
+        }
+
         private RoomObjectModel GetRoomObjectModel(RoomObject roomObject, Employee employee)
         {
             var roomObjectTypeStr = RoomObjectTypes.First(t => t.Id == roomObject.RoomObjectTypeId).Name;
@@ -136,7 +145,8 @@ namespace DbLayer
                 Rectangles = GetRectangleModels(roomObject.Id),
                 ScreenTexts = GetScreenTextModels(roomObject.Id),
                 EmployeeId = employee == null ? 0 : employee.Id,
-                EmployeeFio = employee == null ? string.Empty : employee.Surname + " " + employee.FirstName
+                EmployeeFio = employee == null ? string.Empty : employee.Surname + " " + employee.FirstName,
+                EmployeeUrl = GetEmployeeUrl(employee)
             };
         }
         private List<RoomObjectModel> GetRoomObjectModels(int roomId)
