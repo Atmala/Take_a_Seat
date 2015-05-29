@@ -329,7 +329,8 @@
             }
         } else {
             if (employeeUrl) {
-                window.location.href = employeeUrl;
+                //window.location.href = employeeUrl;
+                window.open(employeeUrl, '_blank');
             }
         }
     }
