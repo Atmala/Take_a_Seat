@@ -680,7 +680,8 @@ namespace DbLayer
             var list  = (
                 from e in _db.Employees
                 from etl in _db.EmployeeTableLinks.Where(etl => etl.EmployeeId == e.Id).DefaultIfEmpty()
-                from ro in _db.RoomObjects.Where(ro => ro.Id == etl.EmployeeId).DefaultIfEmpty()
+                from ro in _db.RoomObjects.Where(ro => ro.Id == etl.RoomObjectId).DefaultIfEmpty()
+                orderby e.Uid
                 select new 
                        {
                            e.FirstName,
