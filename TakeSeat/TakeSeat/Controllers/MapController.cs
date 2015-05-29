@@ -206,7 +206,10 @@ namespace TakeSeat.Controllers
             {
                 csv.AppendLine(row.Fio + "," + row.Uid + "," + row.TableNumber);
             }
-            return File(Encoding.Default.GetBytes(csv.ToString()), "text/csv", "TakeSeatEmployees.csv");
+            var encoding = new UTF8Encoding(true);
+            var data = encoding.GetBytes(csv.ToString());
+            var result = encoding.GetPreamble().Concat(data).ToArray();
+            return File(result, "text/csv", "TakeSeatEmployees.csv");
         }
     }
 }
