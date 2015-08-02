@@ -56,8 +56,8 @@
 
     this.createNew = function (x, y, newWidth, newHeight) {
         roomObjectId = 0;
-        leftTopX = scope.toGrid(scope.view2ProjectX(x) - width / 2);
-        leftTopY = scope.toGrid(scope.view2ProjectY(y) - height / 2);
+        leftTopX = roundTo10(scope.view2ProjectX(x)) - newWidth / 2;
+        leftTopY = roundTo10(scope.view2ProjectY(y)) - newHeight / 2;
         width = newWidth;
         height = newHeight;
         this.getPath();
@@ -141,10 +141,11 @@
     this.deleteRoomObject = function () {
         $.ajax({
             url: window.deleteRoomObjectPath,
+            async: false,
             type: 'POST',
             data: { id: roomObjectId },
             success: function (response) {
-                thisObject.removeCaptions();
+                removeCaptions();
                 attachedPath.remove();
                 scope.loadEmployees();
             }
@@ -269,9 +270,9 @@
     this.bounds = function() {
         return {
             left: leftTopX,
-            right: isHorizontalOriented ? leftTopX + height : leftTopX + width,
+            right: isHorizontalOriented ? leftTopX + width : leftTopX + height,
             top: leftTopY,
-            bottom: isHorizontalOriented ? leftTopY + width : leftTopX + height
+            bottom: isHorizontalOriented ? leftTopY + height : leftTopX + width
         };
     }
 
@@ -279,11 +280,15 @@
         return angle === 90 || angle === 270;
     }
                 
-    this.move = function (offsetX, offsetY) {
+    this.move = function (viewOffsetX, viewOffsetY) {
         if (!isMoving) return;
         isMoved = true;
-        leftTopX = scope.toGrid(scope.view2ProjectXNoGrid(attachedPath.position.x + offsetX) - width / 2);
-        leftTopY = scope.toGrid(scope.view2ProjectYNoGrid(attachedPath.position.y + offsetY) - height / 2);
+        var offsetX = roundTo10(viewOffsetX / scope.scale);
+        var offsetY = roundTo10(viewOffsetY / scope.scale);
+        leftTopX += offsetX;
+        leftTopY += offsetY; 
+        //leftTopX = scope.toGrid(scope.view2ProjectXNoGrid(attachedPath.position.x + offsetX) - width / 2);
+        //leftTopY = scope.toGrid(scope.view2ProjectYNoGrid(attachedPath.position.y + offsetY) - height / 2);
 
         var newX = scope.project2ViewX(leftTopX + width / 2);
         var realOffsetX = newX - attachedPath.position.x;
@@ -347,4 +352,7 @@
         return 'Table: (' + leftTopX + ',' + leftTopY + ')';
     }
 
+    function roundTo10(x) {
+        return Math.round(x / 10) * 10;
+    }
 }

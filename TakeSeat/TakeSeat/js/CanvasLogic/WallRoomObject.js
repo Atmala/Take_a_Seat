@@ -71,7 +71,7 @@
         setWallAppearance(path);
         path.add(getViewPoint(0));
         path.add(getViewPoint(1));
-        paperItems.walls.push(path);
+        paperItems.walls = [path];
     }
 
     this.getSaveArgument = function() {
@@ -266,6 +266,21 @@
             findSegment: findSegment,
             state: getState()
         };
+    }
+
+    this.deleteRoomObject = function () {
+        $.ajax({
+            url: window.deleteRoomObjectPath,
+            async: false,
+            type: 'POST',
+            data: { id: roomObjectId },
+            success: function (response) {
+                if (paperItems.walls.length > 0) {
+                    paperItems.walls[0].remove();
+                    paperItems.walls = [];
+                }
+            }
+        });
     }
 
     function roundTo10(x) {

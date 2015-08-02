@@ -3,7 +3,7 @@
     this.RoomObjectType = 'screentext';
 
     this.getRoomObjectId = function () {
-        return roomObjectId;
+        return this.roomObjectId;
     }
 
     this.createNew = function (x, y, text) {
@@ -140,6 +140,7 @@
     this.deleteRoomObject = function () {
         $.ajax({
             url: window.deleteRoomObjectPath,
+            async: false,
             type: 'POST',
             data: { id: this.roomObjectId },
             success: function (response) {

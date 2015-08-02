@@ -133,6 +133,8 @@ seatApp
                     function setCurrentCoords(x, y) {
                         scope.X = x;
                         scope.Y = y;
+                        scope.XProject = scope.view2ProjectX(x);
+                        scope.YProject = scope.view2ProjectY(y);
                         scope.selectedItemLogText = selectedRoomObject ? selectedRoomObject.dbCoordinatesString() : "unselected";
                     }
 
@@ -159,11 +161,11 @@ seatApp
                     }
 
                     scope.view2ProjectX = function (viewX) {
-                        return scope.toGrid(Math.round((viewX - scope.globalOffset.x) / scope.scale));
+                        return Math.round((viewX - scope.globalOffset.x) / scope.scale / 10) * 10;
                     }
 
                     scope.view2ProjectY = function (viewY) {
-                        return scope.toGrid(Math.round((viewY - scope.globalOffset.y) / scope.scale));
+                        return Math.round((viewY - scope.globalOffset.y) / scope.scale / 10) * 10;
                     }
 
                     scope.view2Project = function (point) {
@@ -197,21 +199,14 @@ seatApp
                         }
                     }
 
-                    scope.toGrid = function (coord) {
-                        if (scope.gridStep === 1) return coord;
-                        return Math.round(coord / scope.gridStep) * scope.gridStep;
-                    }
-
                     scope.toScaledGridX = function (x) {
                         if (scope.gridStep === 1) return x;
-                        if (scope.scale === 1) return scope.toGrid(x);
                         var projectX = scope.view2ProjectX(x);
                         return scope.project2ViewX(projectX);
                     }
 
                     scope.toScaledGridY = function (y) {
                         if (scope.gridStep === 1) return y;
-                        if (scope.scale === 1) return scope.toGrid(y);
                         var projectY = scope.view2ProjectY(y);
                         return scope.project2ViewY(projectY);
                     }
