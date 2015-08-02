@@ -11,8 +11,8 @@
 
     this.loadFromDb = function (dbRoomObject) {
         for (var i = 0; i < dbRoomObject.Points.length; i++) {
-            points[i].x = dbRoomObject.Points[i].X;
-            points[i].y = dbRoomObject.Points[i].Y;
+            points[i].x = roundTo10(dbRoomObject.Points[i].X);
+            points[i].y = roundTo10(dbRoomObject.Points[i].Y);
         }
         subType = dbRoomObject.SubType;
         roomObjectId = dbRoomObject.Id;
@@ -182,8 +182,8 @@
     this.move = function (viewOffsetX, viewOffsetY) {
         if (!isMoving) return;
         isMoved = true;
-        var offsetX = Math.round(viewOffsetX / scope.scale);
-        var offsetY = Math.round(viewOffsetY / scope.scale);
+        var offsetX = roundTo10(viewOffsetX / scope.scale);
+        var offsetY = roundTo10(viewOffsetY / scope.scale);
 
         if (selectedPointIndex != undefined) {
             points[selectedPointIndex].x += offsetX;
@@ -266,5 +266,9 @@
             findSegment: findSegment,
             state: getState()
         };
+    }
+
+    function roundTo10(x) {
+        return Math.round(x / 10) * 10;
     }
 }
