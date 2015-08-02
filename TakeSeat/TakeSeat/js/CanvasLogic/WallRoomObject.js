@@ -182,8 +182,8 @@
     this.move = function (viewOffsetX, viewOffsetY) {
         if (!isMoving) return;
         isMoved = true;
-        var offsetX = viewOffsetX / scope.scale;
-        var offsetY = viewOffsetY / scope.scale;
+        var offsetX = Math.round(viewOffsetX / scope.scale);
+        var offsetY = Math.round(viewOffsetY / scope.scale);
 
         if (selectedPointIndex != undefined) {
             points[selectedPointIndex].x += offsetX;
